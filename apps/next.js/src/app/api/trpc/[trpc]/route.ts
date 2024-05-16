@@ -2,8 +2,8 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { type NextRequest } from "next/server";
 
 import { env } from "@/env.mjs";
-import { appRouter } from "@wardrobe/api";
-import { createTRPCContext } from "@wardrobe/api";
+import { appRouter } from "@ecoffice/api";
+import { createTRPCContext } from "@ecoffice/api";
 
 const handler = (req: NextRequest) =>
   fetchRequestHandler({

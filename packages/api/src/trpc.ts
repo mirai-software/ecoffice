@@ -10,8 +10,8 @@ import { initTRPC, type inferAsyncReturnType } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { db } from "@wardrobe/db";
-import { createClient } from '@supabase/supabase-js';
+import { db } from "@ecoffice/db";
+import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.EXPO_PUBLIC_API_URL as string;
 const supabaseKey = process.env.EXPO_PUBLIC_API_KEY as string;
@@ -85,9 +85,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 
 export type Context = inferAsyncReturnType<typeof createTRPCContext>;
 
-
 const isAuthed = t.middleware(async ({ ctx, next }) => {
-  
   if (!ctx.headers.get("authorization")) {
     throw new Error("Not authorized");
   }
@@ -95,7 +93,7 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
   const jwt = ctx.headers.get("authorization") as string;
   const token = jwt.split(" ")[1];
 
-  const {data} = await supabase.auth.getUser(token);
+  const { data } = await supabase.auth.getUser(token);
 
   console.log(data);
 
@@ -105,11 +103,10 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
 
   return next({
     ctx: {
-      session: data
+      session: data,
     },
   });
 });
-
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)

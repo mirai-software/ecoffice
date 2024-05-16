@@ -18,7 +18,7 @@ export const postRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
-  
+
   // this call is used only to show you how to call the db :)
   protecteddb: protectedProcedure
     .input(
@@ -28,11 +28,11 @@ export const postRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.post.create({
-        data : {
-          name : input.text,
-          user_id : input.text,
-          email : input.text
-        }
-      })
+        data: {
+          name: input.text,
+          user_id: input.text,
+          email: input.text,
+        },
+      });
     }),
 });

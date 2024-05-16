@@ -1,5 +1,5 @@
 {
-  "name": "wardrobe",
+  "name": "ecoffice",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "@wardrobe/db",
+  "name": "@ecoffice/db",
   "version": "0.1.0",
   "module": "index.ts",
   "main": "./index.ts",

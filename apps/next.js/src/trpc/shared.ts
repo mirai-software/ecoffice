@@ -1,6 +1,6 @@
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
-import { type AppRouter } from "@wardrobe/api";
+import { type AppRouter } from "@ecoffice/api";
 
 export const transformer = superjson;
 

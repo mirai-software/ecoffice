@@ -1,5 +1,5 @@
 {
-  "name": "@wardrobe/nextjs",
+  "name": "@ecoffice/nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,9 +9,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "@wardrobe/api": "*",
-    "@wardrobe/db": "*",
-    "@wardrobe/tailwind-config": "*",
+    "@ecoffice/api": "*",
+    "@ecoffice/db": "*",
+    "@ecoffice/tailwind-config": "*",
     "@clerk/nextjs": "^4.27.1",
     "@prisma/client": "^5.1.1",
     "@stripe/stripe-js": "^2.2.0",

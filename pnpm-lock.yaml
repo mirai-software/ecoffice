@@ -14,6 +14,12 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^7.3.1
         version: 7.4.0(eslint@8.57.0)(typescript@5.4.3)
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      dotenv-cli:
+        specifier: ^7.4.1
+        version: 7.4.2
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -48,13 +54,13 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.38.0
         version: 2.41.1
-      '@wardrobe/api':
+      '@ecoffice/api':
         specifier: '*'
         version: link:../../packages/api
-      '@wardrobe/db':
+      '@ecoffice/db':
         specifier: '*'
         version: link:../../packages/db
-      '@wardrobe/tailwind-config':
+      '@ecoffice/tailwind-config':
         specifier: '*'
         version: link:../../packages/config/tailwind
       base64-arraybuffer:
@@ -184,13 +190,13 @@ importers:
       '@trpc/server':
         specifier: ^10.37.1
         version: 10.45.2
-      '@wardrobe/api':
+      '@ecoffice/api':
         specifier: '*'
         version: link:../../packages/api
-      '@wardrobe/db':
+      '@ecoffice/db':
         specifier: '*'
         version: link:../../packages/db
-      '@wardrobe/tailwind-config':
+      '@ecoffice/tailwind-config':
         specifier: '*'
         version: link:../../packages/config/tailwind
       clsx:
@@ -308,7 +314,7 @@ importers:
       '@types/react':
         specifier: ^18.2.33
         version: 18.2.71
-      '@wardrobe/db':
+      '@ecoffice/db':
         specifier: '*'
         version: link:../db
       next:
@@ -5431,6 +5437,16 @@ packages:
       tslib: 2.6.2
     dev: false
 
+  /dotenv-cli@7.4.2:
+    resolution: {integrity: sha512-SbUj8l61zIbzyhIbg0FwPJq6+wjbzdn9oEtozQpZ6kW2ihCcapKVZj49oCT3oPM+mgQm+itgvUQcG5szxVrZTA==}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+      dotenv: 16.4.5
+      dotenv-expand: 10.0.0
+      minimist: 1.2.8
+    dev: false
+
   /dotenv-expand@10.0.0:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
@@ -5438,6 +5454,11 @@ packages:
 
   /dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
     dev: false
 

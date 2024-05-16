@@ -1,5 +1,5 @@
 {
-	"name": "@wardrobe/mobile",
+	"name": "@ecoffice/mobile",
 	"version": "1.0.0",
 	"main": "expo-router/entry",
 	"scripts": {
@@ -12,9 +12,9 @@
 		"@expo/vector-icons": "^13.0.0",
 		"@hookform/resolvers": "^3.1.1",
 		"@supabase/supabase-js": "^2.38.0",
-		"@wardrobe/api": "*",
-		"@wardrobe/db": "*",
-		"@wardrobe/tailwind-config": "*",
+		"@ecoffice/api": "*",
+		"@ecoffice/db": "*",
+		"@ecoffice/tailwind-config": "*",
 		"base64-arraybuffer": "^1.0.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.0",
