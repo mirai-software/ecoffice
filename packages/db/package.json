@@ -10,7 +10,7 @@
     "@types/bun": "latest"
   },
   "scripts": {
-    "with-env": "dotenv -e ../../.env --",
+    "with-env": "dotenv -e ../../apps/next.js/.env --",
     "postinstall": "pnpm prisma generate",
     "dev": "tsc --watch",
     "db-push": "pnpm with-env prisma db push",
