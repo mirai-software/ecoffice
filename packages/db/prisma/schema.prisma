@@ -2,7 +2,11 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
 }
 
 generator zod {
@@ -16,35 +20,64 @@ generator zod {
 }
 
 datasource db {
-  provider     = "postgresql"
-  url          = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    
-    name      String
-    user_id String
-    email     String
-
-    User user @relation(fields: [user_id], references: [id])
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    @@index([name, user_id])
+enum Weekday {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
 }
 
-model user {
-  id        String @id @unique
-  email     String @unique
-  stripeCustomerId String? @unique
-  firstName String
-  lastName  String
-  profileImageUrl String?
+model city {
+  id   String @id @unique
+  name String
 
-  Posts Post[]
-  
-  isPremium Boolean @default(false)
-  PremiumUntil DateTime?
+  calendars         calendar[]
+  secondHandProduct secondHandProduct[]
+  user              user[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model calendar {
+  id     String  @id @unique
+  day    Weekday
+  cityId String
+  city   city    @relation(fields: [cityId], references: [id])
+
+  wasteTypes wasteType[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model wasteType {
+  id         String    @id @unique
+  name       String
+  calendarId String?
+  calendar   calendar? @relation(fields: [calendarId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model secondHandProduct {
+  id String @id @unique
+
+  name        String
+  description String
+  price       Float
+  images      String[] // array of image urls
+
+  city   city   @relation(fields: [cityId], references: [id])
+  cityId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,4 +85,57 @@ model user {
   @@index([id])
 }
 
+model user {
+  id    String @id @unique
+  email String @unique
+  phone String @unique
 
+  firstName String
+  lastName  String
+  city      city   @relation(fields: [cityId], references: [id])
+  cityId    String
+  address   String
+
+  reports report[] // Array di Segnalazioni
+  pickup  pickup[] // Array di Ritiri a Domicilio
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+}
+
+// Segnalazione
+model report {
+  id String @id @unique
+
+  address String
+  type    String
+  status  String
+  images  String[] // array of image urls
+
+  user   user   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+}
+
+// Ritiro a Domilicio
+model pickup {
+  id String @id @unique
+
+  address String
+  status  String
+  images  String[] // array of image urls
+
+  user   user   @relation(fields: [userId], references: [id])
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([id])
+}

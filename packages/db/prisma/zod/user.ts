@@ -1,21 +1,22 @@
 import * as z from "zod"
-import { CompletePost, relatedPostSchema } from "./index"
+import { Completecity, relatedcitySchema, Completereport, relatedreportSchema, Completepickup, relatedpickupSchema } from "./index"
 
 export const userSchema = z.object({
   id: z.string(),
   email: z.string(),
-  stripeCustomerId: z.string().nullish(),
+  phone: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  profileImageUrl: z.string().nullish(),
-  isPremium: z.boolean(),
-  PremiumUntil: z.date().nullish(),
+  cityId: z.string(),
+  address: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
 export interface Completeuser extends z.infer<typeof userSchema> {
-  Posts: CompletePost[]
+  city: Completecity
+  reports: Completereport[]
+  pickup: Completepickup[]
 }
 
 /**
@@ -24,5 +25,7 @@ export interface Completeuser extends z.infer<typeof userSchema> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const relateduserSchema: z.ZodSchema<Completeuser> = z.lazy(() => userSchema.extend({
-  Posts: relatedPostSchema.array(),
+  city: relatedcitySchema,
+  reports: relatedreportSchema.array(),
+  pickup: relatedpickupSchema.array(),
 }))
