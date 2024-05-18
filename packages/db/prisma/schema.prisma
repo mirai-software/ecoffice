@@ -85,16 +85,22 @@ model secondHandProduct {
   @@index([id])
 }
 
-model user {
-  id    String @id @unique
-  email String @unique
-  phone String @unique
+enum Role {
+  user
+  admin
+}
 
+model user {
+  id    String  @id @unique
+  email String  @unique
+  phone String? @unique
+
+  role      Role
   firstName String
   lastName  String
-  city      city   @relation(fields: [cityId], references: [id])
-  cityId    String
-  address   String
+  city      city?   @relation(fields: [cityId], references: [id])
+  cityId    String?
+  address   String?
 
   reports report[] // Array di Segnalazioni
   pickup  pickup[] // Array di Ritiri a Domicilio
