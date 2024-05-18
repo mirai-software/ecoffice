@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  protectedProcedure,
+  privilegedProcedure,
+} from "../trpc";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -19,7 +24,16 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
+  privilegedHello: privilegedProcedure
+    .input(z.object({ text: z.string() }))
+    .query(({ input }) => {
+      return {
+        greeting: `Privileged Hello ${input.text}`,
+      };
+    }),
+
   // this call is used only to show you how to call the db :)
+  /*
   protecteddb: protectedProcedure
     .input(
       z.object({
@@ -35,4 +49,5 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+    */
 });

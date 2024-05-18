@@ -108,6 +108,43 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
   });
 });
 
+const isPrivileged = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.headers.get("authorization")) {
+    throw new Error("Not authorized");
+  }
+
+  const jwt = ctx.headers.get("authorization") as string;
+  const token = jwt.split(" ")[1];
+
+  const { data } = await supabase.auth.getUser(token);
+
+  if (!data.user) {
+    throw new Error("Not authorized");
+  }
+
+  const email = data.user.email;
+
+  const user = await db.user.findFirst({
+    where: {
+      email,
+    },
+  });
+
+  if (!user) {
+    throw new Error("Not authorized");
+  }
+
+  if (user.role !== "admin") {
+    throw new Error("Not authorized");
+  }
+
+  return next({
+    ctx: {
+      session: data,
+    },
+  });
+});
+
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
  *
@@ -132,3 +169,5 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(isAuthed);
+
+export const privilegedProcedure = t.procedure.use(isPrivileged);
