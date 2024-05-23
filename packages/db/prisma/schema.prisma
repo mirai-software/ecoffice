@@ -41,8 +41,10 @@ model city {
   calendars         calendar[]
   secondHandProduct secondHandProduct[]
   user              user[]
+  SupportRequest    SupportRequest[]
 
   // da definire un ulteriore tabella per i recapiti.
+  whatsappNumber String? // momentanemente stringa, da definire un tipo più appropriato 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,8 +106,9 @@ model user {
   cityId    String?
   address   String?
 
-  reports report[] // Array di Segnalazioni
-  pickup  pickup[] // Array di Ritiri a Domicilio
+  reports        report[] // Array di Segnalazioni
+  pickup         pickup[] // Array di Ritiri a Domicilio
+  SupportRequest SupportRequest[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -146,4 +149,29 @@ model pickup {
   updatedAt DateTime @updatedAt
 
   @@index([id])
+}
+
+// Richiesta di Supporto
+model SupportRequest {
+  id       String           @id @unique
+  status   String // Stati possibili: "open", "closed"
+  userId   String
+  user     user             @relation(fields: [userId], references: [id])
+  cityId   String
+  city     city             @relation(fields: [cityId], references: [id])
+  messages SupportMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Messaggi di Supporto
+model SupportMessage {
+  id               String         @id @unique
+  content          String
+  supportRequestId String
+  supportRequest   SupportRequest @relation(fields: [supportRequestId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
