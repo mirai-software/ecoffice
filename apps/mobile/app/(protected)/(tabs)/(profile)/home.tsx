@@ -1,0 +1,74 @@
+import { SafeAreaView } from "@/components/safe-area-view";
+import { H1, Muted } from "@/components/ui/typography";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "expo-router";
+import { Text } from "@/components/ui/text";
+import { useSupabase } from "@/context/supabase-provider";
+export default function Shop() {
+  const router = useRouter();
+  const { signOut } = useSupabase();
+  return (
+    <SafeAreaView className="flex-1 items-center justify-start bg-background p-4 gap-y-4">
+      <H1 className="text-center">Profile</H1>
+      <Muted className="text-center">
+        You are now authenticated and this session will persist even after
+        closing the app.
+      </Muted>
+
+      <Button
+        className="w-full bg-red-400"
+        variant="default"
+        size="default"
+        onPress={() => {
+          router.push("/(profile)/profile");
+        }}
+      >
+        <Text>Il mio Profilo</Text>
+      </Button>
+
+      <Button
+        className="w-full bg-green-400"
+        variant="default"
+        size="default"
+        onPress={() => {
+          router.push("/(profile)/reports");
+        }}
+      >
+        <Text>Segnalazioni Effettuate</Text>
+      </Button>
+
+      <Button
+        className="w-full bg-sky-400"
+        variant="default"
+        size="default"
+        onPress={() => {
+          router.push("/(profile)/requests");
+        }}
+      >
+        <Text>Ritiri richiesti</Text>
+      </Button>
+
+      <Button
+        className="w-full bg-purple-400"
+        variant="default"
+        size="default"
+        onPress={() => {
+          router.push("/(profile)/assistance");
+        }}
+      >
+        <Text>Assistenza</Text>
+      </Button>
+
+      <Button
+        className="w-full bg-blue-500"
+        variant="default"
+        size="default"
+        onPress={() => {
+          signOut();
+        }}
+      >
+        <Text>Esci</Text>
+      </Button>
+    </SafeAreaView>
+  );
+}

@@ -11,10 +11,15 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="(tabs)"
+      initialRouteName="home"
     >
-      <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="(onboarding)/onboarding" />
+      <Stack.Screen name="home" />
+      <Stack.Screen
+        name="[slug]"
+        options={{
+          presentation: "card",
+        }}
+      />
     </Stack>
   );
 }
