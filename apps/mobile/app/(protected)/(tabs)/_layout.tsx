@@ -1,6 +1,12 @@
 import { Tabs } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 import React from "react";
+import { theme } from "@/lib/constants";
+
+import UserIcon from "@/assets/icons/user";
+import BankIcon from "@/assets/icons/bank";
+import CalendarIcon from "@/assets/icons/calendar";
+import ShopIcon from "@/assets/icons/shop";
 
 // import { theme } from "@/lib/constants";
 // import { useColorScheme } from "@/lib/useColorScheme";
@@ -11,22 +17,27 @@ export default function ProtectedLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "white",
+        tabBarActiveTintColor: "#FFFFFF",
+        tabBarInactiveTintColor: theme.light.tabs_muted,
         tabBarStyle: {
           height: 80,
           borderWidth: 1,
           borderRadius: 40,
           marginHorizontal: 10,
-          backgroundColor: "#243239",
+          backgroundColor: theme.light.tabs,
           position: "absolute",
           bottom: 30,
           paddingHorizontal: 20,
           borderColor: "#243239",
           flex: 1,
-          justifyContent: "center",
           borderTopWidth: 0,
         },
         headerShown: false,
+
+        headerStyle: {
+          height: 120,
+        },
+
         tabBarLabelStyle: {
           fontSize: 10,
           fontWeight: "bold",
@@ -34,18 +45,15 @@ export default function ProtectedLayout() {
         tabBarItemStyle: {
           height: 65,
         },
-        headerStyle: {
-          shadowColor: "transparent",
-          height: 120,
-        },
       }}
+      initialRouteName="(home)"
     >
       <Tabs.Screen
         name="(shop)"
         options={{
           title: "Seconda Mano",
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={24} name="shopping-bag" color={color} />
+            <ShopIcon width={28} height={28} color={color} />
           ),
         }}
       />
@@ -53,9 +61,9 @@ export default function ProtectedLayout() {
       <Tabs.Screen
         name="(home)"
         options={{
-          title: "EcoOffice",
+          title: "Home",
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={28} name="home" color={color} />
+            <BankIcon width={28} height={28} color={color} />
           ),
         }}
       />
@@ -63,9 +71,9 @@ export default function ProtectedLayout() {
       <Tabs.Screen
         name="(calendar)"
         options={{
-          title: "Calendar",
+          title: "Calendario",
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={24} name="calendar" color={color} />
+            <CalendarIcon width={28} height={28} color={color} />
           ),
         }}
       />
@@ -73,9 +81,9 @@ export default function ProtectedLayout() {
       <Tabs.Screen
         name="(profile)"
         options={{
-          title: "Profile",
+          title: "Profilo",
           tabBarIcon: ({ color }) => (
-            <FontAwesome size={24} name="user" color={color} />
+            <UserIcon width={28} height={28} color={color} />
           ),
         }}
       />
