@@ -11,9 +11,9 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="home"
+      initialRouteName="profile-home"
     >
-      <Stack.Screen name="home" />
+      <Stack.Screen name="profile-home" />
     </Stack>
   );
 }

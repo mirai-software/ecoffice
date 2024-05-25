@@ -1,22 +1,15 @@
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { View } from "react-native";
 
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { H1, Muted } from "@/components/ui/typography";
-import { SafeAreaView } from "@/components/safe-area-view";
+
+import HeaderContainer from "@/app/_header";
 
 export default function TabOneScreen() {
-  const router = useRouter();
-
   return (
-    <View className="flex-1 flex">
-      <SafeAreaView className="bg-primary h-36 flex">
-        <View className="min-h-20 items-center justify-center">
-          <Text className="text-black text-xl ">EcoOffice</Text>
-        </View>
-      </SafeAreaView>
-
+    <HeaderContainer router={router}>
       <View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
         <H1 className="text-center">Home</H1>
         <Muted className="text-center">
@@ -46,6 +39,6 @@ export default function TabOneScreen() {
           <Text>Richiedi ritiro a Domicilio</Text>
         </Button>
       </View>
-    </View>
+    </HeaderContainer>
   );
 }

@@ -11,11 +11,11 @@ export default function RootLayout() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="home"
+      initialRouteName="shop"
     >
-      <Stack.Screen name="home" />
+      <Stack.Screen name="shop" />
       <Stack.Screen
-        name="[slug]"
+        name="[shop_slug]"
         options={{
           presentation: "card",
         }}
