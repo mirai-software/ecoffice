@@ -9,9 +9,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "@ecoffice/api": "*",
-    "@ecoffice/db": "*",
-    "@ecoffice/tailwind-config": "*",
+    "@ecoffice/api": "workspace:*",
+    "@ecoffice/db": "workspace:*",
+    "@ecoffice/tailwind-config": "workspace:*",
     "@clerk/nextjs": "^4.27.1",
     "@prisma/client": "^5.1.1",
     "@stripe/stripe-js": "^2.2.0",
@@ -57,5 +57,5 @@
   "ct3aMetadata": {
     "initVersion": "7.23.2"
   },
-  "packageManager": "npm@10.2.0"
+  "packageManager": "pnpm@9.1.3"
 }
