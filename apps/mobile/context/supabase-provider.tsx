@@ -159,9 +159,17 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        setSession(session);
-        setUser(session ? session.user : null);
-        setInitialized(true);
+        // check if the jwt is ok
+        const get_session = await supabase.auth.getUser(session?.access_token);
+        if (get_session.data.user) {
+          setSession(session);
+          setUser(session ? session.user : null);
+          setInitialized(true);
+        } else {
+          setSession(null);
+          setUser(null);
+          setInitialized(true);
+        }
       }
     );
     return () => {
