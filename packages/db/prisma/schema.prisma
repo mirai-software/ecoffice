@@ -95,13 +95,13 @@ enum Role {
 }
 
 model user {
-  id    String  @id @unique
+  id    String  @id @unique @default(uuid())
   email String  @unique
   phone String? @unique
 
   role      Role
-  firstName String
-  lastName  String
+  firstName String?
+  lastName  String?
   city      city?   @relation(fields: [cityId], references: [id])
   cityId    String?
   address   String?
@@ -110,8 +110,9 @@ model user {
   pickup         pickup[] // Array di Ritiri a Domicilio
   SupportRequest SupportRequest[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  SignInCompleted Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([id])
 }
