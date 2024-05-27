@@ -23,7 +23,7 @@
     "@trpc/server": "^10.45.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.33",
-    "@ecoffice/db": "*",
+    "@ecoffice/db": "workspace:*",
     "next": "^14.0.0",
     "next-server": "^9.0.5",
     "superjson": "^2.2.1",

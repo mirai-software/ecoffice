@@ -176,3 +176,5 @@ dist
 
 
 apps/mobile/.expo/metro/
+
+.turbo/
