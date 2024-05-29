@@ -22,21 +22,22 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
   return (
     <View style={{ flex: 1 }}>
       <View
+        className="bg-background"
         style={{
           position: "relative",
           paddingTop: insets.top - 50,
-          backgroundColor: "white",
           alignItems: "center",
         }}
       >
         <HeaderBackground />
         <Text
+          className="dark:text-white text-black"
           style={{
             position: "absolute",
             top: insets.top,
             fontSize: 22,
             fontWeight: "semibold",
-            color: "#000",
+
             zIndex: 1,
           }}
         >
