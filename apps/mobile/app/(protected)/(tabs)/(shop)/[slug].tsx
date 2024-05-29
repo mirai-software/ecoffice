@@ -2,10 +2,10 @@ import HeaderContainer from "@/app/_header";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { H1, Muted } from "@/components/ui/typography";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 import { router, useLocalSearchParams } from "expo-router";
 
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 
 export default function Page() {
   const { slug } = useLocalSearchParams();

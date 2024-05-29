@@ -12,8 +12,6 @@ import ShopIcon from "@/assets/icons/shop";
 // import { useColorScheme } from "@/lib/useColorScheme";
 
 export default function ProtectedLayout() {
-  // const { colorScheme } = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
