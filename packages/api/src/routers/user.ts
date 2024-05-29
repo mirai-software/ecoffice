@@ -14,24 +14,43 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
-  getUserSignInCompleted: protectedProcedure
-    .input(z.object({ email: z.string() }))
+  getUser: protectedProcedure.input(z.object({})).query(({ ctx }) => {
+    return ctx.db.user.findUnique({
+      where: {
+        email: ctx.session.user.email,
+      },
+      include: {
+        city: true,
+      },
+    });
+  }),
+
+  setUserInformation: protectedProcedure
+    .input(
+      z.object({
+        firstName: z.string(),
+        lastname: z.string(),
+        city: z.string(),
+        address: z.string(),
+        phoneNumber: z.string(),
+      })
+    )
     .mutation(({ ctx, input }) => {
-      return ctx.db.user
-        .findFirst({
-          where: {
-            email: input.email,
+      return ctx.db.user.update({
+        where: {
+          email: ctx.session.user.email,
+        },
+        data: {
+          firstName: input.firstName,
+          lastName: input.lastname,
+          city: {
+            connect: {
+              id: input.city,
+            },
           },
-          select: {
-            SignInCompleted: true,
-          },
-        })
-        .catch((error) => {
-          console.error(error);
-          return null;
-        })
-        .then((user) => {
-          return user?.SignInCompleted ?? false;
-        });
+          address: input.address,
+          phone: input.phoneNumber,
+        },
+      });
     }),
 });
