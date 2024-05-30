@@ -50,26 +50,36 @@ model city {
   updatedAt DateTime @updatedAt
 }
 
+// Tabella di join per la relazione molti-a-molti
 model calendar {
-  id     String  @id @unique
-  day    Weekday
-  cityId String
-  city   city    @relation(fields: [cityId], references: [id])
-
-  wasteTypes wasteType[]
+  id         String              @id @unique @default(uuid())
+  day        Weekday
+  cityId     String
+  city       city                @relation(fields: [cityId], references: [id])
+  wasteTypes CalendarWasteType[] // Modifica per relazione molti-a-molti
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model wasteType {
-  id         String    @id @unique
-  name       String
-  calendarId String?
-  calendar   calendar? @relation(fields: [calendarId], references: [id])
+  id        String              @id @unique @default(uuid())
+  name      String
+  color     String
+  calendars CalendarWasteType[] // Modifica per relazione molti-a-molti
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// Tabella di join per la relazione molti-a-molti
+model CalendarWasteType {
+  calendarId  String
+  calendar    calendar  @relation(fields: [calendarId], references: [id])
+  wasteTypeId String
+  wasteType   wasteType @relation(fields: [wasteTypeId], references: [id])
+
+  @@id([calendarId, wasteTypeId])
 }
 
 model secondHandProduct {
