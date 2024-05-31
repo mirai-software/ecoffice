@@ -58,4 +58,12 @@ export const cityRouter = createTRPCRouter({
           }
         });
     }),
+
+  getWasteType: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.wasteType.findUnique({
+        where: { id: input.id },
+      });
+    }),
 });

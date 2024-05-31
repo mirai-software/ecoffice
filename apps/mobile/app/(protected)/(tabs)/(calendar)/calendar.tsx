@@ -6,6 +6,7 @@ import { Text } from "@/components/ui/text";
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import { SafeAreaView } from "@/components/safe-area-view";
+import CalendarComponent from "@/components/CalendarComponent";
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});
 
@@ -18,27 +19,15 @@ export default function Shop() {
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
-          <H1 className="text-center">Calendar</H1>
-          <Muted className="text-center">
-            You are now authenticated and this session will persist even after
-            closing the app.
-          </Muted>
-
-          <ScrollView>
-            <Text>{JSON.stringify(Calendar, null, 2)}</Text>
-          </ScrollView>
-
-          <Button
-            className="w-full bg-red-400"
-            variant="default"
-            size="default"
-            onPress={() => {
-              router.push("/(calendar)/Spazzatura-23231");
-            }}
-          >
-            <Text>Go to Spazzatura</Text>
-          </Button>
+        <View className="flex-1 items-start justify-start bg-background gap-y-4">
+          {/* Implementare Shopify ScrollView */}
+          {Calendar?.map((day) => (
+            <CalendarComponent
+              key={day.id}
+              day={day.day}
+              garbages={day.wasteTypes}
+            />
+          ))}
         </View>
       </HeaderContainer>
     );
