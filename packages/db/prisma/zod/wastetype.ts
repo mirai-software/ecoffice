@@ -1,16 +1,18 @@
 import * as z from "zod"
-import { Completecalendar, relatedcalendarSchema } from "./index"
+import { CompleteCalendarWasteType, relatedCalendarWasteTypeSchema } from "./index"
 
 export const wasteTypeSchema = z.object({
   id: z.string(),
   name: z.string(),
-  calendarId: z.string().nullish(),
+  color: z.string(),
+  info: z.string().array(),
+  icon: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
 export interface CompletewasteType extends z.infer<typeof wasteTypeSchema> {
-  calendar?: Completecalendar | null
+  calendars: CompleteCalendarWasteType[]
 }
 
 /**
@@ -19,5 +21,5 @@ export interface CompletewasteType extends z.infer<typeof wasteTypeSchema> {
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
 export const relatedwasteTypeSchema: z.ZodSchema<CompletewasteType> = z.lazy(() => wasteTypeSchema.extend({
-  calendar: relatedcalendarSchema.nullish(),
+  calendars: relatedCalendarWasteTypeSchema.array(),
 }))

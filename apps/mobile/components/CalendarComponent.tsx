@@ -1,13 +1,17 @@
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { Text } from "./ui/text";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import { SvgUri } from "react-native-svg";
+import InfoCircle from "@/assets/icons/info-circle";
 
 type wasteTypes = {
   id: string;
   name: string;
   color: string;
   createdAt: Date;
+  icon?: string;
+  info: string[];
   updatedAt: Date;
 };
 
@@ -32,16 +36,25 @@ export default function CalendarComponent({
               backgroundColor: garbage.color,
             }}
           >
-            <View className="flex-1 flex flex-row justify-between items-center pl-2 pr-5">
-              <Text className="font-semibold text-xl text-white ">
-                {garbage.name}
-              </Text>
-              <FontAwesome
-                name="info"
-                size={24}
-                color="white"
-                onPress={() => router.push(`/${garbage.id}`)}
-              />
+            <View className="flex-1 flex flex-row justify-between items-center pl-1 pr-5">
+              <View className="flex flex-row gap-2">
+                {garbage.icon && garbage.icon != "default" ? (
+                  <SvgUri
+                    width="24"
+                    height="24"
+                    uri={"http://localhost:3000/icon/" + garbage.icon}
+                    fill="white"
+                  />
+                ) : (
+                  <FontAwesome name="recycle" size={24} color="white" />
+                )}
+                <Text className="font-semibold text-xl text-white ">
+                  {garbage.name}
+                </Text>
+              </View>
+              <Pressable onPress={() => router.push("/" + garbage.id)}>
+                <InfoCircle />
+              </Pressable>
             </View>
           </View>
         ))}

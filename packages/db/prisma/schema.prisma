@@ -66,6 +66,8 @@ model wasteType {
   id        String              @id @unique @default(uuid())
   name      String
   color     String
+  info      String[]            @default([])
+  icon      String              @default("default")
   calendars CalendarWasteType[] // Modifica per relazione molti-a-molti
 
   createdAt DateTime @default(now())

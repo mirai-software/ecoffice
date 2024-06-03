@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { Weekday } from "@prisma/client"
-import { Completecity, relatedcitySchema, CompletewasteType, relatedwasteTypeSchema } from "./index"
+import { Completecity, relatedcitySchema, CompleteCalendarWasteType, relatedCalendarWasteTypeSchema } from "./index"
 
 export const calendarSchema = z.object({
   id: z.string(),
@@ -12,7 +12,7 @@ export const calendarSchema = z.object({
 
 export interface Completecalendar extends z.infer<typeof calendarSchema> {
   city: Completecity
-  wasteTypes: CompletewasteType[]
+  wasteTypes: CompleteCalendarWasteType[]
 }
 
 /**
@@ -22,5 +22,5 @@ export interface Completecalendar extends z.infer<typeof calendarSchema> {
  */
 export const relatedcalendarSchema: z.ZodSchema<Completecalendar> = z.lazy(() => calendarSchema.extend({
   city: relatedcitySchema,
-  wasteTypes: relatedwasteTypeSchema.array(),
+  wasteTypes: relatedCalendarWasteTypeSchema.array(),
 }))
