@@ -17,6 +17,7 @@ type SupabaseContextProps = {
   uploadAvatar: (file: string) => Promise<string>;
   getAvatarUrl: () => Promise<string>;
   uploadRequestImage: (file: string, fileUUID: string) => Promise<string>;
+  uploadReportImage: (file: string, fileUUID: string) => Promise<string>;
   getPostImageUrl: (fileUUID: string) => Promise<string>;
 };
 
@@ -34,6 +35,7 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   uploadAvatar: async () => "",
   getAvatarUrl: async () => "",
   uploadRequestImage: async () => "",
+  uploadReportImage: async () => "",
   getPostImageUrl: async () => "",
 });
 
@@ -106,6 +108,29 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const uploadRequestImage = async (file: string, fileUUID: string) => {
     const { data, error } = await supabase.storage
       .from("requests")
+      .upload(user?.id + "/" + fileUUID, decode(file), {
+        contentType: "image/png",
+        cacheControl: "3600",
+        upsert: false,
+      });
+    if (error) {
+      console.error("Error uploading file: ", error);
+      throw error;
+    }
+    return data.path;
+  };
+
+  /**
+   * Uploads a post image to Supabase storage.
+   *
+   * @param file - The file to be uploaded.
+   * @param fileUUID - The UUID of the file.
+   * @returns The path of the uploaded file.
+   * @throws If there is an error during the upload process.
+   */
+  const uploadReportImage = async (file: string, fileUUID: string) => {
+    const { data, error } = await supabase.storage
+      .from("reports")
       .upload(user?.id + "/" + fileUUID, decode(file), {
         contentType: "image/png",
         cacheControl: "3600",
@@ -212,6 +237,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
         uploadAvatar,
         getAvatarUrl,
         uploadRequestImage,
+        uploadReportImage,
         getPostImageUrl,
       }}
     >

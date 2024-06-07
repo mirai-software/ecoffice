@@ -131,7 +131,7 @@ model user {
 
 // Segnalazione
 model report {
-  id String @id @unique
+  id String @id @unique @default(uuid())
 
   address String
   type    String
@@ -152,6 +152,7 @@ model pickup {
   id String @id @unique @default(uuid())
 
   address String
+  type    String
   status  String
   images  String[] // array of image urls
 
