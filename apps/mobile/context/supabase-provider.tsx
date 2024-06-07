@@ -16,7 +16,7 @@ type SupabaseContextProps = {
   signOut: () => Promise<void>;
   uploadAvatar: (file: string) => Promise<string>;
   getAvatarUrl: () => Promise<string>;
-  uploadPostImage: (file: File, fileUUID: string) => Promise<string>;
+  uploadRequestImage: (file: string, fileUUID: string) => Promise<string>;
   getPostImageUrl: (fileUUID: string) => Promise<string>;
 };
 
@@ -33,7 +33,7 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   signOut: async () => {},
   uploadAvatar: async () => "",
   getAvatarUrl: async () => "",
-  uploadPostImage: async () => "",
+  uploadRequestImage: async () => "",
   getPostImageUrl: async () => "",
 });
 
@@ -103,14 +103,16 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
    * @returns The path of the uploaded file.
    * @throws If there is an error during the upload process.
    */
-  const uploadPostImage = async (file: File, fileUUID: string) => {
+  const uploadRequestImage = async (file: string, fileUUID: string) => {
     const { data, error } = await supabase.storage
-      .from("posts")
-      .upload(user?.id + "/" + fileUUID, file, {
+      .from("requests")
+      .upload(user?.id + "/" + fileUUID, decode(file), {
+        contentType: "image/png",
         cacheControl: "3600",
         upsert: false,
       });
     if (error) {
+      console.error("Error uploading file: ", error);
       throw error;
     }
     return data.path;
@@ -209,7 +211,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
         signOut,
         uploadAvatar,
         getAvatarUrl,
-        uploadPostImage,
+        uploadRequestImage,
         getPostImageUrl,
       }}
     >

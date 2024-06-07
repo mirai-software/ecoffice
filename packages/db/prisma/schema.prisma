@@ -149,7 +149,7 @@ model report {
 
 // Ritiro a Domilicio
 model pickup {
-  id String @id @unique
+  id String @id @unique @default(uuid())
 
   address String
   status  String
