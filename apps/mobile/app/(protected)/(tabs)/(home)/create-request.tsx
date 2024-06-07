@@ -15,7 +15,6 @@ import * as ImagePicker from "expo-image-picker";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
 import { api } from "@/lib/api";
-import { SafeAreaView } from "@/components/safe-area-view";
 import { router } from "expo-router";
 import RNPickerSelect from "react-native-picker-select";
 import HeaderContainer from "@/app/_header";
@@ -98,14 +97,14 @@ export default function CreateHomeRequest() {
   if (isLoading) {
     return (
       <HeaderContainer router={router}>
-        <ActivityIndicator className="flex-1 justify-center items-center" />
+        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
       </HeaderContainer>
     );
   } else
     return (
       <HeaderContainer router={router}>
         <View className="flex-1 bg-background p-4 relative">
-          <View className="flex-1 z-20 flex gap-2">
+          <View className="flex-1 z-20 flex gap-4">
             <View className="flex gap-2">
               <Text className="">Indirizzo</Text>
               <TextInput
@@ -159,8 +158,10 @@ export default function CreateHomeRequest() {
                         onPress={() => {
                           setImages(images.filter((img) => img !== image));
                         }}
+                        key={image.uri}
                       >
                         <Image
+                          key={image.assetId}
                           source={{ uri: image.uri }}
                           style={{ width: 100, height: 100, borderRadius: 8 }}
                           className="h-28 w-28 rounded-lg"
@@ -184,7 +185,7 @@ export default function CreateHomeRequest() {
                 className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
                 onPress={HandleSubmit}
               >
-                <Text className="font-bold">Continua</Text>
+                <Text className="font-bold text-white">Continua</Text>
               </Button>
             </View>
           </View>
