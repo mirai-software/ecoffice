@@ -85,6 +85,7 @@ export default function Shop() {
           size="default"
           onPress={() => {
             signOut();
+            router.push("/(public)/sign-in");
           }}
         >
           <Text>Esci</Text>

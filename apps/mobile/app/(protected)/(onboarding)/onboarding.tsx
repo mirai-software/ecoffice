@@ -99,7 +99,7 @@ export default function Onboarding() {
   if (citysLoading) {
     return (
       <SafeAreaView className="flex-1 bg-background p-4">
-        <ActivityIndicator />
+        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
       </SafeAreaView>
     );
   } else

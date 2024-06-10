@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { router } from "expo-router";
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,

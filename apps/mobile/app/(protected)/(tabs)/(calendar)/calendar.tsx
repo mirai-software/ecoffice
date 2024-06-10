@@ -12,9 +12,19 @@ export default function Shop() {
 
   if (isLoading) {
     return (
-      <SafeAreaView>
-        <ActivityIndicator />
-      </SafeAreaView>
+      <HeaderContainer router={router}>
+        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+      </HeaderContainer>
+    );
+  } else if (Calendar?.length === 0) {
+    return (
+      <HeaderContainer router={router}>
+        <View className="flex-1 items-center  justify-center bg-background p-4 gap-y-4">
+          <Muted className="text-center">
+            Nessun Calendario attualmente caricato.{" "}
+          </Muted>
+        </View>
+      </HeaderContainer>
     );
   } else
     return (

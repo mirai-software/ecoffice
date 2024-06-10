@@ -5,7 +5,7 @@ import Svg, { Path } from "react-native-svg";
 export default function HeaderBackground() {
   return (
     <View className="w-full flex flex-row justify-between ">
-      <Svg width="170" height="97" viewBox="0 0 170 97" fill="none">
+      <Svg width="170" height="110" viewBox="0 0 170 97" fill="none">
         <Path
           fill-rule="evenodd"
           clip-rule="evenodd"

@@ -20,7 +20,7 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1 }} className="bg-background">
       <View
         className="bg-background"
         style={{

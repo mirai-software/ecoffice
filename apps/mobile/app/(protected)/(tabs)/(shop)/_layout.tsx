@@ -15,7 +15,7 @@ export default function RootLayout() {
     >
       <Stack.Screen name="shop" />
       <Stack.Screen
-        name="[shop_slug]"
+        name="[slug]"
         options={{
           presentation: "card",
         }}
