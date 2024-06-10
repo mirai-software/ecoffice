@@ -19,6 +19,7 @@ type SupabaseContextProps = {
   uploadRequestImage: (file: string, fileUUID: string) => Promise<string>;
   uploadReportImage: (file: string, fileUUID: string) => Promise<string>;
   getPostImageUrl: (fileUUID: string) => Promise<string>;
+  getProductImageUrl: (fileUUID: string, cityUUID: string) => Promise<string>;
 };
 
 type SupabaseProviderProps = {
@@ -37,6 +38,7 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   uploadRequestImage: async () => "",
   uploadReportImage: async () => "",
   getPostImageUrl: async () => "",
+  getProductImageUrl: async () => "",
 });
 
 export const useSupabase = () => useContext(SupabaseContext);
@@ -162,6 +164,23 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   };
 
   /**
+   * Retrieves the public URL of a product image from Supabase storage.
+   * @param fileUUID - The UUID of the file.
+   * @param cityUUID - The UUID of the city.
+   * @returns The URL of the product image.
+   */
+  const getProductImageUrl = async (fileUUID: string, cityUUID: string) => {
+    const { data } = await supabase.storage
+      .from("shop")
+      .getPublicUrl(cityUUID + "/" + fileUUID);
+
+    if (!data) {
+      return "";
+    }
+    return data.publicUrl;
+  };
+
+  /**
    * Retrieves the URL of the user's avatar from the Supabase storage.
    * @returns The URL of the user's avatar, or an empty string if the avatar is not found.
    */
@@ -239,6 +258,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
         uploadRequestImage,
         uploadReportImage,
         getPostImageUrl,
+        getProductImageUrl,
       }}
     >
       {children}
