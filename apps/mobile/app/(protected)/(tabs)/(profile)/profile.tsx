@@ -1,28 +1,90 @@
 import HeaderContainer from "@/app/_header";
-import { H1 } from "@/components/ui/typography";
+
 import { router } from "expo-router";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import { api } from "@/lib/api";
-import { SafeAreaView } from "@/components/safe-area-view";
+import { Feather } from "@expo/vector-icons";
+
 import { Text } from "@/components/ui/text";
+
+const EditButton = () => {
+  return (
+    <Pressable onPress={() => router.push("/(profile)/profile-edit")}>
+      <Feather name="edit" size={24} color="black" />
+    </Pressable>
+  );
+};
 
 export default function Page() {
   const { data: user, isLoading } = api.user.getUser.useQuery({});
 
   if (isLoading) {
     return (
-      <SafeAreaView>
-        <ActivityIndicator />
-      </SafeAreaView>
+      <HeaderContainer router={router}>
+        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+      </HeaderContainer>
     );
   } else
     return (
-      <HeaderContainer router={router}>
-        <View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
-          <H1 className="text-center">Il Mio Profilo</H1>
-          {/* print the user as json structured */}
-          <View>
-            <Text>{JSON.stringify(user, null, 2)}</Text>
+      <HeaderContainer router={router} rightComponent={EditButton()}>
+        <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4">
+          <View className="flex gap-2 w-full">
+            <Text className="">Nome e Cognome</Text>
+            <View className="flex flex-row">
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 ">
+                {user?.firstName} {user?.lastName}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex gap-2 w-full">
+            <Text className="">Email</Text>
+            <View className="flex flex-row">
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 ">
+                {user?.email}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex gap-2 w-full">
+            <Text className="">Password</Text>
+            <View className="flex flex-row">
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 font-bold text-xl">
+                {"•••••••••"}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex gap-2 w-full">
+            <Text className="">Numero di Telefono</Text>
+            <View className="flex flex-row">
+              <View className="border-[1px] border-gray-500 rounded-2xl ">
+                <Text className="text-black dark:text-white p-4 rounded-2xl">
+                  🇮🇹 +39
+                </Text>
+              </View>
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 ml-5">
+                {user?.phone}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex gap-2 w-full">
+            <Text className="">Comune di Residenza</Text>
+            <View className="flex flex-row">
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 ">
+                {user?.city?.name}
+              </Text>
+            </View>
+          </View>
+
+          <View className="flex gap-2 w-full">
+            <Text className="">Indirizzo di Residenza</Text>
+            <View className="flex flex-row">
+              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 ">
+                {user?.address}
+              </Text>
+            </View>
           </View>
         </View>
       </HeaderContainer>

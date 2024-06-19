@@ -1,15 +1,6 @@
-import * as z from "zod";
-import { Role } from "@prisma/client";
-import {
-  Completecity,
-  relatedcitySchema,
-  Completereport,
-  relatedreportSchema,
-  Completepickup,
-  relatedpickupSchema,
-  CompleteSupportRequest,
-  relatedSupportRequestSchema,
-} from "./index";
+import * as z from "zod"
+import { Role } from "@prisma/client"
+import { Completecity, relatedcitySchema, Completereport, relatedreportSchema, Completepickup, relatedpickupSchema, CompleteSupportRequest, relatedSupportRequestSchema } from "./index"
 
 export const userSchema = z.object({
   id: z.string(),
@@ -23,13 +14,13 @@ export const userSchema = z.object({
   SignInCompleted: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
-});
+})
 
 export interface Completeuser extends z.infer<typeof userSchema> {
-  city?: Completecity | null;
-  reports: Completereport[];
-  pickup: Completepickup[];
-  SupportRequest: CompleteSupportRequest[];
+  city?: Completecity | null
+  reports: Completereport[]
+  pickup: Completepickup[]
+  SupportRequest: CompleteSupportRequest[]
 }
 
 /**
@@ -37,11 +28,9 @@ export interface Completeuser extends z.infer<typeof userSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const relateduserSchema: z.ZodSchema<Completeuser> = z.lazy(() =>
-  userSchema.extend({
-    city: relatedcitySchema.nullish(),
-    reports: relatedreportSchema.array(),
-    pickup: relatedpickupSchema.array(),
-    SupportRequest: relatedSupportRequestSchema.array(),
-  })
-);
+export const relateduserSchema: z.ZodSchema<Completeuser> = z.lazy(() => userSchema.extend({
+  city: relatedcitySchema.nullish(),
+  reports: relatedreportSchema.array(),
+  pickup: relatedpickupSchema.array(),
+  SupportRequest: relatedSupportRequestSchema.array(),
+}))

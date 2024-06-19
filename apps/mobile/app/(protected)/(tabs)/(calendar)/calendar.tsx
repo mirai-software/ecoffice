@@ -1,11 +1,8 @@
-import { H1, Muted } from "@/components/ui/typography";
-import { ActivityIndicator, ScrollView, View } from "react-native";
-import { Button } from "@/components/ui/button";
+import { Muted } from "@/components/ui/typography";
+import { ActivityIndicator, View } from "react-native";
 import { router } from "expo-router";
-import { Text } from "@/components/ui/text";
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
-import { SafeAreaView } from "@/components/safe-area-view";
 import CalendarComponent from "@/components/CalendarComponent";
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});

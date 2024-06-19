@@ -3,7 +3,9 @@ import { Completeuser, relateduserSchema } from "./index"
 
 export const pickupSchema = z.object({
   id: z.string(),
+  number: z.number().int(),
   address: z.string(),
+  type: z.string(),
   status: z.string(),
   images: z.string().array(),
   userId: z.string(),

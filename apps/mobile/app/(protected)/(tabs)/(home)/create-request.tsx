@@ -31,6 +31,7 @@ export default function CreateHomeRequest() {
   const { data, isLoading } = api.user.getUser.useQuery({});
   const { uploadRequestImage } = useSupabase();
   const AddRequest = api.user.addPickupRequest.useMutation();
+  const utils = api.useUtils();
 
   /**
    * Opens the image library and allows the user to pick an image.
@@ -90,6 +91,7 @@ export default function CreateHomeRequest() {
         };
         await AddRequest.mutateAsync(data).then(() => {
           router.back();
+          utils.user.getUserPickupRequests.invalidate();
         });
       }
     }

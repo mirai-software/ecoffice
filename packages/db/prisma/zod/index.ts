@@ -1,6 +1,7 @@
 export * from "./city"
 export * from "./calendar"
 export * from "./wastetype"
+export * from "./calendarwastetype"
 export * from "./secondhandproduct"
 export * from "./user"
 export * from "./report"

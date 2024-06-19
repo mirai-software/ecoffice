@@ -3,6 +3,7 @@ import { Completeuser, relateduserSchema } from "./index"
 
 export const reportSchema = z.object({
   id: z.string(),
+  number: z.number().int(),
   address: z.string(),
   type: z.string(),
   status: z.string(),

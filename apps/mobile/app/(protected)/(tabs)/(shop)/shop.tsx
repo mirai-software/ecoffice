@@ -1,14 +1,21 @@
 import { Text } from "@/components/ui/text";
-import { H1, Muted } from "@/components/ui/typography";
-import { ActivityIndicator, Image, Pressable, View } from "react-native";
+import { Muted } from "@/components/ui/typography";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  RefreshControl,
+  View,
+} from "react-native";
 
 import { useSupabase } from "@/context/supabase-provider";
 import HeaderContainer from "@/app/_header";
 
 import { api } from "@/lib/api";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { useEffect, useState } from "react";
+import { ScrollView } from "react-native";
 
 type secondHandProduct = {
   id: string;
@@ -18,9 +25,10 @@ type secondHandProduct = {
   date: Date;
   price: Float;
   images: string[];
+  customRoute?: string;
 };
 
-const SecondHandProductComponent = (product: secondHandProduct) => {
+export const SecondHandProductComponent = (product: secondHandProduct) => {
   const { getProductImageUrl } = useSupabase();
   const [imageUrl, setImageUrl] = useState<string>("");
 
@@ -41,7 +49,11 @@ const SecondHandProductComponent = (product: secondHandProduct) => {
     return (
       <Pressable
         className="bg-white rounded-2xl shadow-lg w-[90%] mx-5 flex gap-2 pb-5"
-        onPress={() => router.push("(shop)/" + product.id)}
+        onPress={() =>
+          product.customRoute
+            ? router.push(product.customRoute)
+            : router.push(`/(shop)/${product.id}`)
+        }
       >
         <Image
           source={{ uri: imageUrl }}
@@ -59,6 +71,23 @@ const SecondHandProductComponent = (product: secondHandProduct) => {
 
 export default function Shop() {
   const { data, isLoading } = api.city.getAllSecondHandProducts.useQuery({});
+  const [refreshing, setRefreshing] = useState(false);
+  const { slug } = useLocalSearchParams();
+  const utils = api.useUtils();
+
+  if (slug) {
+    const product = data?.find((product) => product.id === slug);
+    if (product) {
+      data?.splice(data?.indexOf(product), 1);
+      data?.unshift(product);
+    }
+  }
+
+  const OnRefresh = () => {
+    utils.city.getAllSecondHandProducts.refetch();
+    setRefreshing(false);
+  };
+
   if (isLoading) {
     return (
       <HeaderContainer router={router}>
@@ -68,7 +97,7 @@ export default function Shop() {
   } else if (data?.length === 0) {
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-centerjustify-center bg-background p-4 gap-y-4">
+        <View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
           <Muted className="text-center">
             Nessun prodotto attualmente caricato.{" "}
           </Muted>
@@ -78,20 +107,28 @@ export default function Shop() {
   } else {
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-center justify-start bg-background gap-y-4 mt-3">
-          {data?.map((product) => (
-            <SecondHandProductComponent
-              key={product.id}
-              name={product.name}
-              description={product.description}
-              cityid={product.cityId}
-              price={product.price}
-              date={product.createdAt}
-              id={product.id}
-              images={product.images}
-            />
-          ))}
-        </View>
+        <ScrollView
+          snapToStart
+          className="h-full pt-10"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={OnRefresh} />
+          }
+        >
+          <View className="flex-1 pb-44 items-center justify-start bg-background gap-y-4 mt-3">
+            {data?.map((product, key) => (
+              <SecondHandProductComponent
+                key={key}
+                name={product.name}
+                description={product.description}
+                cityid={product.cityId}
+                price={product.price}
+                date={product.createdAt}
+                id={product.id}
+                images={product.images}
+              />
+            ))}
+          </View>
+        </ScrollView>
       </HeaderContainer>
     );
   }

@@ -1,11 +1,11 @@
-import { H1, Muted } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { router } from "expo-router";
 import { Text } from "@/components/ui/text";
 import { useSupabase } from "@/context/supabase-provider";
 import HeaderContainer from "@/app/_header";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 
 export default function Shop() {
   const { signOut } = useSupabase();
@@ -17,59 +17,68 @@ export default function Shop() {
 
   return (
     <HeaderContainer router={router}>
-      <View className="flex-1 items-center justify-start bg-background p-4 gap-y-4">
-        <H1 className="text-center">Profile</H1>
-        <Muted className="text-center">
-          You are now authenticated and this session will persist even after
-          closing the app.
-        </Muted>
-
-        <Button
-          className="w-full bg-red-400"
-          variant="default"
-          size="default"
+      <View className="flex-1 items-center  justify-start bg-background gap-y-2">
+        <View className="w-full flex pl-3 mb-2 pt-4">
+          <Text className="font-normal text-md text-gray-400">
+            IMPOSTAZIONI
+          </Text>
+        </View>
+        <Pressable
+          className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             router.push("/(profile)/profile");
           }}
         >
-          <Text>Il mio Profilo</Text>
-        </Button>
+          <Text className="font-normal text-xl pl-2">Il mio Profilo</Text>
+          <FontAwesome name="angle-right" size={24} color="black" />
+        </Pressable>
 
-        <Button
-          className="w-full bg-green-400"
-          variant="default"
-          size="default"
+        <Pressable
+          className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             router.push("/(profile)/reports");
           }}
         >
-          <Text>Segnalazioni Effettuate</Text>
-        </Button>
+          <Text className="font-normal text-xl pl-2">
+            Segnalazioni Effettuate
+          </Text>
+          <FontAwesome name="angle-right" size={24} color="black" />
+        </Pressable>
 
-        <Button
-          className="w-full bg-sky-400"
-          variant="default"
-          size="default"
+        <Pressable
+          className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             router.push("/(profile)/requests");
           }}
         >
-          <Text>Ritiri richiesti</Text>
-        </Button>
+          <Text className="font-normal text-xl pl-2">Ritiri Richiesti</Text>
+          <FontAwesome name="angle-right" size={24} color="black" />
+        </Pressable>
 
-        <Button
-          className="w-full bg-purple-400"
-          variant="default"
-          size="default"
+        <Pressable
+          className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             router.push("/(profile)/assistance");
           }}
         >
-          <Text>Assistenza</Text>
-        </Button>
+          <Text className="font-normal text-xl pl-2">Assistenza</Text>
+          <FontAwesome name="angle-right" size={24} color="black" />
+        </Pressable>
+
+        <Pressable
+          className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
+          onPress={() => {
+            signOut();
+            router.push("/(public)/sign-in");
+            ResetOnboarding();
+          }}
+        >
+          <Text className="font-normal text-xl pl-2">Esci</Text>
+          <FontAwesome name="angle-right" size={24} color="black" />
+        </Pressable>
 
         <Button
-          className="w-full bg-yellow-400"
+          className="w-full bg-yellow-400 mt-10"
           variant="default"
           size="default"
           onPress={() => {
@@ -77,18 +86,6 @@ export default function Shop() {
           }}
         >
           <Text>Reset Onboarding</Text>
-        </Button>
-
-        <Button
-          className="w-full bg-blue-500"
-          variant="default"
-          size="default"
-          onPress={() => {
-            signOut();
-            router.push("/(public)/sign-in");
-          }}
-        >
-          <Text>Esci</Text>
         </Button>
       </View>
     </HeaderContainer>

@@ -1,8 +1,5 @@
 import HeaderContainer from "@/app/_header";
-
-import { H1, Muted } from "@/components/ui/typography";
 import { api } from "@/lib/api";
-
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { useSupabase } from "@/context/supabase-provider";
@@ -90,7 +87,8 @@ export default function Page() {
             {data?.description}
           </Text>
           <Pressable
-            className="w-[95%] mt-10 flex items-center bg-green-500 rounded-2xl p-2"
+            className="w-[95%] mt-10 flex items-center bg-green-500 rounded-2xl p-2 disabled:bg-gray-500 disabled:cursor-not-allowed"
+            disabled={!data?.city.whatsappNumber}
             onPress={() =>
               router.push("https://wa.me/" + data?.city.whatsappNumber)
             }

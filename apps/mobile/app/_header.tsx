@@ -9,12 +9,16 @@ import { ExpoRouter } from "expo-router/types/expo-router";
 
 interface ContainerWithChildrenProps {
   children: ReactNode;
-  router: ExpoRouter.Router;
+  router?: ExpoRouter.Router;
+  modal?: boolean;
+  rightComponent?: ReactNode;
 }
 
 const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
   children,
   router,
+  modal = false,
+  rightComponent,
 }) => {
   const route = useRoute();
   const insets = useSafeAreaInsets();
@@ -45,7 +49,7 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
             name: route.name,
           })}
         </Text>
-        {canGoBack(route.name) && (
+        {canGoBack(route.name) && !modal && router && (
           <View
             style={{
               position: "absolute",
@@ -64,6 +68,19 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
             >
               <FontAwesome name="angle-left" size={24} color="black" />
             </Text>
+          </View>
+        )}
+
+        {rightComponent && (
+          <View
+            style={{
+              position: "absolute",
+              top: insets.top,
+              right: 20,
+              zIndex: 1,
+            }}
+          >
+            {rightComponent}
           </View>
         )}
       </View>

@@ -131,7 +131,8 @@ model user {
 
 // Segnalazione
 model report {
-  id String @id @unique @default(uuid())
+  id     String @id @unique @default(uuid())
+  number Int    @default(autoincrement())
 
   address String
   type    String
@@ -149,8 +150,8 @@ model report {
 
 // Ritiro a Domilicio
 model pickup {
-  id String @id @unique @default(uuid())
-
+  id      String   @id @unique @default(uuid())
+  number  Int      @default(autoincrement())
   address String
   type    String
   status  String

@@ -13,25 +13,44 @@ import { Text } from "@/components/ui/text";
 import { H1, Muted } from "@/components/ui/typography";
 import { api } from "@/lib/api";
 import RNPickerSelect from "react-native-picker-select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as z from "zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "expo-router";
+import { CommonActions } from "@react-navigation/native";
 
 import logo from "@/assets/logo.png";
 import { Path, Svg } from "react-native-svg";
 
 export default function Onboarding() {
   const router = useRouter();
+  const utils = api.useUtils();
 
-  const [city, setCity] = useState(null);
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
 
-  const SetUser = api.user.setUserInformation.useMutation();
   const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
     {}
   );
+
+  const [city, setCity] = useState("");
+  const [name, setName] = useState(
+    user?.firstName + " " + user?.lastName || ""
+  );
+  const [address, setAddress] = useState(user?.address || "");
+  const [phoneNumber, setPhoneNumber] = useState(user?.phone || "");
+
+  const SetUser = api.user.setUserInformation.useMutation();
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    if (user) {
+      if (user.city) setCity(user.city.id);
+      if (user.firstName && user.lastName)
+        setName(user.firstName + " " + user.lastName);
+      if (user.address) setAddress(user.address);
+      if (user.phone) setPhoneNumber(user.phone);
+    }
+  }, [user]);
 
   const HandleSubmit = async () => {
     // check if the user has filled all the fields and if the type is correct
@@ -91,14 +110,20 @@ export default function Onboarding() {
       phoneNumber,
     }).then(async () => {
       await AsyncStorage.setItem("@OnboardingIsDone", "true").then(() => {
-        router.push("/(protected)/(tabs)");
+        utils.invalidate();
+        navigation.dispatch(
+          CommonActions.reset({
+            routes: [{ key: "(tabs)", name: "(tabs)" }],
+          })
+        );
+        router.push("/(protected)/(tabs)/(home)/home");
       });
     });
   };
 
-  if (citysLoading) {
+  if (citysLoading || userLoading) {
     return (
-      <SafeAreaView className="flex-1 bg-background p-4">
+      <SafeAreaView className="flex-1 bg-background p-4 h-full">
         <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
       </SafeAreaView>
     );

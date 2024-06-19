@@ -11,6 +11,46 @@ export const cityRouter = createTRPCRouter({
       );
   }),
 
+  getAllSecondHandProducts: protectedProcedure
+    .input(z.object({}))
+    .query(({ ctx }) => {
+      return ctx.db.user
+        .findUnique({
+          where: { email: ctx.session.user.email },
+          select: { city: true },
+        })
+        .then(async (userCity) => {
+          if (!userCity || userCity.city === null) {
+            throw new Error("City Relation not found");
+          } else {
+            return await ctx.db.city
+              .findUnique({
+                where: { id: userCity.city.id },
+                include: {
+                  secondHandProduct: true,
+                },
+              })
+              .then((city) => {
+                if (!city) {
+                  throw new Error("City not found");
+                }
+                return city.secondHandProduct;
+              });
+          }
+        });
+    }),
+
+  getSecondHandProduct: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.secondHandProduct.findUnique({
+        where: { id: input.id },
+        include: {
+          city: true,
+        },
+      });
+    }),
+
   getCityCalendar: protectedProcedure
     .input(z.object({}))
     .query(async ({ ctx }) => {

@@ -14,6 +14,18 @@ export default function RootLayout() {
       initialRouteName="profile-home"
     >
       <Stack.Screen name="profile-home" />
+      <Stack.Screen
+        name="repid"
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="reqid"
+        options={{
+          presentation: "modal",
+        }}
+      />
     </Stack>
   );
 }

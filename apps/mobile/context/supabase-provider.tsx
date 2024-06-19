@@ -17,7 +17,9 @@ type SupabaseContextProps = {
   uploadAvatar: (file: string) => Promise<string>;
   getAvatarUrl: () => Promise<string>;
   uploadRequestImage: (file: string, fileUUID: string) => Promise<string>;
+  getRequestImageUrl: (fileUUID: string) => Promise<string>;
   uploadReportImage: (file: string, fileUUID: string) => Promise<string>;
+  getReportImageUrl: (fileUUID: string) => Promise<string>;
   getPostImageUrl: (fileUUID: string) => Promise<string>;
   getProductImageUrl: (fileUUID: string, cityUUID: string) => Promise<string>;
 };
@@ -36,7 +38,9 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   uploadAvatar: async () => "",
   getAvatarUrl: async () => "",
   uploadRequestImage: async () => "",
+  getRequestImageUrl: async () => "",
   uploadReportImage: async () => "",
+  getReportImageUrl: async () => "",
   getPostImageUrl: async () => "",
   getProductImageUrl: async () => "",
 });
@@ -122,6 +126,20 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     return data.path;
   };
 
+  const getRequestImageUrl = async (fileUUID: string) => {
+    const { data } = await supabase.storage
+      .from("requests")
+      .getPublicUrl(user?.id + "/" + fileUUID);
+
+    if (!data) {
+      return "";
+    }
+
+    const url =
+      data.publicUrl.split("/").slice(0, -1).join("/") + "/" + fileUUID;
+    return url;
+  };
+
   /**
    * Uploads a post image to Supabase storage.
    *
@@ -143,6 +161,25 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
       throw error;
     }
     return data.path;
+  };
+
+  /**
+   * Retrieves the public URL of a report image from Supabase storage.
+   * @param fileUUID - The UUID of the file.
+   * @returns The URL of the report image.
+   */
+  const getReportImageUrl = async (fileUUID: string) => {
+    const { data } = await supabase.storage
+      .from("reports")
+      .getPublicUrl(user?.id + "/" + fileUUID);
+
+    if (!data) {
+      return "";
+    }
+
+    const url =
+      data.publicUrl.split("/").slice(0, -1).join("/") + "/" + fileUUID;
+    return url;
   };
 
   const getPostImageUrl = async (fileUUID: string) => {
@@ -256,7 +293,9 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
         uploadAvatar,
         getAvatarUrl,
         uploadRequestImage,
+        getRequestImageUrl,
         uploadReportImage,
+        getReportImageUrl,
         getPostImageUrl,
         getProductImageUrl,
       }}

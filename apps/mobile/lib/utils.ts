@@ -30,8 +30,17 @@ export function getTitle(route: { name: string }) {
     case "profile":
       return "Il mio Profilo";
 
+    case "profile-edit":
+      return "Modifica Profilo";
+
     case "reports":
       return "Segnalazioni Effettuate";
+
+    case "repid":
+      return "Segnalazioni Effettuate";
+
+    case "reqid":
+      return "Ritiri richiesti";
 
     case "requests":
       return "Ritiri richiesti";
