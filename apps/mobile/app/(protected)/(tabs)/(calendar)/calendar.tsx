@@ -4,6 +4,28 @@ import { router } from "expo-router";
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import CalendarComponent from "@/components/CalendarComponent";
+
+const getDayItalian = (day: string) => {
+  switch (day) {
+    case "Monday":
+      return "Lunedì";
+    case "Tuesday":
+      return "Martedì";
+    case "Wednesday":
+      return "Mercoledì";
+    case "Thursday":
+      return "Giovedì";
+    case "Friday":
+      return "Venerdì";
+    case "Saturday":
+      return "Sabato";
+    case "Sunday":
+      return "Domenica";
+    default:
+      return "Errore";
+  }
+};
+
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});
 
@@ -26,12 +48,12 @@ export default function Shop() {
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-start justify-start bg-background gap-y-4">
+        <View className="flex-1 items-start justify-start bg-background gap-y-4 pt-4">
           {/* Implementare Shopify ScrollView */}
           {Calendar?.map((day) => (
             <CalendarComponent
               key={day.id}
-              day={day.day}
+              day={getDayItalian(day.day)}
               garbages={day.wasteTypes}
             />
           ))}

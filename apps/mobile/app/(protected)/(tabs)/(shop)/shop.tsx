@@ -34,8 +34,11 @@ export const SecondHandProductComponent = (product: secondHandProduct) => {
 
   useEffect(() => {
     (async () => {
+      if (product.images.length === 0) {
+        setImageUrl("null");
+        return;
+      }
       const url = await getProductImageUrl(product.images[0], product.cityid);
-      console.log(url);
       setImageUrl(url);
     })();
   }, []);
@@ -55,11 +58,17 @@ export const SecondHandProductComponent = (product: secondHandProduct) => {
             : router.push(`/(shop)/${product.id}`)
         }
       >
-        <Image
-          source={{ uri: imageUrl }}
-          className="w-full h-52 rounded-t-2xl"
-          resizeMode="cover"
-        />
+        {imageUrl !== "null" ? (
+          <Image
+            source={{ uri: imageUrl }}
+            className="w-full h-52 rounded-t-2xl"
+            resizeMode="cover"
+          />
+        ) : (
+          <View className="w-full h-52 rounded-t-2xl flex items-center justify-center">
+            <Text className="font-semibold text-xl">Nessuna Immagine</Text>
+          </View>
+        )}
         <Text className="font-medium text-xl pl-4">{product.name}</Text>
         <Text className="font-light text-md pl-4">
           {product.date.toDateString()}
