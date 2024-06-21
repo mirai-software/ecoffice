@@ -1,5 +1,7 @@
 import { Text } from "@/components/ui/text";
 import { Muted } from "@/components/ui/typography";
+import { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import {
   ActivityIndicator,
   Image,
@@ -106,24 +108,34 @@ export default function Shop() {
   } else if (data?.length === 0) {
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-center justify-center bg-background p-4 gap-y-4">
+        <Animated.View
+          className="flex-1 items-center justify-center bg-background p-4 gap-y-4"
+          entering={FadeIn}
+          exiting={FadeOut}
+        >
           <Muted className="text-center">
             Nessun prodotto attualmente caricato.{" "}
           </Muted>
-        </View>
+        </Animated.View>
       </HeaderContainer>
     );
   } else {
     return (
       <HeaderContainer router={router}>
-        <ScrollView
+        <Animated.ScrollView
+          entering={FadeIn}
+          exiting={FadeOut}
           snapToStart
           className="h-full pt-10"
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={OnRefresh} />
           }
         >
-          <View className="flex-1 pb-44 items-center justify-start bg-background gap-y-4 mt-3">
+          <Animated.View
+            className="flex-1 pb-44 items-center justify-start bg-background gap-y-4 mt-3"
+            entering={FadeIn}
+            exiting={FadeOut}
+          >
             {data?.map((product, key) => (
               <SecondHandProductComponent
                 key={key}
@@ -136,8 +148,8 @@ export default function Shop() {
                 images={product.images}
               />
             ))}
-          </View>
-        </ScrollView>
+          </Animated.View>
+        </Animated.ScrollView>
       </HeaderContainer>
     );
   }

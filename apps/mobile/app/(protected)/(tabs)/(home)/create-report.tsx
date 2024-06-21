@@ -18,6 +18,10 @@ import { router } from "expo-router";
 import RNPickerSelect from "react-native-picker-select";
 import HeaderContainer from "@/app/_header";
 import AddImage from "@/assets/icons/add-image";
+
+import { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+
 import * as z from "zod";
 
 export default function CreateReport() {
@@ -143,7 +147,9 @@ export default function CreateReport() {
                       }}
                       key={image.uri}
                     >
-                      <Image
+                      <Animated.Image
+                        entering={FadeIn}
+                        exiting={FadeOut}
                         key={image.assetId}
                         source={{ uri: image.uri }}
                         style={{ width: 100, height: 100, borderRadius: 8 }}

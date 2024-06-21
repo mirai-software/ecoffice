@@ -5,6 +5,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { SvgUri } from "react-native-svg";
 import InfoCircle from "@/assets/icons/info-circle";
 
+import { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+
 type wasteTypes = {
   id: string;
   name: string;
@@ -23,7 +26,11 @@ export default function CalendarComponent({
   garbages: wasteTypes[];
 }) {
   return (
-    <View className="flex flex-row">
+    <Animated.View
+      className="flex flex-row"
+      entering={FadeIn}
+      exiting={FadeOut}
+    >
       <View className="flex-1 justify-center items-center">
         <Text>{day}</Text>
       </View>
@@ -59,6 +66,6 @@ export default function CalendarComponent({
           </View>
         ))}
       </View>
-    </View>
+    </Animated.View>
   );
 }
