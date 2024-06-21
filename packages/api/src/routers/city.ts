@@ -51,6 +51,33 @@ export const cityRouter = createTRPCRouter({
       });
     }),
 
+  getCityStatistics: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.user
+      .findUnique({
+        where: { email: ctx.session.user.email },
+        select: { city: true },
+      })
+      .then(async (userCity) => {
+        if (!userCity || userCity.city === null) {
+          throw new Error("City Relation not found");
+        } else {
+          return await ctx.db.city
+            .findUnique({
+              where: { id: userCity.city.id },
+              include: {
+                statistics: true,
+              },
+            })
+            .then((city) => {
+              if (!city) {
+                throw new Error("City not found");
+              }
+              return city.statistics;
+            });
+        }
+      });
+  }),
+
   getCityCalendar: protectedProcedure
     .input(z.object({}))
     .query(async ({ ctx }) => {

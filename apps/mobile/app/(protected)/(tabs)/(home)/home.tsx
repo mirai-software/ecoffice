@@ -7,6 +7,8 @@ import {
   ScrollView,
 } from "react-native";
 
+import { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import PagerView from "react-native-pager-view";
 
 import { Text } from "@/components/ui/text";
@@ -15,6 +17,7 @@ import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import { SecondHandProductComponent } from "../(shop)/shop";
 import { RequestComponent } from "../(profile)/requests";
+import StatisticsComponent from "@/components/StatisticsComponent";
 
 export default function TabOneScreen() {
   const { data: Calendar, isLoading: calendarLoading } =
@@ -24,12 +27,21 @@ export default function TabOneScreen() {
   const { data: requests, isLoading: requestLoadings } =
     api.user.getUserPickupRequests.useQuery();
 
+  const { data: statistics, isLoading: statisticsLoading } =
+    api.city.getCityStatistics.useQuery();
+
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
   const currentDay = Calendar?.find((day) => day.day === today);
 
-  if (calendarLoading || secondHandLoading || requestLoadings || userLoading) {
+  if (
+    calendarLoading ||
+    secondHandLoading ||
+    requestLoadings ||
+    userLoading ||
+    statisticsLoading
+  ) {
     return (
       <HeaderContainer>
         <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
@@ -39,7 +51,11 @@ export default function TabOneScreen() {
     return (
       <HeaderContainer router={router}>
         <ScrollView snapToStart className="">
-          <View className="flex w-full gap-1">
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            className="flex w-full gap-1"
+          >
             <View className="flex flex-row justify-between items-center w-full p-4">
               <Text className="font-semibold text-xl">
                 Calendario Utenze Domestiche
@@ -54,8 +70,12 @@ export default function TabOneScreen() {
               day={"Oggi"}
               garbages={currentDay?.wasteTypes || []}
             />
-          </View>
-          <View className="flex flex-row gap-4 pt-4 mb-4 mx-4">
+          </Animated.View>
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            className="flex flex-row gap-4 pt-4 mb-4 mx-4"
+          >
             <Pressable
               onPress={() => {
                 router.push("/create-report");
@@ -84,13 +104,17 @@ export default function TabOneScreen() {
                 style={{ width: 120, height: 120 }}
               />
             </Pressable>
-          </View>
-          <View className="flex flex-row justify-between items-center w-full p-4">
+          </Animated.View>
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            className="flex flex-row justify-between items-center w-full p-4"
+          >
             <Text className="font-semibold text-2xl">Seconda Mano</Text>
             <Pressable onPress={() => router.navigate("/(shop)/shop")}>
               <Text className="font-normal text-md underline">Vedi tutto</Text>
             </Pressable>
-          </View>
+          </Animated.View>
           {secondHand?.length === 0 ? (
             <View className="min-h-10 flex items-center justify-center">
               <Text className="text-center font-normal text-gray-600">
@@ -98,7 +122,11 @@ export default function TabOneScreen() {
               </Text>
             </View>
           ) : (
-            <View className="w-full h-80">
+            <Animated.View
+              entering={FadeIn}
+              exiting={FadeOut}
+              className="w-full h-80"
+            >
               <PagerView style={{ flex: 1 }} initialPage={0}>
                 {secondHand?.map((product, index) => (
                   <View key={index} className="relative w-full">
@@ -116,12 +144,16 @@ export default function TabOneScreen() {
                   </View>
                 ))}
               </PagerView>
-            </View>
+            </Animated.View>
           )}
-          <View className="flex flex-row justify-between items-center w-full p-4">
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            className="flex flex-row justify-between items-center w-full p-4"
+          >
             <Text className="font-semibold text-2xl">Richieste Effettuate</Text>
-          </View>
-          <View className="mx-5">
+          </Animated.View>
+          <Animated.View entering={FadeIn} exiting={FadeOut} className="mx-5">
             {requests?.length === 0 ? (
               <View className="min-h-10 flex items-center justify-center">
                 <Text className="text-center font-normal text-gray-600">
@@ -129,7 +161,11 @@ export default function TabOneScreen() {
                 </Text>
               </View>
             ) : (
-              <View className="w-full h-20">
+              <Animated.View
+                entering={FadeIn}
+                exiting={FadeOut}
+                className="w-full h-20"
+              >
                 <PagerView style={{ flex: 1 }} initialPage={0}>
                   {requests?.map((request, index) => (
                     <View key={index} className="relative w-full">
@@ -143,14 +179,19 @@ export default function TabOneScreen() {
                     </View>
                   ))}
                 </PagerView>
-              </View>
+              </Animated.View>
             )}
-          </View>
-          <View className="flex flex-row justify-between items-center w-full p-4 pb-60">
+          </Animated.View>
+          <Animated.View
+            entering={FadeIn}
+            exiting={FadeOut}
+            className="flex flex-col justify-between items-start w-full p-4 pb-60 pt-10"
+          >
             <Text className="font-semibold text-2xl">
               Comune di {user?.city?.name}
             </Text>
-          </View>
+            <StatisticsComponent statistics={statistics} />
+          </Animated.View>
         </ScrollView>
       </HeaderContainer>
     );

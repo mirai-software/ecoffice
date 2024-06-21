@@ -1,4 +1,5 @@
 export * from "./city"
+export * from "./statistic"
 export * from "./calendar"
 export * from "./wastetype"
 export * from "./calendarwastetype"
