@@ -1,15 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import * as z from "zod";
 
 import { SafeAreaView } from "@/components/safe-area-view";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormInput } from "@/components/ui/form";
 import { Text } from "@/components/ui/text";
-import { H1, Muted } from "@/components/ui/typography";
+import { Muted } from "@/components/ui/typography";
 import { useSupabase } from "@/context/supabase-provider";
+import { toast } from "@backpackapp-io/react-native-toast";
+import { Image } from "react-native";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -18,6 +20,28 @@ const formSchema = z.object({
     .min(8, "Please enter at least 8 characters.")
     .max(64, "Please enter fewer than 64 characters."),
 });
+
+export const SignInHeader = () => {
+  return (
+    <View className="relative h-[24%]">
+      <View className="absolute top-0 -right-4 w-max z-10">
+        <Image
+          source={require("../../assets/SignInImage.png")}
+          style={{ width: 200, height: 200 }}
+        />
+      </View>
+      <View className="absolute -bottom-5 -left-0  w-max z-10">
+        <Image source={require("../../assets/logo.png")} className="w-30" />
+      </View>
+      <View className="z-20 mt-5s">
+        <Text className="font-bold text-5xl flex text-left">
+          Facciamo la {"\n"}differenza
+        </Text>
+        <Text className="font-light italic text-5xl">insieme</Text>
+      </View>
+    </View>
+  );
+};
 
 export default function SignIn() {
   const { signInWithPassword } = useSupabase();
@@ -36,17 +60,29 @@ export default function SignIn() {
       await signInWithPassword(data.email, data.password);
       form.reset();
     } catch (error: Error | any) {
-      console.log(error.message);
+      toast.error(error.message, {
+        styles: {
+          view: {
+            backgroundColor: "#00930F",
+            borderRadius: 8,
+          },
+          indicator: {
+            backgroundColor: "white",
+          },
+        },
+      });
     }
   }
 
   return (
     <SafeAreaView className="flex-1 bg-background p-4">
-      <View className="flex-1 mt-[25%]">
-        <H1 className="self-start">Login</H1>
-        <Muted className="self-start mb-5">to enjoy the full experience</Muted>
+      <SignInHeader />
+      <View className="flex-1 mt-[15%] ">
+        <Text className="self-center mb-5 font-semibold text-2xl">
+          Accedi al tuo account
+        </Text>
         <Form {...form}>
-          <View className="gap-4">
+          <View className="gap-4 border-b-[1px] pb-4 border-gray-400">
             <FormField
               control={form.control}
               name="email"
@@ -76,29 +112,39 @@ export default function SignIn() {
                 />
               )}
             />
+
+            <Pressable>
+              <Text className="underline text-sm">
+                Hai dimenticato la password?
+              </Text>
+            </Pressable>
+
+            <Button
+              size="lg"
+              variant="default"
+              onPress={form.handleSubmit(onSubmit)}
+              className="bg-[#334493]"
+            >
+              {form.formState.isSubmitting ? (
+                <ActivityIndicator size="small" />
+              ) : (
+                <Text className="font-bold">Accedi</Text>
+              )}
+            </Button>
           </View>
         </Form>
       </View>
       <View className="gap-y-4">
-        <Button
-          size="default"
-          variant="default"
-          onPress={form.handleSubmit(onSubmit)}
-        >
-          {form.formState.isSubmitting ? (
-            <ActivityIndicator size="small" />
-          ) : (
-            <Text>Sign In</Text>
-          )}
-        </Button>
         <Muted
           className="text-center"
           onPress={() => {
             router.replace("/sign-up");
           }}
         >
-          Don't have an account?{" "}
-          <Muted className="text-foreground">Sign up</Muted>
+          Non hai un Account?{" "}
+          <Muted className="text-foreground underline text-[#334493]">
+            Registrati
+          </Muted>
         </Muted>
       </View>
     </SafeAreaView>

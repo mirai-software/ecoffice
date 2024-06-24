@@ -69,7 +69,7 @@ export default function Shop() {
           className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             signOut();
-            router.push("/(public)/sign-in");
+            router.navigate("/(public)/sign-in");
             ResetOnboarding();
           }}
         >

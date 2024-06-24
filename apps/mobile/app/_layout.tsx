@@ -4,6 +4,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { SupabaseProvider } from "@/context/supabase-provider";
 import { TRPCProvider } from "@/lib/api";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Toasts } from "@backpackapp-io/react-native-toast";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -15,14 +17,17 @@ export default function RootLayout() {
     <SupabaseProvider>
       <TRPCProvider>
         <SafeAreaProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="(protected)" />
-            <Stack.Screen name="(public)" />
-          </Stack>
+          <GestureHandlerRootView>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="(protected)" />
+              <Stack.Screen name="(public)" />
+            </Stack>
+            <Toasts />
+          </GestureHandlerRootView>
         </SafeAreaProvider>
       </TRPCProvider>
     </SupabaseProvider>

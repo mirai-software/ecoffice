@@ -52,8 +52,8 @@ export default function StatisticsComponent({
             <Text
               className={
                 selected === StatisticType.ProductionIndicator
-                  ? "text-white"
-                  : "text-black"
+                  ? "text-white text-md"
+                  : "text-black text-md"
               }
             >
               Indicatori di Produzione
@@ -71,8 +71,8 @@ export default function StatisticsComponent({
             <Text
               className={
                 selected === StatisticType.SpecificIndicator
-                  ? "text-white"
-                  : "text-black"
+                  ? "text-white text-md"
+                  : "text-black text-md"
               }
             >
               {" "}

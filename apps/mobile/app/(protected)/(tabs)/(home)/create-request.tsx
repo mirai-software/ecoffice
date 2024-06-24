@@ -23,6 +23,7 @@ import AddImage from "@/assets/icons/add-image";
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 import * as z from "zod";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 export default function CreateHomeRequest() {
   // Form States
@@ -95,6 +96,20 @@ export default function CreateHomeRequest() {
         await AddRequest.mutateAsync(data).then(() => {
           router.back();
           utils.user.getUserPickupRequests.invalidate();
+          toast.success(
+            "Ritiro a domicilio richiesto correttamente. Puoi seguirne lo stato dal tuo Profilo.",
+            {
+              styles: {
+                view: {
+                  backgroundColor: "#00930F",
+                  borderRadius: 8,
+                },
+                indicator: {
+                  backgroundColor: "white",
+                },
+              },
+            }
+          );
         });
       }
     }

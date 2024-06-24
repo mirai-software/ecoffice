@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   NativeSyntheticEvent,
   Pressable,
+  ScrollView,
   TextInput,
   View,
 } from "react-native";
@@ -16,6 +17,7 @@ import { TextInputChangeEventData } from "react-native";
 import { Button } from "@/components/ui/button";
 
 import * as z from "zod";
+import { toast } from "@backpackapp-io/react-native-toast";
 export default function Profile_Edit() {
   const SetUser = api.user.setUserInformation.useMutation();
   const { data: user, isLoading } = api.user.getUser.useQuery({});
@@ -89,6 +91,17 @@ export default function Profile_Edit() {
     }).then(async () => {
       utils.user.getUser.invalidate();
       router.back();
+      toast.success("Le modifiche sono state salvate correttamente.", {
+        styles: {
+          view: {
+            backgroundColor: "#00930F",
+            borderRadius: 8,
+          },
+          indicator: {
+            backgroundColor: "white",
+          },
+        },
+      });
     });
   };
 
@@ -101,106 +114,108 @@ export default function Profile_Edit() {
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4">
-          <View className="flex gap-2 w-full">
-            <Text className="">Nome e Cognome</Text>
-            <TextInput
-              className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
-              value={name}
-              onChange={(
-                value: NativeSyntheticEvent<TextInputChangeEventData>
-              ) => setName(value.nativeEvent.text)}
-            />
-          </View>
-
-          <View className="flex gap-2 w-full">
-            <Text className="">Email</Text>
-            <View className="flex flex-row border-gray-500 border-[1px] rounded-2xl bg-gray-600/20">
-              <Text className=" dark:text-white text-gray-600 p-4 flex-1">
-                {user?.email}
-              </Text>
+        <ScrollView>
+          <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4">
+            <View className="flex gap-2 w-full">
+              <Text className="">Nome e Cognome</Text>
+              <TextInput
+                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                value={name}
+                onChange={(
+                  value: NativeSyntheticEvent<TextInputChangeEventData>
+                ) => setName(value.nativeEvent.text)}
+              />
             </View>
-          </View>
 
-          <View className="flex gap-2 w-full">
-            <View className="flex flex-row justify-between">
-              <Text className="">Password</Text>
-              <Pressable>
-                <Text className="text-[#334493] underline font-medium pr-2">
-                  Cambia Password
-                </Text>
-              </Pressable>
-            </View>
-            <View className="flex flex-row">
-              <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 font-bold text-xl">
-                {"•••••••••"}
-              </Text>
-            </View>
-          </View>
-
-          <View className="flex gap-2 w-full">
-            <Text className="">Numero di Telefono</Text>
-            <View className="flex flex-row">
-              <View className="border-[1px] border-gray-500 rounded-2xl ">
-                <Text className="text-black dark:text-white p-4 rounded-2xl">
-                  🇮🇹 +39
+            <View className="flex gap-2 w-full">
+              <Text className="">Email</Text>
+              <View className="flex flex-row border-gray-500 border-[1px] rounded-2xl bg-gray-600/20">
+                <Text className=" dark:text-white text-gray-600 p-4 flex-1">
+                  {user?.email}
                 </Text>
               </View>
-              <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
-                value={phone}
-                placeholder="Numero di Telefono"
-                onChange={(
-                  value: NativeSyntheticEvent<TextInputChangeEventData>
-                ) => setPhone(value.nativeEvent.text)}
-              />
             </View>
-          </View>
 
-          <View className="flex gap-2 w-full">
-            <Text className="">Comune di Residenza</Text>
-            <View className="flex ">
-              <RNPickerSelect
-                onValueChange={(value) => setCity(value)}
-                placeholder={{ label: "Select a city", value: null }}
-                style={{
-                  inputIOS: {
-                    fontSize: 16,
-                    paddingVertical: 14,
-                    paddingHorizontal: 16,
-                    borderWidth: 1,
-                    borderColor: "rgb(107 114 128)",
-                    borderRadius: 16,
-                    color: "black",
-                    paddingRight: 30, // to ensure the text is never behind the icon
-                  },
-                }}
-                value={city}
-                items={citys as []}
-              />
+            <View className="flex gap-2 w-full">
+              <View className="flex flex-row justify-between">
+                <Text className="">Password</Text>
+                <Pressable>
+                  <Text className="text-[#334493] underline font-medium pr-2">
+                    Cambia Password
+                  </Text>
+                </Pressable>
+              </View>
+              <View className="flex flex-row">
+                <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 font-bold text-xl">
+                  {"•••••••••"}
+                </Text>
+              </View>
             </View>
-          </View>
 
-          <View className="flex gap-2 w-full">
-            <Text className="">Indirizzo di Residenza</Text>
-            <View className="flex flex-row">
-              <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 "
-                value={address}
-                placeholder="Indirizzo di Residenza"
-                onChange={(
-                  value: NativeSyntheticEvent<TextInputChangeEventData>
-                ) => setAddress(value.nativeEvent.text)}
-              />
+            <View className="flex gap-2 w-full">
+              <Text className="">Numero di Telefono</Text>
+              <View className="flex flex-row">
+                <View className="border-[1px] border-gray-500 rounded-2xl ">
+                  <Text className="text-black dark:text-white p-4 rounded-2xl">
+                    🇮🇹 +39
+                  </Text>
+                </View>
+                <TextInput
+                  className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
+                  value={phone}
+                  placeholder="Numero di Telefono"
+                  onChange={(
+                    value: NativeSyntheticEvent<TextInputChangeEventData>
+                  ) => setPhone(value.nativeEvent.text)}
+                />
+              </View>
             </View>
+
+            <View className="flex gap-2 w-full">
+              <Text className="">Comune di Residenza</Text>
+              <View className="flex ">
+                <RNPickerSelect
+                  onValueChange={(value) => setCity(value)}
+                  placeholder={{ label: "Select a city", value: null }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      paddingVertical: 14,
+                      paddingHorizontal: 16,
+                      borderWidth: 1,
+                      borderColor: "rgb(107 114 128)",
+                      borderRadius: 16,
+                      color: "black",
+                      paddingRight: 30, // to ensure the text is never behind the icon
+                    },
+                  }}
+                  value={city}
+                  items={citys as []}
+                />
+              </View>
+            </View>
+
+            <View className="flex gap-2 w-full">
+              <Text className="">Indirizzo di Residenza</Text>
+              <View className="flex flex-row">
+                <TextInput
+                  className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 "
+                  value={address}
+                  placeholder="Indirizzo di Residenza"
+                  onChange={(
+                    value: NativeSyntheticEvent<TextInputChangeEventData>
+                  ) => setAddress(value.nativeEvent.text)}
+                />
+              </View>
+            </View>
+            <Button
+              className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3 mb-40"
+              onPress={HandleSubmit}
+            >
+              <Text className="font-bold text-white">Continua</Text>
+            </Button>
           </View>
-          <Button
-            className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
-            onPress={HandleSubmit}
-          >
-            <Text className="font-bold text-white">Continua</Text>
-          </Button>
-        </View>
+        </ScrollView>
       </HeaderContainer>
     );
 }

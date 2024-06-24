@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { useForm } from "react-hook-form";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Pressable, View } from "react-native";
 import * as z from "zod";
 
 import { SafeAreaView } from "@/components/safe-area-view";
@@ -11,6 +11,8 @@ import { Text } from "@/components/ui/text";
 import { H1, Muted } from "@/components/ui/typography";
 import { useSupabase } from "@/context/supabase-provider";
 import { api } from "@/lib/api";
+import { SignInHeader } from "./sign-in";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 const formSchema = z
   .object({
@@ -59,17 +61,27 @@ export default function SignUp() {
       await addUser.mutateAsync({ email: data.email });
       await await await form.reset();
     } catch (error: Error) {
-      console.log(error.message);
+      toast.error(error.message, {
+        styles: {
+          view: {
+            backgroundColor: "#00930F",
+            borderRadius: 8,
+          },
+          indicator: {
+            backgroundColor: "white",
+          },
+        },
+      });
     }
   }
 
   return (
     <SafeAreaView className="flex-1 bg-background p-4">
-      <View className="flex-1 mt-[25%]">
-        <H1 className="self-start">Sign Up</H1>
-        <Muted className="self-start mb-5">
-          to continue to Expo Supabase Starter
-        </Muted>
+      <SignInHeader />
+      <View className="flex-1 mt-[15%]">
+        <Text className="self-center mb-5 font-semibold text-2xl">
+          Benvenuto! Registrati adesso
+        </Text>
         <Form {...form}>
           <View className="gap-6">
             <FormField
@@ -115,29 +127,45 @@ export default function SignUp() {
                 />
               )}
             />
+
+            <Muted className="text-center">
+              Creando un account, accetti i nostri{" "}
+              <Pressable className="underline">
+                <Muted className="underline">Termini e Condizioni</Muted>
+              </Pressable>{" "}
+              e la nostra{" "}
+              <Pressable className="underline">
+                <Muted className="underline">Politica sulla Privacy</Muted>
+              </Pressable>
+              .
+            </Muted>
+
+            <Button
+              size="lg"
+              variant="default"
+              onPress={form.handleSubmit(onSubmit)}
+              className="bg-[#334493]"
+            >
+              {form.formState.isSubmitting ? (
+                <ActivityIndicator size="small" />
+              ) : (
+                <Text className="font-bold">Accedi</Text>
+              )}
+            </Button>
           </View>
         </Form>
       </View>
       <View className="gap-y-4">
-        <Button
-          size="default"
-          variant="default"
-          onPress={form.handleSubmit(onSubmit)}
-        >
-          {form.formState.isSubmitting ? (
-            <ActivityIndicator size="small" />
-          ) : (
-            <Text>Sign Up</Text>
-          )}
-        </Button>
         <Muted
           className="text-center"
           onPress={() => {
             router.replace("/sign-in");
           }}
         >
-          Already have an account?{" "}
-          <Muted className="text-foreground">Sign in</Muted>
+          Hai già un account?{" "}
+          <Muted className="text-foreground underline text-[#334493]">
+            Accedi
+          </Muted>
         </Muted>
       </View>
     </SafeAreaView>

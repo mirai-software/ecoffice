@@ -23,6 +23,7 @@ import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 
 import * as z from "zod";
+import { toast } from "@backpackapp-io/react-native-toast";
 
 export default function CreateReport() {
   // Form States
@@ -75,6 +76,20 @@ export default function CreateReport() {
       };
       await AddReport.mutateAsync(data).then(() => {
         router.back();
+        toast.success(
+          "Grazie della segnalazione, ce ne occuperemo il prima possibile.",
+          {
+            styles: {
+              view: {
+                backgroundColor: "#00930F",
+                borderRadius: 8,
+              },
+              indicator: {
+                backgroundColor: "white",
+              },
+            },
+          }
+        );
       });
     } else {
       const imagesUrl: string[] = [];
