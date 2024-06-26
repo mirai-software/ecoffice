@@ -35,7 +35,7 @@ enum Weekday {
 }
 
 model city {
-  id   String @id @unique
+  id   String @id @unique @default(uuid())
   name String
 
   calendars         calendar[]
@@ -94,7 +94,7 @@ model wasteType {
 
 // Tabella di join per la relazione molti-a-molti
 model CalendarWasteType {
-  calendarId  String
+  calendarId  String    @default(uuid())
   calendar    calendar  @relation(fields: [calendarId], references: [id])
   wasteTypeId String
   wasteType   wasteType @relation(fields: [wasteTypeId], references: [id])
@@ -103,7 +103,7 @@ model CalendarWasteType {
 }
 
 model secondHandProduct {
-  id String @id @unique
+  id String @id @unique @default(uuid())
 
   name        String
   description String
@@ -186,7 +186,7 @@ model pickup {
 
 // Richiesta di Supporto
 model SupportRequest {
-  id       String           @id @unique
+  id       String           @id @unique @default(uuid())
   status   String // Stati possibili: "open", "closed"
   userId   String
   user     user             @relation(fields: [userId], references: [id])
@@ -200,7 +200,7 @@ model SupportRequest {
 
 // Messaggi di Supporto
 model SupportMessage {
-  id               String         @id @unique
+  id               String         @id @unique @default(uuid())
   content          String
   supportRequestId String
   supportRequest   SupportRequest @relation(fields: [supportRequestId], references: [id])
