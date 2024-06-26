@@ -155,7 +155,17 @@ export default function CreateHomeRequest() {
                     },
                   }}
                   value={type}
-                  items={[{ label: "RAEE 1", value: "RAEE-1" }]}
+                  items={[
+                    { label: "RAEE", value: "RAEE-1" },
+                    {
+                      label: "Pannolini e Pannoloni",
+                      value: "Pannolini-Pannoloni",
+                    },
+                    {
+                      label: "Sfalci di Potatura",
+                      value: "Sfalci-di-Potatura",
+                    },
+                  ]}
                 />
               </View>
             </View>
