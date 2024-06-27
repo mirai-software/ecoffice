@@ -30,8 +30,10 @@ export default function StatisticsComponent({
 
   if (statistics.length === 0 || !statistics) {
     return (
-      <View className="flex-1 w-full mt-3">
-        <Text className="text-black">Nessuna statistica disponibile</Text>
+      <View className="flex-1 w-full mt-3 justify-center items-center">
+        <Text className="text-center font-normal text-gray-600">
+          Nessuna Statistica Presente
+        </Text>
       </View>
     );
   }

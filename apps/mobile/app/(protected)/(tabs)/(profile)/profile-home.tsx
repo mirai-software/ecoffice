@@ -76,17 +76,6 @@ export default function Shop() {
           <Text className="font-normal text-xl pl-2">Esci</Text>
           <FontAwesome name="angle-right" size={24} color="black" />
         </Pressable>
-
-        <Button
-          className="w-full bg-yellow-400 mt-10"
-          variant="default"
-          size="default"
-          onPress={() => {
-            ResetOnboarding();
-          }}
-        >
-          <Text>Reset Onboarding</Text>
-        </Button>
       </View>
     </HeaderContainer>
   );

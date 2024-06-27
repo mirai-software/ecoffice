@@ -59,7 +59,22 @@ export default function SignUp() {
     try {
       await signUp(data.email, data.password);
       await addUser.mutateAsync({ email: data.email });
-      await await await form.reset();
+      await form.reset();
+      await router.replace("/sign-in");
+      toast.success(
+        "Account creato con successo! Controlla la tua email per confermare l'account.",
+        {
+          styles: {
+            view: {
+              backgroundColor: "#00930F",
+              borderRadius: 8,
+            },
+            indicator: {
+              backgroundColor: "white",
+            },
+          },
+        }
+      );
     } catch (error: Error) {
       toast.error(error.message, {
         styles: {

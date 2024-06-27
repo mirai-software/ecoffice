@@ -57,7 +57,9 @@ export default function Page() {
                   Cosa conferire
                 </Text>
               </View>
-              <Text className="font-normal">{wasteType?.info[0]}</Text>
+              <Text className="font-normal">
+                {wasteType?.info[0] || "Non ci sono informazioni"}
+              </Text>
             </View>
             <View className="mb-4">
               <View className="flex-row items-center mb-2">
