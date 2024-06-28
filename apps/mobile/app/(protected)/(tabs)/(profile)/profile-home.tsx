@@ -6,6 +6,7 @@ import HeaderContainer from "@/app/_header";
 import { Pressable, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
+import { api } from "@/lib/api";
 
 export default function Shop() {
   const { signOut } = useSupabase();
@@ -15,6 +16,7 @@ export default function Shop() {
     router.push("/(protected)");
   };
 
+  const { isLoading, data } = api.user.getActiveSupportRequest.useQuery();
   return (
     <HeaderContainer router={router}>
       <View className="flex-1 items-center  justify-start bg-background gap-y-2">
@@ -61,7 +63,15 @@ export default function Shop() {
             router.push("/(profile)/assistance");
           }}
         >
-          <Text className="font-normal text-xl pl-2">Assistenza</Text>
+          <View className="flex flex-row gap-2 justify-center items-center">
+            <Text className="font-normal text-xl pl-2">Assistenza</Text>
+            {!isLoading &&
+              data!.length > 0 &&
+              data![0].messages[data![0].messages.length - 1].userId !=
+                data![0].userId && (
+                <View className=" bg-red-500 rounded-full z-10 h-3 w-3"></View>
+              )}
+          </View>
           <FontAwesome name="angle-right" size={24} color="black" />
         </Pressable>
 

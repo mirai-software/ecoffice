@@ -7,11 +7,16 @@ import UserIcon from "@/assets/icons/user";
 import BankIcon from "@/assets/icons/bank";
 import CalendarIcon from "@/assets/icons/calendar";
 import ShopIcon from "@/assets/icons/shop";
+import { View } from "react-native";
 
 // import { theme } from "@/lib/constants";
 // import { useColorScheme } from "@/lib/useColorScheme";
 
+import { api } from "@/lib/api";
+
 export default function ProtectedLayout() {
+  const { isLoading, data } = api.user.getActiveSupportRequest.useQuery();
+
   return (
     <Tabs
       screenOptions={{
@@ -80,8 +85,18 @@ export default function ProtectedLayout() {
         name="(profile)"
         options={{
           title: "Profilo",
+
           tabBarIcon: ({ color }) => (
-            <UserIcon width={28} height={28} color={color} />
+            <View className="relative">
+              {!isLoading &&
+                data!.length > 0 &&
+                data![0].messages[data![0].messages.length - 1].userId !=
+                  data![0].userId && (
+                  <View className="absolute right-0 bg-red-500 rounded-full z-10 min-h-3 min-w-3"></View>
+                )}
+
+              <UserIcon width={28} height={28} color={color} />
+            </View>
           ),
         }}
       />

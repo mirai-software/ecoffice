@@ -1,8 +1,6 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
-import { get } from "http";
-
 export const userRouter = createTRPCRouter({
   addUser: publicProcedure
     .input(z.object({ email: z.string() }))
@@ -154,6 +152,135 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+
+  getActiveSupportRequest: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.supportRequest.findMany({
+      where: {
+        user: {
+          email: ctx.session.user.email,
+        },
+        status: "open",
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        user: true,
+        messages: {
+          orderBy: {
+            createdAt: "asc",
+          },
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+  }),
+
+  closeSupportRequest: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.supportRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: "closed",
+        },
+      });
+    }),
+
+  CreateSupportRequest: protectedProcedure
+    .input(
+      z.object({
+        messages: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.user
+        .findUnique({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          if (!user) {
+            throw new Error("User not found");
+          }
+
+          return ctx.db.supportRequest.create({
+            data: {
+              status: "open",
+              user: {
+                connect: {
+                  id: user.id,
+                },
+              },
+              city: {
+                connect: {
+                  id: user.cityId!,
+                },
+              },
+              messages: {
+                create: {
+                  content: input.messages,
+                  user: {
+                    connect: {
+                      id: user.id,
+                    },
+                  },
+                },
+              },
+            },
+          });
+        });
+    }),
+
+  AddMessageToSupportRequest: protectedProcedure
+    .input(
+      z.object({
+        message: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.supportRequest
+        .findFirst({
+          where: {
+            user: {
+              email: ctx.session.user.email,
+            },
+            status: "open",
+          },
+          orderBy: {
+            createdAt: "desc",
+          },
+        })
+        .then((supportRequest) => {
+          if (!supportRequest) {
+            throw new Error("Support request not found");
+          }
+          return ctx.db.supportMessage.create({
+            data: {
+              content: input.message,
+              supportRequest: {
+                connect: {
+                  id: supportRequest.id,
+                },
+              },
+              user: {
+                connect: {
+                  email: ctx.session.user.email,
+                },
+              },
+            },
+          });
+        });
+    }),
 
   setUserInformation: protectedProcedure
     .input(

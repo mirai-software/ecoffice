@@ -1,16 +1,18 @@
 import * as z from "zod"
-import { CompleteSupportRequest, relatedSupportRequestSchema } from "./index"
+import { CompleteSupportRequest, relatedSupportRequestSchema, Completeuser, relateduserSchema } from "./index"
 
 export const supportMessageSchema = z.object({
   id: z.string(),
   content: z.string(),
   supportRequestId: z.string(),
+  userId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
 
 export interface CompleteSupportMessage extends z.infer<typeof supportMessageSchema> {
   supportRequest: CompleteSupportRequest
+  user: Completeuser
 }
 
 /**
@@ -20,4 +22,5 @@ export interface CompleteSupportMessage extends z.infer<typeof supportMessageSch
  */
 export const relatedSupportMessageSchema: z.ZodSchema<CompleteSupportMessage> = z.lazy(() => supportMessageSchema.extend({
   supportRequest: relatedSupportRequestSchema,
+  user: relateduserSchema,
 }))

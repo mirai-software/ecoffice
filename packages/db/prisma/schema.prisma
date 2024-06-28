@@ -140,9 +140,10 @@ model user {
   pickup         pickup[] // Array di Ritiri a Domicilio
   SupportRequest SupportRequest[]
 
-  SignInCompleted Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  SignInCompleted Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  SupportMessage  SupportMessage[]
 
   @@index([id])
 }
@@ -204,6 +205,9 @@ model SupportMessage {
   content          String
   supportRequestId String
   supportRequest   SupportRequest @relation(fields: [supportRequestId], references: [id])
+
+  user   user   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
