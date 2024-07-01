@@ -13,7 +13,6 @@ export default function Shop() {
 
   const ResetOnboarding = async () => {
     await AsyncStorage.setItem("@OnboardingIsDone", "false");
-    router.push("/(protected)");
   };
 
   const { isLoading, data } = api.user.getActiveSupportRequest.useQuery();
@@ -79,8 +78,8 @@ export default function Shop() {
           className="w-full flex flex-row justify-between border-b-2 p-2 border-[#CACACA]"
           onPress={() => {
             signOut();
-            router.navigate("/(public)/sign-in");
             ResetOnboarding();
+            router.navigate("/(public)/sign-in");
           }}
         >
           <Text className="font-normal text-xl pl-2">Esci</Text>

@@ -87,8 +87,11 @@ export default function Onboarding() {
     const addressSchema = z.string().min(2);
     const addressResult = addressSchema.safeParse(address);
 
-    if (!addressResult.success) {
-      alert("L'indirizzo non è valido");
+    if (
+      !addressResult.success ||
+      !address.includes(citys.find((cityd) => cityd.value == city)?.label || "")
+    ) {
+      alert("L'indirizzo non è valido o non è appartenente al comune scelto");
       return;
     }
 
@@ -192,9 +195,11 @@ export default function Onboarding() {
                 query={{
                   key: process.env.GOOGLE_MAPS_API_KEY as string,
                   language: "it",
+                  components: "country:it",
                 }}
                 fetchDetails={true}
                 onPress={(data, details) => {
+                  // get the city from the address
                   setAddress(details!["formatted_address"]);
                 }}
                 autoFillOnNotFound={true}

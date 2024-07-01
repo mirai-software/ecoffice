@@ -202,6 +202,7 @@ export default function Profile_Edit() {
                 query={{
                   key: process.env.GOOGLE_MAPS_API_KEY as string,
                   language: "it",
+                  components: "country:it",
                 }}
                 fetchDetails={true}
                 onPress={(data, details) => {
