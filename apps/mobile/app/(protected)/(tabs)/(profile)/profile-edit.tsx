@@ -200,7 +200,7 @@ export default function Profile_Edit() {
               <GooglePlacesAutocomplete
                 placeholder="Scrivi il tuo Indirizzo"
                 query={{
-                  key: "AIzaSyCXjyC38LmgNgEvbJ9QxpQ2nSZmpPMNPmI",
+                  key: process.env.GOOGLE_MAPS_API_KEY as string,
                   language: "it",
                 }}
                 fetchDetails={true}
