@@ -18,6 +18,7 @@ import * as z from "zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import { CommonActions } from "@react-navigation/native";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import logo from "@/assets/logo.png";
 import { Path, Svg } from "react-native-svg";
@@ -184,14 +185,86 @@ export default function Onboarding() {
               />
             </View>
 
-            <View className="flex gap-2">
-              <Text className="">Indirizzo di Residenza</Text>
-              <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
-                value={address}
-                onChange={(
-                  value: NativeSyntheticEvent<TextInputChangeEventData>
-                ) => setAddress(value.nativeEvent.text)}
+            <View className="flex gap-2 z-20 relative w-full">
+              <Text className="">Indirizzo</Text>
+              <GooglePlacesAutocomplete
+                placeholder={address || "Inserisci il tuo indirizzo"}
+                query={{
+                  key: "AIzaSyCXjyC38LmgNgEvbJ9QxpQ2nSZmpPMNPmI",
+                  language: "it",
+                }}
+                fetchDetails={true}
+                onPress={(data, details) => {
+                  setAddress(details!["formatted_address"]);
+                }}
+                autoFillOnNotFound={true}
+                onFail={(error) => console.log(error)}
+                onNotFound={() => console.log("no results")}
+                styles={{
+                  container: {
+                    flex: 1,
+                    height: 44,
+
+                    marginBottom: 40,
+                    zIndex: 999,
+                    position: "relative",
+                  },
+                  textInputContainer: {
+                    flexDirection: "row",
+                    zIndex: 999,
+                  },
+                  textInput: {
+                    backgroundColor: "#FFFFFF",
+                    borderWidth: 1,
+                    borderColor: "#6B7280",
+                    height: 44,
+                    borderRadius: 12,
+                    paddingVertical: 10,
+                    paddingHorizontal: 10,
+                    fontSize: 15,
+                    flex: 1,
+                    zIndex: 999,
+                  },
+                  poweredContainer: {
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    borderBottomRightRadius: 5,
+                    borderBottomLeftRadius: 5,
+                    borderColor: "#c8c7cc",
+                    borderTopWidth: 0.5,
+                    zIndex: 999,
+                  },
+                  powered: {},
+                  listView: {
+                    zIndex: 100,
+                    // set absolute to prevent keyboard from covering the results
+                    position: "absolute",
+                    top: 50,
+                    backgroundColor: "white",
+                    // set border color to light grey
+                    borderColor: "lightgrey",
+                    // set border width to 1
+                    borderWidth: 1,
+                    borderRadius: 5,
+                  },
+                  row: {
+                    padding: 13,
+                    height: 44,
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                  },
+                  separator: {
+                    height: 0.5,
+                    backgroundColor: "#c8c7cc",
+                  },
+                  description: {},
+                  loader: {
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    height: 20,
+                    zIndex: 999,
+                  },
+                }}
               />
             </View>
 

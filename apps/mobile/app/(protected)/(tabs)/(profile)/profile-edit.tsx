@@ -15,6 +15,7 @@ import { Text } from "@/components/ui/text";
 import { useState } from "react";
 import { TextInputChangeEventData } from "react-native";
 import { Button } from "@/components/ui/button";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
@@ -194,19 +195,103 @@ export default function Profile_Edit() {
                 />
               </View>
             </View>
+            <View className="flex gap-2 z-20 relative w-full">
+              <Text className="">Indirizzo</Text>
+              <GooglePlacesAutocomplete
+                placeholder="Scrivi il tuo Indirizzo"
+                query={{
+                  key: "AIzaSyCXjyC38LmgNgEvbJ9QxpQ2nSZmpPMNPmI",
+                  language: "it",
+                }}
+                fetchDetails={true}
+                onPress={(data, details) => {
+                  setAddress(details!["formatted_address"]);
+                }}
+                autoFillOnNotFound={true}
+                onFail={(error) => {
+                  toast.success(
+                    "Sembra esserci un problema con la geolocalizzazione, contatta l'assistenza citando : " +
+                      error,
+                    {
+                      styles: {
+                        view: {
+                          backgroundColor: "#00930F",
+                          borderRadius: 8,
+                        },
+                        indicator: {
+                          backgroundColor: "white",
+                        },
+                      },
+                    }
+                  );
+                }}
+                onNotFound={() => console.log("no results")}
+                styles={{
+                  container: {
+                    flex: 1,
+                    height: 44,
 
-            <View className="flex gap-2 w-full">
-              <Text className="">Indirizzo di Residenza</Text>
-              <View className="flex flex-row">
-                <TextInput
-                  className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 "
-                  value={address}
-                  placeholder="Indirizzo di Residenza"
-                  onChange={(
-                    value: NativeSyntheticEvent<TextInputChangeEventData>
-                  ) => setAddress(value.nativeEvent.text)}
-                />
-              </View>
+                    marginBottom: 40,
+                    zIndex: 999,
+                    position: "relative",
+                  },
+                  textInputContainer: {
+                    flexDirection: "row",
+                    zIndex: 999,
+                  },
+                  textInput: {
+                    backgroundColor: "#FFFFFF",
+                    borderWidth: 1,
+                    borderColor: "#6B7280",
+                    height: 44,
+                    borderRadius: 12,
+                    paddingVertical: 10,
+                    paddingHorizontal: 10,
+                    fontSize: 15,
+                    flex: 1,
+                    zIndex: 999,
+                  },
+                  poweredContainer: {
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    borderBottomRightRadius: 5,
+                    borderBottomLeftRadius: 5,
+                    borderColor: "#c8c7cc",
+                    borderTopWidth: 0.5,
+                    zIndex: 999,
+                  },
+                  powered: {},
+                  listView: {
+                    zIndex: 100,
+                    // set absolute to prevent keyboard from covering the results
+                    position: "absolute",
+                    top: 50,
+                    backgroundColor: "white",
+                    // set border color to light grey
+                    borderColor: "lightgrey",
+                    // set border width to 1
+                    borderWidth: 1,
+                    borderRadius: 5,
+                  },
+                  row: {
+                    padding: 13,
+                    height: 44,
+                    flexDirection: "row",
+                    backgroundColor: "white",
+                  },
+                  separator: {
+                    height: 0.5,
+                    backgroundColor: "#c8c7cc",
+                  },
+                  description: {},
+                  loader: {
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    height: 20,
+                    zIndex: 999,
+                  },
+                }}
+              />
             </View>
             <Button
               className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3 mb-40"

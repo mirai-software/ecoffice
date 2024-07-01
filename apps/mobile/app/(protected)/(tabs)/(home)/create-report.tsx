@@ -19,6 +19,8 @@ import RNPickerSelect from "react-native-picker-select";
 import HeaderContainer from "@/app/_header";
 import AddImage from "@/assets/icons/add-image";
 
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 
@@ -116,14 +118,101 @@ export default function CreateReport() {
     <HeaderContainer router={router}>
       <View className="flex-1 bg-background p-4 relative">
         <View className="flex-1 z-20 flex gap-4">
-          <View className="flex gap-2">
+          <View className="flex gap-2 z-20 relative">
             <Text className="">Indirizzo</Text>
-            <TextInput
-              className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
-              value={address}
-              onChange={(
-                value: NativeSyntheticEvent<TextInputChangeEventData>
-              ) => setAddress(value.nativeEvent.text)}
+            <GooglePlacesAutocomplete
+              placeholder="Scrivi il tuo Indirizzo"
+              query={{
+                key: "AIzaSyCXjyC38LmgNgEvbJ9QxpQ2nSZmpPMNPmI",
+                language: "it",
+              }}
+              fetchDetails={true}
+              onPress={(data, details) => {
+                setAddress(details!["formatted_address"]);
+              }}
+              autoFillOnNotFound={true}
+              onFail={(error) => {
+                toast.success(
+                  "Sembra esserci un problema con la geolocalizzazione, contatta l'assistenza citando : " +
+                    error,
+                  {
+                    styles: {
+                      view: {
+                        backgroundColor: "#00930F",
+                        borderRadius: 8,
+                      },
+                      indicator: {
+                        backgroundColor: "white",
+                      },
+                    },
+                  }
+                );
+              }}
+              onNotFound={() => console.log("no results")}
+              styles={{
+                container: {
+                  flex: 1,
+                  height: 44,
+                  marginBottom: 40,
+                  zIndex: 999,
+                  position: "relative",
+                },
+                textInputContainer: {
+                  flexDirection: "row",
+                  zIndex: 999,
+                },
+                textInput: {
+                  backgroundColor: "#FFFFFF",
+                  borderWidth: 1,
+                  borderColor: "#6B7280",
+                  height: 44,
+                  borderRadius: 12,
+                  paddingVertical: 10,
+                  paddingHorizontal: 10,
+                  fontSize: 15,
+                  flex: 1,
+                  zIndex: 999,
+                },
+                poweredContainer: {
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  borderBottomRightRadius: 5,
+                  borderBottomLeftRadius: 5,
+                  borderColor: "#c8c7cc",
+                  borderTopWidth: 0.5,
+                  zIndex: 999,
+                },
+                powered: {},
+                listView: {
+                  zIndex: 100,
+                  // set absolute to prevent keyboard from covering the results
+                  position: "absolute",
+                  top: 50,
+                  backgroundColor: "white",
+                  // set border color to light grey
+                  borderColor: "lightgrey",
+                  // set border width to 1
+                  borderWidth: 1,
+                  borderRadius: 5,
+                },
+                row: {
+                  padding: 13,
+                  height: 44,
+                  flexDirection: "row",
+                  backgroundColor: "white",
+                },
+                separator: {
+                  height: 0.5,
+                  backgroundColor: "#c8c7cc",
+                },
+                description: {},
+                loader: {
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                  height: 20,
+                  zIndex: 999,
+                },
+              }}
             />
           </View>
 

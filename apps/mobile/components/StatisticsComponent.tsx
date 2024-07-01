@@ -28,7 +28,7 @@ export default function StatisticsComponent({
     StatisticType.ProductionIndicator
   );
 
-  if (statistics.length === 0 || !statistics) {
+  if (!statistics || statistics.length === 0) {
     return (
       <View className="flex-1 w-full mt-3 justify-center items-center">
         <Text className="text-center font-normal text-gray-600">
