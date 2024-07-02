@@ -193,7 +193,7 @@ export default function Onboarding() {
               <GooglePlacesAutocomplete
                 placeholder={address || "Inserisci il tuo indirizzo"}
                 query={{
-                  key: process.env.GOOGLE_MAPS_API_KEY as string,
+                  key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY as string,
                   language: "it",
                   components: "country:it",
                 }}

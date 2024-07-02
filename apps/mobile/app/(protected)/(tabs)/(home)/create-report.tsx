@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  Image,
-  View,
-  Text,
-  TextInput,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  Pressable,
-} from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { Button } from "@/components/ui/button";
 import * as ImagePicker from "expo-image-picker";
@@ -123,7 +115,7 @@ export default function CreateReport() {
             <GooglePlacesAutocomplete
               placeholder="Scrivi il tuo Indirizzo"
               query={{
-                key: process.env.GOOGLE_MAPS_API_KEY as string,
+                key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY as string,
                 language: "it",
               }}
               fetchDetails={true}
