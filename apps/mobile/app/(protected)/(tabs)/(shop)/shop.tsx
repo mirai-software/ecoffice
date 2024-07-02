@@ -17,7 +17,6 @@ import { api } from "@/lib/api";
 import { router, useLocalSearchParams } from "expo-router";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
 
 type secondHandProduct = {
   id: string;

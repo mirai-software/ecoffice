@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Text } from "@/components/ui/text";
 import { toast } from "@backpackapp-io/react-native-toast";
 
-function italianTimeFormat(dateUTC) {
+export function italianTimeFormat(dateUTC) {
   if (dateUTC) {
     const jsDateFormat = new Date(dateUTC);
     const fullStringTime = {

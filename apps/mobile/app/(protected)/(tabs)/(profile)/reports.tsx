@@ -5,6 +5,7 @@ import { router } from "expo-router";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
+import { italianTimeFormat } from "./assistance";
 
 const ReportComponent = ({
   report,
@@ -59,10 +60,14 @@ const ReportComponent = ({
           <View className="flex flex-row gap-1 justify-center items-center">
             <Text className="font-normal text-md pl-2">{report.type}</Text>
             <Text className="pl-2 font-bold">-</Text>
-            <Text className="font-normal text-md pl-2">{report.address}</Text>
+            <Text className="font-normal text-md pl-2">
+              {report.address.length > 20
+                ? report.address.substring(0, 20) + "..."
+                : report.address}
+            </Text>
           </View>
           <Text className="font-normal text-md pl-2 text-gray-500">
-            {report.createdAt.toDateString()}
+            {italianTimeFormat(report.createdAt)}
           </Text>
         </View>
       </Pressable>

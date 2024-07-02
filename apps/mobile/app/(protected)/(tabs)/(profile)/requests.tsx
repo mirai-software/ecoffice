@@ -4,6 +4,7 @@ import { router } from "expo-router";
 import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
+import { italianTimeFormat } from "./assistance";
 
 const StatusComponent = ({
   status,
@@ -85,8 +86,8 @@ export const RequestComponent = ({
                 {request.type}
               </Text>
               <Text className="pl-2 font-bold">-</Text>
-              <Text className="font-normal text-md pl-2 text-gray-500">
-                {request.createdAt.toDateString()}
+              <Text className="font-normal text-md pl-1 text-gray-500">
+                {italianTimeFormat(request.createdAt)}
               </Text>
             </View>
           </View>
