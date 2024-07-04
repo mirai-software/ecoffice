@@ -27,7 +27,7 @@ export default function Profile_Edit() {
   );
 
   const [name, setName] = useState(user?.firstName + " " + user?.lastName);
-  const [phone, setPhone] = useState(user?.phone);
+  const [phone, setPhone] = useState(user?.phone ?? "");
   const [address, setAddress] = useState(user?.address);
   const [city, setCity] = useState(user?.city?.id);
 
@@ -37,6 +37,11 @@ export default function Profile_Edit() {
     // check if the user has filled all the fields and if the type is correct
     if (!name || !city || !address || !phone) {
       alert("Assicurati di aver compilato tutti i campi");
+      return;
+    }
+
+    if (!citys) {
+      alert("Sembra esserci un problema con la geolocalizzazione");
       return;
     }
 
@@ -90,7 +95,7 @@ export default function Profile_Edit() {
       address,
       phoneNumber: phone,
     }).then(async () => {
-      utils.user.getUser.invalidate();
+      utils.invalidate();
       router.back();
       toast.success("Le modifiche sono state salvate correttamente.", {
         styles: {

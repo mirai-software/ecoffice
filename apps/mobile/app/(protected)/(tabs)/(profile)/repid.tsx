@@ -9,7 +9,9 @@ import HeaderContainer from "@/app/_header";
 
 export default function Page() {
   const { id } = useLocalSearchParams();
-  const { isLoading, data } = api.user.getUserReportRequest.useQuery({ id });
+  const { isLoading, data } = api.user.getUserReportRequest.useQuery({
+    id: id as string,
+  });
   const { getReportImageUrl } = useSupabase();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 

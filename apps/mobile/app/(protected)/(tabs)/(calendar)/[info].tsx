@@ -1,5 +1,4 @@
 import HeaderContainer from "@/app/_header";
-import { H1, Muted } from "@/components/ui/typography";
 import { router, useLocalSearchParams } from "expo-router";
 import { api } from "@/lib/api";
 import { ActivityIndicator, Text, View, ScrollView } from "react-native";

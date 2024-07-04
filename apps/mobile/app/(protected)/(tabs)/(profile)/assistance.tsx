@@ -1,5 +1,5 @@
 import HeaderContainer from "@/app/_header";
-import { H1, H3, Muted } from "@/components/ui/typography";
+import { H3, Muted } from "@/components/ui/typography";
 import { router } from "expo-router";
 import {
   ActivityIndicator,
@@ -14,7 +14,7 @@ import { useState } from "react";
 import { Text } from "@/components/ui/text";
 import { toast } from "@backpackapp-io/react-native-toast";
 
-export function italianTimeFormat(dateUTC) {
+export function italianTimeFormat(dateUTC: Date | null) {
   if (dateUTC) {
     const jsDateFormat = new Date(dateUTC);
     const fullStringTime = {
@@ -56,8 +56,7 @@ export default function Page() {
   const CloseRequest = api.user.closeSupportRequest.useMutation();
   const utils = api.useUtils();
 
-  const { isLoading, data, error } =
-    api.user.getActiveSupportRequest.useQuery();
+  const { isLoading, data } = api.user.getActiveSupportRequest.useQuery();
 
   const SendMessageToSupportRequest = () => {
     SendMessage.mutate({

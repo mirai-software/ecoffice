@@ -36,7 +36,9 @@ const StatusComponent = ({
 
 export default function Page() {
   const { id } = useLocalSearchParams();
-  const { isLoading, data } = api.user.getUserPickupRequest.useQuery({ id });
+  const { isLoading, data } = api.user.getUserPickupRequest.useQuery({
+    id: id as string,
+  });
   const { getRequestImageUrl } = useSupabase();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
@@ -71,7 +73,7 @@ export default function Page() {
           </View>
           <View className="flex gap-2">
             <Text className="text-2xl text-gray-600">Stato</Text>
-            <StatusComponent status={data.status as any} />
+            <StatusComponent status={data?.status ?? "pending"} />
           </View>
 
           <View className="flex flex-col gap-2 w-full">

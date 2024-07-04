@@ -20,6 +20,7 @@ import { useNavigation } from "expo-router";
 import { CommonActions } from "@react-navigation/native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
+// @ts-expect-error : The file is not found but it is actually there
 import logo from "@/assets/logo.png";
 import { Path, Svg } from "react-native-svg";
 
@@ -57,6 +58,11 @@ export default function Onboarding() {
     // check if the user has filled all the fields and if the type is correct
     if (!name || !city || !address || !phoneNumber) {
       alert("Assicurati di aver compilato tutti i campi");
+      return;
+    }
+
+    if (!citys) {
+      alert("Errore nel caricamento dei comuni");
       return;
     }
 

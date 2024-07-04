@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { router } from "expo-router";
 import { Text } from "@/components/ui/text";
 import { useSupabase } from "@/context/supabase-provider";

@@ -1,14 +1,5 @@
-import { useEffect, useState } from "react";
-import {
-  Image,
-  View,
-  Text,
-  TextInput,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  ActivityIndicator,
-  Pressable,
-} from "react-native";
+import { useState } from "react";
+import { View, Text, ActivityIndicator, Pressable } from "react-native";
 
 import { useSupabase } from "@/context/supabase-provider";
 import { Button } from "@/components/ui/button";
@@ -32,7 +23,7 @@ export default function CreateHomeRequest() {
   const [images, setImages] = useState([] as ImagePicker.ImagePickerAsset[]);
   const [type, setType] = useState(null);
   const [address, setAddress] = useState("");
-  const [tmpdata, setTmpData] = useState({} as any);
+
   // API Calls
   const { data, isLoading } = api.user.getUser.useQuery({});
   const { uploadRequestImage } = useSupabase();

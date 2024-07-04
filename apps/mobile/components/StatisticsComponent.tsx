@@ -7,22 +7,12 @@ enum StatisticType {
   SpecificIndicator = "SpecificIndicator",
 }
 
-type Statistics = {
-  id: string;
-  name: string;
-  data: string;
-  type: StatisticType;
-  cityId: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 export default function StatisticsComponent({
   statistics,
 }: {
-  statistics: Statistics[];
+  statistics: any[] | undefined;
 }) {
   const [selected, setSelected] = useState<StatisticType>(
     StatisticType.ProductionIndicator

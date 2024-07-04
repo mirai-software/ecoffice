@@ -1,7 +1,7 @@
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import { router } from "expo-router";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import { italianTimeFormat } from "./assistance";
@@ -79,7 +79,7 @@ export const RequestComponent = ({
         <View className="flex flex-row justify-between mx-2 items-center">
           <View>
             <Text className="font-medium text-2xl pl-2">
-              Ritiro {"#" + request.number}
+              Ritiro {"#" + number}
             </Text>
             <View className="flex flex-row gap-1 justify-center items-center">
               <Text className="font-normal text-md pl-2 text-gray-500">
@@ -93,7 +93,7 @@ export const RequestComponent = ({
           </View>
 
           <View className="flex flex-row gap-2 justify-start items-center">
-            <StatusComponent status={request.status as any} />
+            <StatusComponent status={request.status} />
           </View>
         </View>
       </Pressable>
