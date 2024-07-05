@@ -16,6 +16,7 @@ import { useState } from "react";
 import { TextInputChangeEventData } from "react-native";
 import { Button } from "@/components/ui/button";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { Feather } from "@expo/vector-icons";
 
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
@@ -32,6 +33,30 @@ export default function Profile_Edit() {
   const [city, setCity] = useState(user?.city?.id);
 
   const utils = api.useUtils();
+
+  const SaveButton = () => {
+    if (hadMadeChanges()) {
+      return (
+        <Pressable onPress={HandleSubmit}>
+          <Feather name="save" size={24} color="black" />
+        </Pressable>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const hadMadeChanges = () => {
+    if (
+      name != user?.firstName + " " + user?.lastName ||
+      phone != user?.phone ||
+      address != user?.address ||
+      city != user?.city?.id
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const HandleSubmit = async () => {
     // check if the user has filled all the fields and if the type is correct
@@ -72,8 +97,11 @@ export default function Profile_Edit() {
     const addressSchema = z.string().min(2);
     const addressResult = addressSchema.safeParse(address);
 
-    if (!addressResult.success) {
-      alert("L'indirizzo non è valido");
+    if (
+      !addressResult.success ||
+      !address.includes(citys.find((cityd) => cityd.value == city)?.label || "")
+    ) {
+      alert("L'indirizzo non è valido o non è incluso nel comune selezionato");
       return;
     }
 
@@ -119,7 +147,7 @@ export default function Profile_Edit() {
     );
   } else
     return (
-      <HeaderContainer router={router}>
+      <HeaderContainer router={router} rightComponent={SaveButton()}>
         <ScrollView>
           <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4">
             <View className="flex gap-2 w-full">
@@ -203,7 +231,7 @@ export default function Profile_Edit() {
             <View className="flex gap-2 z-20 relative w-full">
               <Text className="">Indirizzo</Text>
               <GooglePlacesAutocomplete
-                placeholder="Scrivi il tuo Indirizzo"
+                placeholder={user?.address ?? "Inserisci il tuo indirizzo"}
                 query={{
                   key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY as string,
                   language: "it",
@@ -237,7 +265,6 @@ export default function Profile_Edit() {
                     flex: 1,
                     height: 44,
 
-                    marginBottom: 40,
                     zIndex: 999,
                     position: "relative",
                   },
@@ -299,12 +326,6 @@ export default function Profile_Edit() {
                 }}
               />
             </View>
-            <Button
-              className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3 mb-40"
-              onPress={HandleSubmit}
-            >
-              <Text className="font-bold text-white">Continua</Text>
-            </Button>
           </View>
         </ScrollView>
       </HeaderContainer>

@@ -2,7 +2,14 @@ import HeaderContainer from "@/app/_header";
 
 import { api } from "@/lib/api";
 import { router } from "expo-router";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import { italianTimeFormat } from "./assistance";
@@ -49,7 +56,7 @@ const ReportComponent = ({
         {imageUrl && (
           <Image
             source={{ uri: imageUrl }}
-            className="h-24 w-20  bg-gray-500"
+            className="h-24 w-20  bg-gray-500/10"
             resizeMode="cover"
           />
         )}
@@ -97,13 +104,19 @@ export default function Page() {
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4 mt-4">
-          <View className="flex gap-2 w-full">
-            {reports?.map((report, index) => (
-              <ReportComponent report={report} number={index} key={report.id} />
-            ))}
+        <ScrollView>
+          <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4 mt-4 pb-40">
+            <View className="flex gap-2 w-full">
+              {reports?.map((report, index) => (
+                <ReportComponent
+                  report={report}
+                  number={index}
+                  key={report.id}
+                />
+              ))}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </HeaderContainer>
     );
 }

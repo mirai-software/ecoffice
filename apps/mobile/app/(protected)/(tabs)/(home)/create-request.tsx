@@ -58,8 +58,10 @@ export default function CreateHomeRequest() {
     const addressSchema = z.string().min(2);
     const addressResult = addressSchema.safeParse(address);
 
-    if (!addressResult.success) {
-      alert("L'indirizzo non risulta nel formato corretto");
+    if (!addressResult.success || !address.includes(data?.city?.name ?? "")) {
+      alert(
+        "L'indirizzo non risulta nel formato corretto o non è valido per la tua città"
+      );
       return;
     }
 
@@ -71,6 +73,20 @@ export default function CreateHomeRequest() {
       };
       await AddRequest.mutateAsync(data).then(() => {
         router.back();
+        toast.success(
+          "Ritiro a domicilio richiesto correttamente. Puoi seguirne lo stato dal tuo Profilo.",
+          {
+            styles: {
+              view: {
+                backgroundColor: "#00930F",
+                borderRadius: 8,
+              },
+              indicator: {
+                backgroundColor: "white",
+              },
+            },
+          }
+        );
       });
     } else {
       const imagesUrl: string[] = [];

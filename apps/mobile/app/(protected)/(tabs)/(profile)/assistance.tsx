@@ -41,10 +41,12 @@ export function italianTimeFormat(dateUTC: Date | null) {
       fullStringTime.month +
       "/" +
       fullStringTime.year +
-      " " +
-      fullStringTime.hours +
+      " "
+      /*
+      + fullStringTime.hours +
       ":" +
       fullStringTime.minutes
+      */
     );
   }
   return null;

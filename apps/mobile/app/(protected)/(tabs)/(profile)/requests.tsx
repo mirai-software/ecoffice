@@ -1,7 +1,13 @@
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import { router } from "expo-router";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import { italianTimeFormat } from "./assistance";
@@ -123,13 +129,19 @@ export default function Page() {
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4 mt-4">
-          <View className="flex gap-2 w-full">
-            {requests?.map((requests, index) => (
-              <RequestComponent request={requests} number={index} key={index} />
-            ))}
+        <ScrollView>
+          <View className="flex-1 items-start justify-start bg-background p-4 gap-y-4 mt-4 pb-40">
+            <View className="flex gap-2 w-full">
+              {requests?.map((requests, index) => (
+                <RequestComponent
+                  request={requests}
+                  number={index}
+                  key={index}
+                />
+              ))}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </HeaderContainer>
     );
 }

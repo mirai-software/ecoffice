@@ -14,6 +14,7 @@ export default function RootLayout() {
       initialRouteName="profile-home"
     >
       <Stack.Screen name="profile-home" />
+      <Stack.Screen name="profile-edit" />
       <Stack.Screen
         name="repid"
         options={{
