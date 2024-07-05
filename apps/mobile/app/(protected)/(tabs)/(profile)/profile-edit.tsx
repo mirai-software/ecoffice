@@ -43,7 +43,9 @@ export default function Profile_Edit() {
         </Pressable>
       );
     } else {
-      return null;
+      return (
+        <Text className="text-[#949B9E] underline font-medium pr-2">Salva</Text>
+      );
     }
   };
 
