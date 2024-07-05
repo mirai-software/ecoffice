@@ -14,9 +14,8 @@ import RNPickerSelect from "react-native-picker-select";
 import { Text } from "@/components/ui/text";
 import { useState } from "react";
 import { TextInputChangeEventData } from "react-native";
-import { Button } from "@/components/ui/button";
+
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { Feather } from "@expo/vector-icons";
 
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
@@ -38,7 +37,9 @@ export default function Profile_Edit() {
     if (hadMadeChanges()) {
       return (
         <Pressable onPress={HandleSubmit}>
-          <Feather name="save" size={24} color="black" />
+          <Text className="text-[#334493] underline font-medium pr-2">
+            Salva
+          </Text>
         </Pressable>
       );
     } else {
