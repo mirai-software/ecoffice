@@ -16,28 +16,30 @@ import { toast } from "@backpackapp-io/react-native-toast";
 
 const formSchema = z
   .object({
-    email: z.string().email("Please enter a valid email address."),
+    email: z.string().email("Inserisci un indirizzo email valido."),
     password: z
       .string()
-      .min(8, "Please enter at least 8 characters.")
-      .max(64, "Please enter fewer than 64 characters.")
+      .min(8, "La password deve contenere almeno 8 caratteri.")
+      .max(64, "La password deve contenere al massimo 64 caratteri")
       .regex(
         /^(?=.*[a-z])/,
-        "Your password must have at least one lowercase letter."
+        "La tua password deve contenere almeno una lettera minuscola."
       )
       .regex(
         /^(?=.*[A-Z])/,
-        "Your password must have at least one uppercase letter."
+        "La tua password deve contenere almeno una lettera maiuscola."
       )
-      .regex(/^(?=.*[0-9])/, "Your password must have at least one number.")
+      .regex(/^(?=.*[0-9])/, "La tua password deve contenere almeno un numero.")
       .regex(
         /^(?=.*[!@#$%^&*])/,
-        "Your password must have at least one special character."
+        "La tua password deve contenere almeno un carattere speciale."
       ),
-    confirmPassword: z.string().min(8, "Please enter at least 8 characters."),
+    confirmPassword: z
+      .string()
+      .min(8, "La password deve contenere almeno 8 caratteri."),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Your passwords do not match.",
+    message: "Le password non corrispondono.",
     path: ["confirmPassword"],
   });
 

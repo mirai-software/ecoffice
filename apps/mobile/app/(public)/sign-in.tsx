@@ -14,11 +14,11 @@ import { toast } from "@backpackapp-io/react-native-toast";
 import { Image } from "react-native";
 
 const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address."),
+  email: z.string().email("Inserisci un indirizzo email valido."),
   password: z
     .string()
-    .min(8, "Please enter at least 8 characters.")
-    .max(64, "Please enter fewer than 64 characters."),
+    .min(8, "La password deve contenere almeno 8 caratteri.")
+    .max(64, "La password deve contenere al massimo 64 caratteri"),
 });
 
 export const SignInHeader = () => {
