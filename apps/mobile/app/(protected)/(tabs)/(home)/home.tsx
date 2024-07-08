@@ -18,6 +18,9 @@ import { api } from "@/lib/api";
 import { SecondHandProductComponent } from "../(shop)/shop";
 import { RequestComponent } from "../(profile)/requests";
 import StatisticsComponent from "@/components/StatisticsComponent";
+import { CategoryType } from "../(calendar)/calendar";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function TabOneScreen() {
   const { data: Calendar, isLoading: calendarLoading } =
@@ -34,6 +37,18 @@ export default function TabOneScreen() {
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
   const currentDay = Calendar?.find((day) => day.day === today);
+
+  const [category, setCategory] = useState<CategoryType>(CategoryType.Citizen);
+
+  useEffect(() => {
+    const getCategory = async () => {
+      const category = await AsyncStorage.getItem("category");
+      if (category) {
+        setCategory(category as CategoryType);
+      }
+    };
+    getCategory();
+  }, []);
 
   if (
     calendarLoading ||
@@ -69,6 +84,7 @@ export default function TabOneScreen() {
             <CalendarComponent
               day={"Oggi"}
               garbages={currentDay?.wasteTypes || []}
+              category={category}
             />
           </Animated.View>
           <Animated.View

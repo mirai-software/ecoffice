@@ -15,8 +15,6 @@ import { Text } from "@/components/ui/text";
 import { useState } from "react";
 import { TextInputChangeEventData } from "react-native";
 
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
 export default function Profile_Edit() {
@@ -28,7 +26,7 @@ export default function Profile_Edit() {
 
   const [name, setName] = useState(user?.firstName + " " + user?.lastName);
   const [phone, setPhone] = useState(user?.phone ?? "");
-  const [address, setAddress] = useState(user?.address);
+  const [address, setAddress] = useState(user?.address ?? "");
   const [city, setCity] = useState(user?.city?.id);
 
   const utils = api.useUtils();
@@ -100,10 +98,7 @@ export default function Profile_Edit() {
     const addressSchema = z.string().min(2);
     const addressResult = addressSchema.safeParse(address);
 
-    if (
-      !addressResult.success ||
-      !address.includes(citys.find((cityd) => cityd.value == city)?.label || "")
-    ) {
+    if (!addressResult.success) {
       alert("L'indirizzo non è valido o non è incluso nel comune selezionato");
       return;
     }
@@ -231,102 +226,15 @@ export default function Profile_Edit() {
                 />
               </View>
             </View>
-            <View className="flex gap-2 z-20 relative w-full">
+            <View className="flex gap-2">
               <Text className="">Indirizzo</Text>
-              <GooglePlacesAutocomplete
-                placeholder={user?.address ?? "Inserisci il tuo indirizzo"}
-                query={{
-                  key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-                  language: "it",
-                  components: "country:it",
-                }}
-                fetchDetails={true}
-                onPress={(data, details) => {
-                  setAddress(details!["formatted_address"]);
-                }}
-                autoFillOnNotFound={true}
-                onFail={(error) => {
-                  toast.success(
-                    "Sembra esserci un problema con la geolocalizzazione, contatta l'assistenza citando : " +
-                      error,
-                    {
-                      styles: {
-                        view: {
-                          backgroundColor: "#00930F",
-                          borderRadius: 8,
-                        },
-                        indicator: {
-                          backgroundColor: "white",
-                        },
-                      },
-                    }
-                  );
-                }}
-                onNotFound={() => console.log("no results")}
-                styles={{
-                  container: {
-                    flex: 1,
-                    height: 44,
-
-                    zIndex: 999,
-                    position: "relative",
-                  },
-                  textInputContainer: {
-                    flexDirection: "row",
-                    zIndex: 999,
-                  },
-                  textInput: {
-                    backgroundColor: "#FFFFFF",
-                    borderWidth: 1,
-                    borderColor: "#6B7280",
-                    height: 44,
-                    borderRadius: 12,
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                    fontSize: 15,
-                    flex: 1,
-                    zIndex: 999,
-                  },
-                  poweredContainer: {
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    borderBottomRightRadius: 5,
-                    borderBottomLeftRadius: 5,
-                    borderColor: "#c8c7cc",
-                    borderTopWidth: 0.5,
-                    zIndex: 999,
-                  },
-                  powered: {},
-                  listView: {
-                    zIndex: 100,
-                    // set absolute to prevent keyboard from covering the results
-                    position: "absolute",
-                    top: 50,
-                    backgroundColor: "white",
-                    // set border color to light grey
-                    borderColor: "lightgrey",
-                    // set border width to 1
-                    borderWidth: 1,
-                    borderRadius: 5,
-                  },
-                  row: {
-                    padding: 13,
-                    height: 44,
-                    flexDirection: "row",
-                    backgroundColor: "white",
-                  },
-                  separator: {
-                    height: 0.5,
-                    backgroundColor: "#c8c7cc",
-                  },
-                  description: {},
-                  loader: {
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    height: 20,
-                    zIndex: 999,
-                  },
-                }}
+              <TextInput
+                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                value={address}
+                placeholder="Inserisci l'indirizzo"
+                onChange={(
+                  value: NativeSyntheticEvent<TextInputChangeEventData>
+                ) => setAddress(value.nativeEvent.text)}
               />
             </View>
           </View>

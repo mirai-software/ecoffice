@@ -38,10 +38,9 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
           className="dark:text-white text-black"
           style={{
             position: "absolute",
-            top: insets.top,
+            top: "50%",
             fontSize: 22,
             fontWeight: "semibold",
-
             zIndex: 1,
           }}
         >

@@ -1,10 +1,12 @@
 import * as z from "zod"
+import { WasteCategory } from "@prisma/client"
 import { CompleteCalendarWasteType, relatedCalendarWasteTypeSchema } from "./index"
 
 export const wasteTypeSchema = z.object({
   id: z.string(),
   name: z.string(),
   color: z.string(),
+  category: z.nativeEnum(WasteCategory),
   info: z.string().array(),
   icon: z.string(),
   createdAt: z.date(),

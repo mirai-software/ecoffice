@@ -80,10 +80,16 @@ model calendar {
   updatedAt DateTime @updatedAt
 }
 
+enum WasteCategory {
+  Commercial
+  Citizen
+}
+
 model wasteType {
   id        String              @id @unique @default(uuid())
   name      String
   color     String
+  category  WasteCategory       @default(Citizen)
   info      String[]            @default([])
   icon      String              @default("default")
   calendars CalendarWasteType[] // Modifica per relazione molti-a-molti

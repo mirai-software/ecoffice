@@ -1,9 +1,12 @@
 import { Muted } from "@/components/ui/typography";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, View } from "react-native";
 import { router } from "expo-router";
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import CalendarComponent from "@/components/CalendarComponent";
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -26,8 +29,24 @@ const getDayItalian = (day: string) => {
   }
 };
 
+export enum CategoryType {
+  Commercial = "Commercial",
+  Citizen = "Citizen",
+}
+
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});
+  const [category, setCategory] = useState(CategoryType.Citizen);
+
+  useEffect(() => {
+    const getCategory = async () => {
+      const category = await AsyncStorage.getItem("category");
+      if (category) {
+        setCategory(category as CategoryType);
+      }
+    };
+    getCategory();
+  }, []);
 
   if (isLoading) {
     return (
@@ -49,13 +68,69 @@ export default function Shop() {
     return (
       <HeaderContainer router={router}>
         <ScrollView>
+          <View className="w-[90%] flex flex-row justify-between items-center border-2 rounded-3xl border-gray-300 mt-4 mx-5">
+            <Pressable
+              onPress={async () => {
+                await AsyncStorage.setItem("category", CategoryType.Citizen);
+                setCategory(CategoryType.Citizen);
+              }}
+              className="w-[50%]"
+            >
+              <View
+                className={
+                  category === CategoryType.Citizen
+                    ? "bg-[#334493] flex-1 w-full rounded-3xl p-4"
+                    : "text-secondary  w-full rounded-3xl p-4"
+                }
+              >
+                <Text
+                  className={
+                    category === CategoryType.Citizen
+                      ? "text-white text-md text-center"
+                      : "text-black text-md text-center"
+                  }
+                >
+                  Cittadino
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              onPress={async () => {
+                await AsyncStorage.setItem("category", CategoryType.Commercial);
+                setCategory(CategoryType.Commercial);
+              }}
+              className="w-[50%]"
+            >
+              <View
+                className={
+                  category === CategoryType.Commercial
+                    ? "bg-[#334493] flex-1 w-full rounded-3xl p-4"
+                    : "text-secondary w-full rounded-3xl p-4"
+                }
+              >
+                <Text
+                  className={
+                    category === CategoryType.Commercial
+                      ? "text-white text-md text-center"
+                      : "text-black text-md text-center"
+                  }
+                >
+                  {" "}
+                  Commerciale
+                </Text>
+              </View>
+            </Pressable>
+          </View>
           <View className="flex-1 items-start justify-start bg-background gap-y-4 pt-4 pb-40">
-            {/* Implementare Shopify ScrollView */}
+            <Text className="w-full text-center text-gray-500 font-normal">
+              Orario di ritiro 18:00 - 24:00
+            </Text>
             {Calendar?.map((day) => (
               <CalendarComponent
                 key={day.id}
                 day={getDayItalian(day.day)}
                 garbages={day.wasteTypes}
+                category={category}
               />
             ))}
           </View>

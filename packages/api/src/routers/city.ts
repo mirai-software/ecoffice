@@ -91,7 +91,6 @@ export const cityRouter = createTRPCRouter({
           if (!userCity || userCity.city === null) {
             throw new Error("City Relation not found");
           } else {
-            // get the city calendar and the CalendarWasteType relation
             return await ctx.db.city
               .findUnique({
                 where: { id: userCity.city.id },

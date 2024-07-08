@@ -19,13 +19,17 @@
       "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "bundleIdentifier": "com.miraisoftware.ecoffice"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "experiments": {
       "typedRoutes": true
@@ -35,10 +39,19 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with the staff."
+          "photosPermission": "The app accesses your photos to let you share them with the staff.",
+          "cameraPermission": "The app accesses your camera to let you take photos and share them with the staff."
         }
       ],
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "55be3b0a-3d5d-4636-a172-3df87935f3c5"
+      }
+    }
   }
 }

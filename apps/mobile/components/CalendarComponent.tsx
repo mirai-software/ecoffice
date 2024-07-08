@@ -12,6 +12,7 @@ type wasteTypes = {
   id: string;
   name: string;
   color: string;
+  category: string;
   createdAt: Date;
   icon?: string;
   info: string[];
@@ -21,9 +22,11 @@ type wasteTypes = {
 export default function CalendarComponent({
   day,
   garbages,
+  category,
 }: {
   day: string;
   garbages: wasteTypes[];
+  category: string;
 }) {
   return (
     <Animated.View
@@ -35,36 +38,41 @@ export default function CalendarComponent({
         <Text>{day}</Text>
       </View>
       <View className="flex-[3] min-h-12">
-        {garbages.map((garbage) => (
-          <View
-            key={garbage.id}
-            className={`min-h-12 justify-center pl-2`}
-            style={{
-              backgroundColor: garbage.color,
-            }}
-          >
-            <View className="flex-1 flex flex-row justify-between items-center pl-1 pr-5">
-              <View className="flex flex-row gap-2">
-                {garbage.icon && garbage.icon != "default" ? (
-                  <SvgUri
-                    width="24"
-                    height="24"
-                    uri={"http://localhost:3000/icon/" + garbage.icon}
-                    fill="white"
-                  />
-                ) : (
-                  <FontAwesome name="recycle" size={24} color="white" />
-                )}
-                <Text className="font-semibold text-xl text-white ">
-                  {garbage.name}
-                </Text>
+        {
+          // show only the garbages that are in the selected category
+          garbages
+            .filter((garbage) => garbage.category === category)
+            .map((garbage) => (
+              <View
+                key={garbage.id}
+                className={`min-h-12 justify-center pl-2`}
+                style={{
+                  backgroundColor: garbage.color,
+                }}
+              >
+                <View className="flex-1 flex flex-row justify-between items-center pl-1 pr-5">
+                  <View className="flex flex-row gap-2">
+                    {garbage.icon && garbage.icon != "default" ? (
+                      <SvgUri
+                        width="24"
+                        height="24"
+                        uri={"http://localhost:3000/icon/" + garbage.icon}
+                        fill="white"
+                      />
+                    ) : (
+                      <FontAwesome name="recycle" size={24} color="white" />
+                    )}
+                    <Text className="font-semibold text-xl text-white ">
+                      {garbage.name}
+                    </Text>
+                  </View>
+                  <Pressable onPress={() => router.push("/" + garbage.id)}>
+                    <InfoCircle />
+                  </Pressable>
+                </View>
               </View>
-              <Pressable onPress={() => router.push("/" + garbage.id)}>
-                <InfoCircle />
-              </Pressable>
-            </View>
-          </View>
-        ))}
+            ))
+        }
       </View>
     </Animated.View>
   );

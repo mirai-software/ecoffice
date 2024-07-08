@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Image,
   NativeSyntheticEvent,
+  ScrollView,
   TextInput,
   TextInputChangeEventData,
   View,
@@ -18,7 +19,6 @@ import * as z from "zod";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
 import { CommonActions } from "@react-navigation/native";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 
 // @ts-expect-error : The file is not found but it is actually there
 import logo from "@/assets/logo.png";
@@ -93,10 +93,7 @@ export default function Onboarding() {
     const addressSchema = z.string().min(2);
     const addressResult = addressSchema.safeParse(address);
 
-    if (
-      !addressResult.success ||
-      !address.includes(citys.find((cityd) => cityd.value == city)?.label || "")
-    ) {
+    if (!addressResult.success) {
       alert("L'indirizzo non è valido o non è appartenente al comune scelto");
       return;
     }
@@ -150,163 +147,92 @@ export default function Onboarding() {
             />
           </Svg>
         </View>
-        <View className="flex-1 z-20">
-          <View className="flex items-center">
-            <Image source={logo} className="w-fit h-fit mt-3 z-10" />
-          </View>
-          <H1 className="self-start mt-10 font-semibold">Ehi ciao!</H1>
-          <Muted className="self-start mb-5 text-lg">
-            Abbiamo bisogno di qualche informazione per migliorare la tua
-            esperienza nell’applicazione.
-          </Muted>
-
-          <View className="flex flex-col gap-5">
-            <View className="flex gap-2">
-              <Text className="">Nome e Cognome</Text>
-              <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
-                value={name}
-                onChange={(
-                  value: NativeSyntheticEvent<TextInputChangeEventData>
-                ) => setName(value.nativeEvent.text)}
-              />
+        <ScrollView className="z-20" keyboardShouldPersistTaps="handled">
+          <View className="flex-1 z-20 pb-40">
+            <View className="flex items-center">
+              <Image source={logo} className="w-fit h-fit mt-3 z-10" />
             </View>
+            <H1 className="self-start mt-10 font-semibold">Ehi ciao!</H1>
+            <Muted className="self-start mb-5 text-lg">
+              Abbiamo bisogno di qualche informazione per migliorare la tua
+              esperienza nell’applicazione.
+            </Muted>
 
-            <View className="flex gap-2">
-              <Text className="">Comune di Residenza</Text>
-              <RNPickerSelect
-                onValueChange={(value) => setCity(value)}
-                placeholder={{ label: "Select a city", value: null }}
-                style={{
-                  inputIOS: {
-                    fontSize: 16,
-                    paddingVertical: 14,
-                    paddingHorizontal: 16,
-                    borderWidth: 1,
-                    borderColor: "rgb(107 114 128)",
-                    borderRadius: 16,
-                    color: "black",
-                    paddingRight: 30, // to ensure the text is never behind the icon
-                  },
-                }}
-                value={city}
-                items={citys as []}
-              />
-            </View>
-
-            <View className="flex gap-2 z-20 relative w-full">
-              <Text className="">Indirizzo</Text>
-              <GooglePlacesAutocomplete
-                placeholder={address || "Inserisci il tuo indirizzo"}
-                query={{
-                  key: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-                  language: "it",
-                  components: "country:it",
-                }}
-                fetchDetails={true}
-                onPress={(data, details) => {
-                  // get the city from the address
-                  setAddress(details!["formatted_address"]);
-                }}
-                autoFillOnNotFound={true}
-                onFail={(error) => console.log(error)}
-                onNotFound={() => console.log("no results")}
-                styles={{
-                  container: {
-                    flex: 1,
-                    height: 44,
-
-                    marginBottom: 40,
-                    zIndex: 999,
-                    position: "relative",
-                  },
-                  textInputContainer: {
-                    flexDirection: "row",
-                    zIndex: 999,
-                  },
-                  textInput: {
-                    backgroundColor: "#FFFFFF",
-                    borderWidth: 1,
-                    borderColor: "#6B7280",
-                    height: 44,
-                    borderRadius: 12,
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                    fontSize: 15,
-                    flex: 1,
-                    zIndex: 999,
-                  },
-                  poweredContainer: {
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    borderBottomRightRadius: 5,
-                    borderBottomLeftRadius: 5,
-                    borderColor: "#c8c7cc",
-                    borderTopWidth: 0.5,
-                    zIndex: 999,
-                  },
-                  powered: {},
-                  listView: {
-                    zIndex: 100,
-                    // set absolute to prevent keyboard from covering the results
-                    position: "absolute",
-                    top: 50,
-                    backgroundColor: "white",
-                    // set border color to light grey
-                    borderColor: "lightgrey",
-                    // set border width to 1
-                    borderWidth: 1,
-                    borderRadius: 5,
-                  },
-                  row: {
-                    padding: 13,
-                    height: 44,
-                    flexDirection: "row",
-                    backgroundColor: "white",
-                  },
-                  separator: {
-                    height: 0.5,
-                    backgroundColor: "#c8c7cc",
-                  },
-                  description: {},
-                  loader: {
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    height: 20,
-                    zIndex: 999,
-                  },
-                }}
-              />
-            </View>
-
-            <View className="flex gap-2">
-              <Text className="">Numero di Telefono</Text>
-              <View className="flex flex-row">
-                <View className="border-[1px] border-gray-500 rounded-lg ">
-                  <Text className="text-black dark:text-white p-4 rounded-2xl">
-                    🇮🇹 +39
-                  </Text>
-                </View>
+            <View className="flex flex-col gap-5">
+              <View className="flex gap-2">
+                <Text className="">Nome e Cognome</Text>
                 <TextInput
-                  className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
-                  value={phoneNumber}
-                  placeholder="Numero di Telefono"
+                  className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                  value={name}
                   onChange={(
                     value: NativeSyntheticEvent<TextInputChangeEventData>
-                  ) => setPhoneNumber(value.nativeEvent.text)}
+                  ) => setName(value.nativeEvent.text)}
                 />
               </View>
+
+              <View className="flex gap-2">
+                <Text className="">Comune di Residenza</Text>
+                <RNPickerSelect
+                  onValueChange={(value) => setCity(value)}
+                  placeholder={{ label: "Select a city", value: null }}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      paddingVertical: 14,
+                      paddingHorizontal: 16,
+                      borderWidth: 1,
+                      borderColor: "rgb(107 114 128)",
+                      borderRadius: 16,
+                      color: "black",
+                      paddingRight: 30, // to ensure the text is never behind the icon
+                    },
+                  }}
+                  value={city}
+                  items={citys as []}
+                />
+              </View>
+
+              <View className="flex gap-2">
+                <Text className="">Indirizzo</Text>
+                <TextInput
+                  className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                  value={address}
+                  placeholder="Inserisci l'indirizzo"
+                  onChange={(
+                    value: NativeSyntheticEvent<TextInputChangeEventData>
+                  ) => setAddress(value.nativeEvent.text)}
+                />
+              </View>
+
+              <View className="flex gap-2">
+                <Text className="">Numero di Telefono</Text>
+                <View className="flex flex-row">
+                  <View className="border-[1px] border-gray-500 rounded-lg ">
+                    <Text className="text-black dark:text-white p-4 rounded-2xl">
+                      🇮🇹 +39
+                    </Text>
+                  </View>
+                  <TextInput
+                    className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
+                    value={phoneNumber}
+                    placeholder="Numero di Telefono"
+                    onChange={(
+                      value: NativeSyntheticEvent<TextInputChangeEventData>
+                    ) => setPhoneNumber(value.nativeEvent.text)}
+                  />
+                </View>
+              </View>
+            </View>
+            <View className="flex-1 justify-end pb-4">
+              <Button
+                className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
+                onPress={HandleSubmit}
+              >
+                <Text className="font-bold">Continua</Text>
+              </Button>
             </View>
           </View>
-          <View className="flex-1 justify-end pb-4">
-            <Button
-              className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
-              onPress={HandleSubmit}
-            >
-              <Text className="font-bold">Continua</Text>
-            </Button>
-          </View>
-        </View>
+        </ScrollView>
         <View className="absolute bottom-0 left-0 h-fit w-max z-10">
           <Svg width="206" height="220" viewBox="0 0 206 220" fill="none">
             <Path
