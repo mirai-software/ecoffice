@@ -17,6 +17,7 @@ import Animated from "react-native-reanimated";
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function CreateHomeRequest() {
   // Form States
@@ -35,16 +36,18 @@ export default function CreateHomeRequest() {
    * Adds the selected image to the `images` state array.
    */
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.1,
-      base64: true,
+    await ImagePicker.requestCameraPermissionsAsync().then(async (res) => {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.1,
+        base64: true,
+      });
+      if (!result.canceled) {
+        setImages([...images, result.assets[0]]);
+      }
     });
-    if (!result.canceled) {
-      setImages([...images, result.assets[0]]);
-    }
   };
 
   const HandleSubmit = async () => {
@@ -281,12 +284,21 @@ export default function CreateHomeRequest() {
               <View className="flex flex-row gap-4">
                 {images.length > 0
                   ? images.map((image) => (
-                      <Pressable
-                        onPress={() => {
-                          setImages(images.filter((img) => img !== image));
-                        }}
-                        key={image.uri}
-                      >
+                      <View className="relative" key={image.assetId}>
+                        <Pressable
+                          onPress={() => {
+                            setImages(images.filter((img) => img !== image));
+                          }}
+                          key={image.uri}
+                          className="absolute top-1 right-1 z-30  rounded-full p-1"
+                        >
+                          <AntDesign
+                            name="close"
+                            size={20}
+                            color="white"
+                            className="shadow-lg"
+                          />
+                        </Pressable>
                         <Animated.Image
                           entering={FadeIn}
                           exiting={FadeOut}
@@ -295,7 +307,7 @@ export default function CreateHomeRequest() {
                           style={{ width: 100, height: 100, borderRadius: 8 }}
                           className="h-28 w-28 rounded-lg"
                         />
-                      </Pressable>
+                      </View>
                     ))
                   : null}
                 {images.length < 3 ? (
