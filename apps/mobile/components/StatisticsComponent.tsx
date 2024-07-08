@@ -30,9 +30,10 @@ export default function StatisticsComponent({
 
   return (
     <View className="flex-1 w-full mt-3">
-      <View className="w-full flex flex-row justify-evenly items-center border-2 rounded-3xl border-gray-300">
+      <View className="w-full flex flex-row justify-between items-center border-2 rounded-3xl border-gray-300 mt-4">
         <Pressable
           onPress={() => setSelected(StatisticType.ProductionIndicator)}
+          className="w-[50%]"
         >
           <View
             className={
@@ -44,15 +45,18 @@ export default function StatisticsComponent({
             <Text
               className={
                 selected === StatisticType.ProductionIndicator
-                  ? "text-white text-md"
-                  : "text-black text-md"
+                  ? "text-white text-md text-center"
+                  : "text-black text-md text-center"
               }
             >
               Indicatori di Produzione
             </Text>
           </View>
         </Pressable>
-        <Pressable onPress={() => setSelected(StatisticType.SpecificIndicator)}>
+        <Pressable
+          onPress={() => setSelected(StatisticType.SpecificIndicator)}
+          className="w-[50%]"
+        >
           <View
             className={
               selected === StatisticType.SpecificIndicator
@@ -63,8 +67,8 @@ export default function StatisticsComponent({
             <Text
               className={
                 selected === StatisticType.SpecificIndicator
-                  ? "text-white text-md"
-                  : "text-black text-md"
+                  ? "text-white text-md text-center"
+                  : "text-black text-md text-center"
               }
             >
               {" "}
