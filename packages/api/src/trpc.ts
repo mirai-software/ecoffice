@@ -56,7 +56,7 @@ export const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: { req: NextRequest }) => {
   // If the session is invalid, return a context with no session
   return createInnerTRPCContext({
-    // @ts-expect-error - we're not using req/res
+    // @ts-ignore
     headers: opts.req.headers,
   });
 };
