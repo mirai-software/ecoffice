@@ -5,9 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-}
+
+//generator erd {
+  //provider = "prisma-erd-generator"
+//}
 
 generator zod {
   provider              = "zod-prisma"
@@ -38,13 +39,30 @@ model city {
   id   String @id @unique @default(uuid())
   name String
 
+  address          String @default("Via Roma 1")
+
   calendars         calendar[]
   secondHandProduct secondHandProduct[]
   user              user[]
   SupportRequest    SupportRequest[]
   statistics        Statistic[]
+  openingHours      OpeningHour[] // Aggiunta relazione con OpeningHour
   // da definire un ulteriore tabella per i recapiti.
   whatsappNumber    String? // momentanemente stringa, da definire un tipo più appropriato 
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OpeningHour {
+  id        String   @id @unique @default(uuid())
+  day       Weekday
+  openTime1 String   // Prima fascia oraria di apertura
+  closeTime1 String  // Prima fascia oraria di chiusura
+  openTime2 String?  // Seconda fascia oraria di apertura (opzionale)
+  closeTime2 String? // Seconda fascia oraria di chiusura (opzionale)
+  cityId    String
+  city      city     @relation(fields: [cityId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

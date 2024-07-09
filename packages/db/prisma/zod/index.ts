@@ -1,4 +1,5 @@
 export * from "./city"
+export * from "./openinghour"
 export * from "./statistic"
 export * from "./calendar"
 export * from "./wastetype"
