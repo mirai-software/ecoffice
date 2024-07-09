@@ -62,7 +62,7 @@ const ReportComponent = ({
         )}
         <View className="flex flex-col gap-2">
           <Text className="font-medium text-2xl pl-2">
-            Segnalazione {"#" + report.number}
+            Segnalazione {"#" + number}
           </Text>
           <View className="flex flex-row gap-1 justify-center items-center">
             <Text className="font-normal text-md pl-2">{report.type}</Text>

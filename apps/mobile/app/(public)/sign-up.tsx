@@ -8,11 +8,12 @@ import { SafeAreaView } from "@/components/safe-area-view";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormInput } from "@/components/ui/form";
 import { Text } from "@/components/ui/text";
-import { H1, Muted } from "@/components/ui/typography";
+import { Muted } from "@/components/ui/typography";
 import { useSupabase } from "@/context/supabase-provider";
 import { api } from "@/lib/api";
 import { SignInHeader } from "./sign-in";
 import { toast } from "@backpackapp-io/react-native-toast";
+import { ScrollView } from "react-native";
 
 const formSchema = z
   .object({
@@ -77,18 +78,20 @@ export default function SignUp() {
           },
         }
       );
-    } catch (error: Error) {
-      toast.error(error.message, {
-        styles: {
-          view: {
-            backgroundColor: "#00930F",
-            borderRadius: 8,
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message, {
+          styles: {
+            view: {
+              backgroundColor: "#00930F",
+              borderRadius: 8,
+            },
+            indicator: {
+              backgroundColor: "white",
+            },
           },
-          indicator: {
-            backgroundColor: "white",
-          },
-        },
-      });
+        });
+      }
     }
   }
 
@@ -100,76 +103,77 @@ export default function SignUp() {
           Benvenuto! Registrati adesso
         </Text>
         <Form {...form}>
-          <View className="gap-6">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormInput
-                  label="Email"
-                  placeholder="Email"
-                  autoCapitalize="none"
-                  autoComplete="email"
-                  autoCorrect={false}
-                  keyboardType="email-address"
-                  {...field}
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormInput
-                  label="Password"
-                  placeholder="Password"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  secureTextEntry
-                  {...field}
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormInput
-                  label="Confirm Password"
-                  placeholder="Confirm password"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  secureTextEntry
-                  {...field}
-                />
-              )}
-            />
+          <ScrollView>
+            <View className="gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormInput
+                    label="Email"
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    autoComplete="email"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    {...field}
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormInput
+                    label="Password"
+                    placeholder="Password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry
+                    {...field}
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormInput
+                    label="Confirm Password"
+                    placeholder="Confirm password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry
+                    {...field}
+                  />
+                )}
+              />
 
-            <Muted className="text-center">
-              Creando un account, accetti i nostri{" "}
-              <Pressable className="underline">
-                <Muted className="underline">Termini e Condizioni</Muted>
-              </Pressable>{" "}
-              e la nostra{" "}
-              <Pressable className="underline">
-                <Muted className="underline">Politica sulla Privacy</Muted>
-              </Pressable>
-              .
-            </Muted>
-
+              <Muted className="text-center">
+                Creando un account, accetti i nostri{" "}
+                <Pressable className="underline">
+                  <Muted className="underline">Termini e Condizioni</Muted>
+                </Pressable>{" "}
+                e la nostra{" "}
+                <Pressable className="underline">
+                  <Muted className="underline">Politica sulla Privacy</Muted>
+                </Pressable>
+                .
+              </Muted>
+            </View>
             <Button
               size="lg"
               variant="default"
               onPress={form.handleSubmit(onSubmit)}
-              className="bg-[#334493]"
+              className="bg-[#334493] mt-2"
             >
               {form.formState.isSubmitting ? (
                 <ActivityIndicator size="small" />
               ) : (
-                <Text className="font-bold">Accedi</Text>
+                <Text className="font-bold">Registrati</Text>
               )}
             </Button>
-          </View>
+          </ScrollView>
         </Form>
       </View>
       <View className="gap-y-4">

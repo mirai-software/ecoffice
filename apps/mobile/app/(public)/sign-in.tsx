@@ -59,7 +59,7 @@ export default function SignIn() {
     try {
       await signInWithPassword(data.email, data.password);
       form.reset();
-    } catch (error: Error | any) {
+    } catch (error: Error | unknown) {
       toast.error(error.message, {
         styles: {
           view: {
