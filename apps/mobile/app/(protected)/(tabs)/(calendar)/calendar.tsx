@@ -7,6 +7,7 @@ import CalendarComponent from "@/components/CalendarComponent";
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "expo-router";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -37,6 +38,8 @@ export enum CategoryType {
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});
   const [category, setCategory] = useState(CategoryType.Citizen);
+  const navigation = useNavigation();
+  const utils = api.useUtils();
 
   useEffect(() => {
     const getCategory = async () => {
@@ -73,6 +76,11 @@ export default function Shop() {
               onPress={async () => {
                 await AsyncStorage.setItem("category", CategoryType.Citizen);
                 setCategory(CategoryType.Citizen);
+                utils.city.getCityCalendar.invalidate();
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "home" }], // your stack screen name
+                });
               }}
               className="w-[50%]"
             >
@@ -98,6 +106,11 @@ export default function Shop() {
               onPress={async () => {
                 await AsyncStorage.setItem("category", CategoryType.Commercial);
                 setCategory(CategoryType.Commercial);
+                utils.city.getCityCalendar.invalidate();
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "home" }], // your stack screen name
+                });
               }}
               className="w-[50%]"
             >

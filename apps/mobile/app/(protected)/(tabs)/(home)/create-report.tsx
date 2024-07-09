@@ -137,7 +137,7 @@ export default function CreateReport() {
           <View className="flex gap-2">
             <Text className="">Indirizzo</Text>
             <TextInput
-              className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+              className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
               value={address}
               placeholder="Inserisci l'indirizzo"
               onChange={(
@@ -151,10 +151,10 @@ export default function CreateReport() {
               <Text className="">Tipo di Rifiuti</Text>
               <RNPickerSelect
                 onValueChange={(value) => setType(value)}
-                placeholder={{ label: "Select a type", value: null }}
+                placeholder={{ label: "Seleziona un Tipo", value: null }}
                 style={{
                   inputIOS: {
-                    fontSize: 16,
+                    fontSize: 14,
                     paddingVertical: 14,
                     paddingHorizontal: 16,
                     borderWidth: 1,
@@ -214,7 +214,7 @@ export default function CreateReport() {
 
           <View className="flex-1 justify-end pb-32">
             <Button
-              className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
+              className="mt-5 bg-[#334493]   text-black w-full rounded-lg p-3"
               onPress={HandleSubmit}
             >
               <Text className="font-bold text-white">Continua</Text>

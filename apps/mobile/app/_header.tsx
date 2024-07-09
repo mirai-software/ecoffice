@@ -4,7 +4,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRoute } from "@react-navigation/native";
 import { canGoBack, getTitle } from "@/lib/utils";
 import React, { ReactNode } from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import { ExpoRouter } from "expo-router/types/expo-router";
 
 interface ContainerWithChildrenProps {
@@ -26,7 +26,7 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
   return (
     <View style={{ flex: 1 }} className="bg-background">
       <View
-        className="bg-background"
+        className="bg-white"
         style={{
           position: "relative",
           paddingTop: insets.top - 50,
@@ -35,10 +35,10 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
       >
         <HeaderBackground />
         <Text
-          className="dark:text-white text-black"
+          className="text-black"
           style={{
             position: "absolute",
-            top: "50%",
+            top: "55%",
             fontSize: 22,
             fontWeight: "semibold",
             zIndex: 1,
@@ -57,16 +57,17 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
               zIndex: 1,
             }}
           >
-            <Text
+            <Pressable
               style={{
                 fontSize: 22,
                 fontWeight: "semibold",
                 color: "#000",
               }}
+              className=" rounded-full p-3"
               onPress={() => router.back()}
             >
               <FontAwesome name="angle-left" size={24} color="black" />
-            </Text>
+            </Pressable>
           </View>
         )}
 

@@ -12,6 +12,18 @@ import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import { italianTimeFormat } from "./assistance";
 
+const RequestTypes = [
+  { label: "RAEE", value: "RAEE-1" },
+  {
+    label: "Pannolini e Pannoloni",
+    value: "Pannolini-Pannoloni",
+  },
+  {
+    label: "Sfalci di Potatura",
+    value: "Sfalci-di-Potatura",
+  },
+];
+
 const StatusComponent = ({ status }: { status: string }) => {
   switch (status) {
     case "pending":
@@ -85,7 +97,10 @@ export const RequestComponent = ({
             </Text>
             <View className="flex flex-row gap-1 justify-center items-center">
               <Text className="font-normal text-md pl-2 text-gray-500">
-                {request.type}
+                {
+                  RequestTypes.find((type) => type.value === request.type)
+                    ?.label
+                }
               </Text>
               <Text className="pl-2 font-bold">-</Text>
               <Text className="font-normal text-md pl-1 text-gray-500">

@@ -151,7 +151,7 @@ export default function Profile_Edit() {
             <View className="flex gap-2 w-full">
               <Text className="">Nome e Cognome</Text>
               <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
                 value={name}
                 onChange={(
                   value: NativeSyntheticEvent<TextInputChangeEventData>
@@ -162,7 +162,7 @@ export default function Profile_Edit() {
             <View className="flex gap-2 w-full">
               <Text className="">Email</Text>
               <View className="flex flex-row border-gray-500 border-[1px] rounded-2xl bg-gray-600/20">
-                <Text className=" dark:text-white text-gray-600 p-4 flex-1">
+                <Text className="   text-gray-600 p-4 flex-1">
                   {user?.email}
                 </Text>
               </View>
@@ -178,7 +178,7 @@ export default function Profile_Edit() {
                 </Pressable>
               </View>
               <View className="flex flex-row">
-                <Text className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4 flex-1 font-bold text-xl">
+                <Text className="border-[1px] border-gray-500 rounded-2xl   text-black p-4 flex-1 font-bold text-xl">
                   {"•••••••••"}
                 </Text>
               </View>
@@ -188,12 +188,10 @@ export default function Profile_Edit() {
               <Text className="">Numero di Telefono</Text>
               <View className="flex flex-row">
                 <View className="border-[1px] border-gray-500 rounded-2xl ">
-                  <Text className="text-black dark:text-white p-4 rounded-2xl">
-                    🇮🇹 +39
-                  </Text>
+                  <Text className="text-black   p-4 rounded-2xl">🇮🇹 +39</Text>
                 </View>
                 <TextInput
-                  className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
+                  className="border-[1px] border-gray-500 rounded-2xl    text-black p-4 flex-1 ml-5"
                   value={phone}
                   placeholder="Numero di Telefono"
                   onChange={(
@@ -226,10 +224,10 @@ export default function Profile_Edit() {
                 />
               </View>
             </View>
-            <View className="flex gap-2">
+            <View className="flex gap-2 w-full">
               <Text className="">Indirizzo</Text>
               <TextInput
-                className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                className="border-[1px] border-gray-500 rounded-2xl w-full  text-black p-4"
                 value={address}
                 placeholder="Inserisci l'indirizzo"
                 onChange={(

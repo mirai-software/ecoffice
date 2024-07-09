@@ -36,7 +36,8 @@ export default function TabOneScreen() {
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-  const currentDay = Calendar?.find((day) => day.day === today);
+  const currentDay = useState(Calendar?.find((day) => day.day === today));
+  console.log("calendario pazzo", currentDay);
 
   const [category, setCategory] = useState<CategoryType>(CategoryType.Citizen);
 
@@ -73,7 +74,10 @@ export default function TabOneScreen() {
           >
             <View className="flex flex-row justify-between items-center w-full p-4">
               <Text className="font-semibold text-xl">
-                Calendario Utenze Domestiche
+                Calendario Utenze{" "}
+                {category === CategoryType.Citizen
+                  ? "Cittadino"
+                  : "Commerciale"}
               </Text>
               <Pressable
                 onPress={() => router.navigate("/(calendar)/calendar")}
@@ -83,7 +87,7 @@ export default function TabOneScreen() {
             </View>
             <CalendarComponent
               day={"Oggi"}
-              garbages={currentDay?.wasteTypes || []}
+              garbages={currentDay[0]?.wasteTypes || []}
               category={category}
             />
           </Animated.View>
@@ -190,7 +194,7 @@ export default function TabOneScreen() {
                           ...request,
                           customRoute: "/(profile)/requests",
                         }}
-                        number={request.number}
+                        number={index}
                       />
                     </View>
                   ))}

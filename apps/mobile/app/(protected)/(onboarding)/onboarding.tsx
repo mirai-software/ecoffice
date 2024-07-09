@@ -162,7 +162,7 @@ export default function Onboarding() {
               <View className="flex gap-2">
                 <Text className="">Nome e Cognome</Text>
                 <TextInput
-                  className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                  className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
                   value={name}
                   onChange={(
                     value: NativeSyntheticEvent<TextInputChangeEventData>
@@ -195,7 +195,7 @@ export default function Onboarding() {
               <View className="flex gap-2">
                 <Text className="">Indirizzo</Text>
                 <TextInput
-                  className="border-[1px] border-gray-500 rounded-2xl dark:text-white text-black p-4"
+                  className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
                   value={address}
                   placeholder="Inserisci l'indirizzo"
                   onChange={(
@@ -208,12 +208,10 @@ export default function Onboarding() {
                 <Text className="">Numero di Telefono</Text>
                 <View className="flex flex-row">
                   <View className="border-[1px] border-gray-500 rounded-lg ">
-                    <Text className="text-black dark:text-white p-4 rounded-2xl">
-                      🇮🇹 +39
-                    </Text>
+                    <Text className="text-black   p-4 rounded-2xl">🇮🇹 +39</Text>
                   </View>
                   <TextInput
-                    className="border-[1px] border-gray-500 rounded-2xl  dark:text-white text-black p-4 flex-1 ml-5"
+                    className="border-[1px] border-gray-500 rounded-2xl    text-black p-4 flex-1 ml-5"
                     value={phoneNumber}
                     placeholder="Numero di Telefono"
                     onChange={(
@@ -225,7 +223,7 @@ export default function Onboarding() {
             </View>
             <View className="flex-1 justify-end pb-4">
               <Button
-                className="mt-5 bg-[#334493] dark:text-white text-black w-full rounded-lg p-3"
+                className="mt-5 bg-[#334493]   text-black w-full rounded-lg p-3"
                 onPress={HandleSubmit}
               >
                 <Text className="font-bold">Continua</Text>
