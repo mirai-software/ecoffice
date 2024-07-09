@@ -7,11 +7,7 @@ import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import HeaderContainer from "@/app/_header";
 
-const StatusComponent = ({
-  status,
-}: {
-  status: "pending" | "accepted" | "rejected";
-}) => {
+const StatusComponent = ({ status }: { status: string }) => {
   switch (status) {
     case "pending":
       return (
