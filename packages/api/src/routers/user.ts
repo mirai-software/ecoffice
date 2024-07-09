@@ -13,6 +13,31 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
+  checkifUserisAdmin: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const check = await ctx.db.user
+        .findUnique({
+          where: {
+            email: input.email,
+            role: "admin",
+          },
+        })
+        .then((user) => {
+          console.log("user", user);
+          if (!user) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      return check;
+    }),
+
   addPickupRequest: protectedProcedure
     .input(
       z.object({
