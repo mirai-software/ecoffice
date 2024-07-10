@@ -37,7 +37,6 @@ export default function TabOneScreen() {
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
   const currentDay = useState(Calendar?.find((day) => day.day === today));
-  console.log("calendario pazzo", currentDay);
 
   const [category, setCategory] = useState<CategoryType>(CategoryType.Citizen);
 
@@ -207,9 +206,17 @@ export default function TabOneScreen() {
             exiting={FadeOut}
             className="flex flex-col justify-between items-start w-full p-4 pb-60 pt-10"
           >
-            <Text className="font-semibold text-2xl">
-              Comune di {user?.city?.name}
-            </Text>
+            <View className="flex flex-row justify-between w-full items-center">
+              <Text className="font-semibold text-2xl">
+                Comune di {user?.city?.name}
+              </Text>
+
+              <Pressable onPress={() => router.push("/(home)/orari")}>
+                <Text className="font-normal text-md underline text-[#334493]">
+                  Vedi orari
+                </Text>
+              </Pressable>
+            </View>
             <StatisticsComponent statistics={statistics} />
           </Animated.View>
         </ScrollView>

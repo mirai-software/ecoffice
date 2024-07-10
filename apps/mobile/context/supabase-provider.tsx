@@ -14,6 +14,7 @@ type SupabaseContextProps = {
   signUp: (email: string, password: string) => Promise<void>;
   signInWithPassword: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  PasswordReset: (email: string) => Promise<void>;
   uploadAvatar: (file: string) => Promise<string>;
   getAvatarUrl: () => Promise<string>;
   uploadRequestImage: (file: string, fileUUID: string) => Promise<string>;
@@ -35,6 +36,7 @@ export const SupabaseContext = createContext<SupabaseContextProps>({
   signUp: async () => {},
   signInWithPassword: async () => {},
   signOut: async () => {},
+  PasswordReset: async () => {},
   uploadAvatar: async () => "",
   getAvatarUrl: async () => "",
   uploadRequestImage: async () => "",
@@ -53,6 +55,19 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [initialized, setInitialized] = useState<boolean>(false);
+
+  const PasswordReset = async () => {
+    const { error, data } = await supabase.auth.resetPasswordForEmail(
+      user?.email as string,
+      {
+        redirectTo: "http://localhost:3000/auth/reset-password",
+      }
+    );
+    if (error) {
+      throw error;
+    }
+    console.log("Password recovery email sent to", user?.email);
+  };
 
   const signUp = async (email: string, password: string) => {
     const { error } = await supabase.auth.signUp({
@@ -290,6 +305,7 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
         signUp,
         signInWithPassword,
         signOut,
+        PasswordReset,
         uploadAvatar,
         getAvatarUrl,
         uploadRequestImage,

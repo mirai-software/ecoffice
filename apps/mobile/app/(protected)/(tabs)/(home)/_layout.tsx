@@ -12,6 +12,12 @@ export default function RootLayout() {
         headerShown: false,
       }}
     >
+      <Stack.Screen
+        name="orari"
+        options={{
+          presentation: "modal",
+        }}
+      />
       <Stack.Screen name="home" />
       <Stack.Screen
         name="create-report"
@@ -19,6 +25,7 @@ export default function RootLayout() {
           presentation: "card",
         }}
       />
+
       <Stack.Screen
         name="create-request"
         options={{

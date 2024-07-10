@@ -21,6 +21,9 @@ export function getTitle(route: { name: string }) {
     case "calendar":
       return "Calendario";
 
+    case "orari":
+      return "Orari Comune";
+
     case "[info]":
       return "Info";
 

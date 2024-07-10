@@ -14,6 +14,7 @@ import RNPickerSelect from "react-native-picker-select";
 import { Text } from "@/components/ui/text";
 import { useState } from "react";
 import { TextInputChangeEventData } from "react-native";
+import { useSupabase } from "@/context/supabase-provider";
 
 import * as z from "zod";
 import { toast } from "@backpackapp-io/react-native-toast";
@@ -23,6 +24,8 @@ export default function Profile_Edit() {
   const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
     {}
   );
+
+  const { PasswordReset } = useSupabase();
 
   const [name, setName] = useState(user?.firstName + " " + user?.lastName);
   const [phone, setPhone] = useState(user?.phone ?? "");
@@ -171,7 +174,25 @@ export default function Profile_Edit() {
             <View className="flex gap-2 w-full">
               <View className="flex flex-row justify-between">
                 <Text className="">Password</Text>
-                <Pressable>
+                <Pressable
+                  onPress={async () => {
+                    await PasswordReset(user?.email as string);
+                    toast.success(
+                      "Abbiamo inviato una mail per il reset della password",
+                      {
+                        styles: {
+                          view: {
+                            backgroundColor: "#00930F",
+                            borderRadius: 8,
+                          },
+                          indicator: {
+                            backgroundColor: "white",
+                          },
+                        },
+                      }
+                    );
+                  }}
+                >
                   <Text className="text-[#334493] underline font-medium pr-2">
                     Cambia Password
                   </Text>

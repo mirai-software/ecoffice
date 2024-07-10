@@ -173,7 +173,11 @@ export const userRouter = createTRPCRouter({
         email: ctx.session.user.email,
       },
       include: {
-        city: true,
+        city: {
+          include: {
+            openingHours: true,
+          },
+        },
       },
     });
   }),
