@@ -58,11 +58,6 @@ const HeaderContainer: React.FC<ContainerWithChildrenProps> = ({
             }}
           >
             <Pressable
-              style={{
-                fontSize: 22,
-                fontWeight: "semibold",
-                color: "#000",
-              }}
               className=" rounded-full p-3"
               onPress={() => router.back()}
             >
