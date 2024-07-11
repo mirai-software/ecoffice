@@ -57,7 +57,8 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const [initialized, setInitialized] = useState<boolean>(false);
 
   const PasswordReset = async () => {
-    const { error, data } = await supabase.auth.resetPasswordForEmail(
+    console.log("Password recovery email sent to", user?.email);
+    const { error } = await supabase.auth.resetPasswordForEmail(
       user?.email as string,
       {
         redirectTo: "http://localhost:3000/auth/reset-password",
@@ -66,7 +67,6 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
     if (error) {
       throw error;
     }
-    console.log("Password recovery email sent to", user?.email);
   };
 
   const signUp = async (email: string, password: string) => {
