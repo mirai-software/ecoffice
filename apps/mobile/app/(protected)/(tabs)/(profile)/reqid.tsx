@@ -2,7 +2,6 @@ import { Text } from "@/components/ui/text";
 import { useLocalSearchParams } from "expo-router";
 import { ActivityIndicator, Image, View } from "react-native";
 import { api } from "@/lib/api";
-import { SafeAreaView } from "@/components/safe-area-view";
 import { useSupabase } from "@/context/supabase-provider";
 import { useEffect, useState } from "react";
 import HeaderContainer from "@/app/_header";
@@ -37,6 +36,7 @@ export default function Page() {
   });
   const { getRequestImageUrl } = useSupabase();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imagesFinished, setImageFinished] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -44,13 +44,14 @@ export default function Page() {
         const url = await getRequestImageUrl(image);
         setImageUrls([...imageUrls, url]);
       });
+      setImageFinished(true);
     })();
   }, [isLoading]);
 
-  if (isLoading || imageUrls.length === 0) {
-    <SafeAreaView>
+  if (isLoading || !imagesFinished) {
+    <HeaderContainer modal={true}>
       <ActivityIndicator size="large" color="#0000ff" />;
-    </SafeAreaView>;
+    </HeaderContainer>;
   } else
     return (
       <HeaderContainer modal={true}>
