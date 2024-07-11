@@ -1,6 +1,6 @@
 import HeaderContainer from "@/app/_header";
 import { router, useLocalSearchParams } from "expo-router";
-import { api } from "@/lib/api";
+import { api, getBaseUrl } from "@/lib/api";
 import { ActivityIndicator, Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "@/components/safe-area-view";
 import { FontAwesome } from "@expo/vector-icons";
@@ -38,7 +38,7 @@ export default function Page() {
               <SvgUri
                 width="24"
                 height="24"
-                uri={"http://localhost:3000/icon/" + wasteType.icon}
+                uri={getBaseUrl() + wasteType.icon}
                 fill="white"
               />
             ) : (
