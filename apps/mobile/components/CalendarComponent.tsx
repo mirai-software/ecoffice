@@ -7,6 +7,7 @@ import InfoCircle from "@/assets/icons/info-circle";
 
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
+import { getBaseUrl } from "@/lib/api";
 
 type wasteTypes = {
   id: string;
@@ -56,7 +57,7 @@ export default function CalendarComponent({
                       <SvgUri
                         width="24"
                         height="24"
-                        uri={"http://localhost:3000/icon/" + garbage.icon}
+                        uri={getBaseUrl() + garbage.icon}
                         fill="white"
                       />
                     ) : (

@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { decode } from "base64-arraybuffer";
 
 import { supabase } from "@/config/supabase";
+import { getBaseUrl } from "@/lib/api";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -57,16 +58,16 @@ export const SupabaseProvider = ({ children }: SupabaseProviderProps) => {
   const [initialized, setInitialized] = useState<boolean>(false);
 
   const PasswordReset = async () => {
-    const { error, data } = await supabase.auth.resetPasswordForEmail(
+    console.log("Password recovery email sent to", user?.email);
+    const { error } = await supabase.auth.resetPasswordForEmail(
       user?.email as string,
       {
-        redirectTo: "http://localhost:3000/auth/reset-password",
+        redirectTo: getBaseUrl() + "/auth/reset-password",
       }
     );
     if (error) {
       throw error;
     }
-    console.log("Password recovery email sent to", user?.email);
   };
 
   const signUp = async (email: string, password: string) => {

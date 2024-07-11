@@ -79,7 +79,7 @@ export default function Shop() {
                 utils.city.getCityCalendar.invalidate();
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: "home" }], // your stack screen name
+                  routes: [{ name: "home" as never }], // your stack screen name
                 });
               }}
               className="w-[50%]"
@@ -109,7 +109,7 @@ export default function Shop() {
                 utils.city.getCityCalendar.invalidate();
                 navigation.reset({
                   index: 0,
-                  routes: [{ name: "home" }], // your stack screen name
+                  routes: [{ name: "home" as never }], // your stack screen name
                 });
               }}
               className="w-[50%]"

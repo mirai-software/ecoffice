@@ -21,6 +21,7 @@ import StatisticsComponent from "@/components/StatisticsComponent";
 import { CategoryType } from "../(calendar)/calendar";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { set } from "zod";
 
 export default function TabOneScreen() {
   const { data: Calendar, isLoading: calendarLoading } =
@@ -36,7 +37,10 @@ export default function TabOneScreen() {
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
-  const currentDay = useState(Calendar?.find((day) => day.day === today));
+
+  const [currentDay, setcurrentDay] = useState(
+    Calendar?.find((day) => day.day === today)
+  );
 
   const [category, setCategory] = useState<CategoryType>(CategoryType.Citizen);
 
@@ -50,11 +54,18 @@ export default function TabOneScreen() {
     getCategory();
   }, []);
 
+  useEffect(() => {
+    if (!calendarLoading) {
+      setcurrentDay(Calendar?.find((day) => day.day === today));
+    }
+  }, [calendarLoading]);
+
   if (
     calendarLoading ||
     secondHandLoading ||
     requestLoadings ||
     userLoading ||
+    !currentDay ||
     statisticsLoading
   ) {
     return (
@@ -86,7 +97,7 @@ export default function TabOneScreen() {
             </View>
             <CalendarComponent
               day={"Oggi"}
-              garbages={currentDay[0]?.wasteTypes || []}
+              garbages={currentDay?.wasteTypes || []}
               category={category}
             />
           </Animated.View>
