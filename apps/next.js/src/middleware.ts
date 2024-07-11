@@ -14,9 +14,9 @@ export async function middleware(req: NextRequest) {
 
   if (!data.session) {
     return NextResponse.rewrite(new URL("/login", req.url));
+  } else {
+    return NextResponse.rewrite(new URL("/dashboard", req.url));
   }
-
-  return res;
 }
 export const config = {
   matcher: [
