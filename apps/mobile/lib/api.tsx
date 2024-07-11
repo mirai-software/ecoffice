@@ -40,7 +40,9 @@ const getBaseUrl = () => {
   }
   */
 
-  return localhost ? `http://${localhost}:3000` : "http://localhost:3000";
+  return process.env.EXPO_PUBLIC_API_ENDPOINT
+    ? process.env.EXPO_PUBLIC_API_ENDPOINT
+    : "http://localhost:3000";
 };
 
 /**
