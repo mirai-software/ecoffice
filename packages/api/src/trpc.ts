@@ -96,7 +96,6 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
   const { data } = await supabase.auth.getUser(token);
 
   // console.log(data);
-
   if (!data.user) {
     throw new Error("Not authorized");
   }

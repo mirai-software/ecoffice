@@ -13,6 +13,7 @@
     "@ecoffice/api": "workspace:*",
     "@ecoffice/db": "workspace:*",
     "@ecoffice/tailwind-config": "workspace:*",
+    "@headlessui/react": "^2.1.2",
     "@prisma/client": "^5.1.1",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-toast": "^1.2.1",
