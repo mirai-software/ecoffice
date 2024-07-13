@@ -50,11 +50,6 @@ export default function Login() {
     });
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
   return (
     <div className="flex h-screen items-center justify-center bg-background">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg">
