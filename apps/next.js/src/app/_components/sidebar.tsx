@@ -1,6 +1,11 @@
+"use client";
+
 import Logo from "@/../public/icon/ecoffice.png";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@headlessui/react";
 const SidebarRoute = [
   {
     name: "Dashboard",
@@ -47,6 +52,14 @@ const SidebarRoute = [
 ];
 
 export function Sidebar() {
+  const supabase = createClientComponentClient();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
+
   return (
     <section className="flex h-screen w-full flex-col bg-background p-4 text-white">
       <div className="mb-4 mt-6 flex justify-start">
@@ -65,9 +78,9 @@ export function Sidebar() {
         ))}
       </ul>
       <div className="mt-auto px-2 pb-6 text-left">
-        <a href="/logout" className="hover:underline">
+        <Button onClick={handleSignOut} className="hover:underline">
           Log Out
-        </a>
+        </Button>
       </div>
     </section>
   );

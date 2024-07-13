@@ -1,4 +1,3 @@
-import { SideNav } from "../_components/SideNav";
 import { SideContainer } from "../_components/sideContainer";
 import { Sidebar } from "../_components/sidebar";
 
@@ -14,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen bg-background">
+    <div className="h-screen bg-slate-100 lg:bg-background">
       <main className="hidden h-screen md:hidden lg:flex">
         <section className="w-[20%]">
           <Sidebar />

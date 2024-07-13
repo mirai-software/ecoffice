@@ -4,11 +4,13 @@ import { Fragment } from "react";
 import Logo from "@/../public/icon/ecoffice.png";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { Dialog, Transition } from "@headlessui/react";
+import { Button, Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
 
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { getRouteName } from "@/lib/getRouteName";
 
 export const navigation = [
   {
@@ -61,6 +63,8 @@ export function SideNav(props: {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }) {
+  const pathname = usePathname();
+
   return (
     <>
       <div className="h-full">
@@ -138,27 +142,33 @@ export function SideNav(props: {
         </div>
 
         <main className="2xl:pl-72 flex h-full flex-col lg:pl-60">
-          <div className="flex h-10 w-full items-center justify-start border-b-2 bg-white pl-2">
-            <button
-              type="button"
-              className="-m-2.5 p-2.5"
-              onClick={() => props.setSidebarOpen(true)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="h-6 w-6"
+          <div className="flex h-14 w-full items-center justify-around border-b-2 bg-white ">
+            <p className="flex-1 pl-2 text-xl font-semibold">
+              {getRouteName(pathname)}
+            </p>
+
+            <div className="flex flex-1 justify-end pr-4">
+              <button
+                type="button"
+                className=""
+                onClick={() => props.setSidebarOpen(true)}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="h-6 w-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {props.children}
@@ -173,7 +183,13 @@ function Sidebar(props: {
   setSidebarOpen: (open: boolean) => void;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
+
+  const supabase = createClientComponentClient();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.refresh();
+  };
   return (
     <div
       className={clsx(
@@ -193,13 +209,8 @@ function Sidebar(props: {
                   <button
                     onClick={() => {
                       props.setSidebarOpen(false);
-                      const lang = pathname.split("/")[1];
-                      // controlla che l'item href non sia un link esterno controllando che non cominci con https
-                      if (item.href.indexOf("https") !== 0) {
-                        router.push(`/${lang}${item.href}`);
-                      } else {
-                        router.push(item.href);
-                      }
+
+                      router.push(item.route);
                     }}
                     className={cn(
                       "group flex gap-x-3 rounded-md p-2 text-lg font-normal leading-6 text-white hover:bg-white hover:text-background",
@@ -213,6 +224,11 @@ function Sidebar(props: {
           </li>
         </ul>
       </nav>
+      <div className="mt-auto pb-6 text-left">
+        <Button onClick={handleSignOut} className="text-white hover:underline">
+          Log Out
+        </Button>
+      </div>
     </div>
   );
 }
