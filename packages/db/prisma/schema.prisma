@@ -5,9 +5,8 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 //generator erd {
-  //provider = "prisma-erd-generator"
+//provider = "prisma-erd-generator"
 //}
 
 generator zod {
@@ -39,7 +38,7 @@ model city {
   id   String @id @unique @default(uuid())
   name String
 
-  address          String @default("Via Roma 1")
+  address String @default("Via Roma 1")
 
   calendars         calendar[]
   secondHandProduct secondHandProduct[]
@@ -47,6 +46,8 @@ model city {
   SupportRequest    SupportRequest[]
   statistics        Statistic[]
   openingHours      OpeningHour[] // Aggiunta relazione con OpeningHour
+  reports           report[]
+  pickups           pickup[]
   // da definire un ulteriore tabella per i recapiti.
   whatsappNumber    String? // momentanemente stringa, da definire un tipo più appropriato 
 
@@ -55,14 +56,14 @@ model city {
 }
 
 model OpeningHour {
-  id        String   @id @unique @default(uuid())
-  day       Weekday
-  openTime1 String   // Prima fascia oraria di apertura
-  closeTime1 String  // Prima fascia oraria di chiusura
-  openTime2 String?  // Seconda fascia oraria di apertura (opzionale)
+  id         String  @id @unique @default(uuid())
+  day        Weekday
+  openTime1  String // Prima fascia oraria di apertura
+  closeTime1 String // Prima fascia oraria di chiusura
+  openTime2  String? // Seconda fascia oraria di apertura (opzionale)
   closeTime2 String? // Seconda fascia oraria di chiusura (opzionale)
-  cityId    String
-  city      city     @relation(fields: [cityId], references: [id])
+  cityId     String
+  city       city    @relation(fields: [cityId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -185,6 +186,9 @@ model report {
   user   user   @relation(fields: [userId], references: [id])
   userId String
 
+  city   city   @relation(fields: [cityId], references: [id])
+  cityId String @default("c3092b4f-9abd-47bb-b99c-d4b6bacdde41") // per non distruggere i dati esistenti
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -202,6 +206,9 @@ model pickup {
 
   user   user   @relation(fields: [userId], references: [id])
   userId String
+
+  city   city   @relation(fields: [cityId], references: [id])
+  cityId String @default("c3092b4f-9abd-47bb-b99c-d4b6bacdde41") // per non distruggere i dati esistenti
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
