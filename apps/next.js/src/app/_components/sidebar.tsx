@@ -2,7 +2,8 @@
 
 import Logo from "@/../public/icon/ecoffice.png";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@headlessui/react";
@@ -54,6 +55,7 @@ const SidebarRoute = [
 export function Sidebar() {
   const supabase = createClientComponentClient();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -69,7 +71,7 @@ export function Sidebar() {
         {SidebarRoute.map((route) => (
           <li
             key={route.slug}
-            className="w-full rounded-lg p-2 hover:bg-white  hover:text-background"
+            className={`w-full rounded-lg p-2 hover:bg-white hover:text-background ${pathname === route.route ? "bg-white text-background" : ""}`}
           >
             <Link href={route.route} className="w-full" aria-current="page">
               {route.name}
