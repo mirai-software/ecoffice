@@ -50,6 +50,7 @@ model city {
   pickups           pickup[]
   // da definire un ulteriore tabella per i recapiti.
   whatsappNumber    String? // momentanemente stringa, da definire un tipo più appropriato 
+  email            String? // momentanemente stringa, da definire un tipo più appropriato
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
