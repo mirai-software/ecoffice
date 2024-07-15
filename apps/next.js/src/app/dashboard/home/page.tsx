@@ -154,7 +154,7 @@ export default async function home() {
           }}
         />
 
-        <DailyCalendarDialog Calendar={data?.calendars} />
+        <DailyCalendarDialog Calendar={data?.calendars || []} />
       </section>
     </Container>
   );

@@ -1,6 +1,11 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  privilegedProcedure,
+  protectedProcedure,
+  publicProcedure,
+} from "../trpc";
 export const userRouter = createTRPCRouter({
   addUser: publicProcedure
     .input(z.object({ email: z.string() }))
@@ -310,6 +315,40 @@ export const userRouter = createTRPCRouter({
           });
         });
     }),
+
+  getAdminCity: privilegedProcedure.query(({ ctx }) => {
+    // dalla mail dell'utente ottieni tutti i dati collegati alla città
+    return ctx.db.user
+      .findUnique({
+        where: {
+          email: ctx.session.user.email,
+        },
+        include: {
+          city: {
+            include: {
+              openingHours: true,
+              statistics: true,
+              SupportRequest: true,
+              secondHandProduct: true,
+              reports: true,
+              pickups: true,
+              calendars: {
+                include: {
+                  wasteTypes: {
+                    include: {
+                      wasteType: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      })
+      .then((user) => {
+        return user?.city;
+      });
+  }),
 
   setUserInformation: protectedProcedure
     .input(
