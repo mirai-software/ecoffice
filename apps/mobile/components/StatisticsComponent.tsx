@@ -12,7 +12,15 @@ import Animated from "react-native-reanimated";
 export default function StatisticsComponent({
   statistics,
 }: {
-  statistics: any[] | undefined;
+  statistics: {
+    id: string;
+    name: string;
+    data: string;
+    type: string;
+    cityId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[];
 }) {
   const [selected, setSelected] = useState<StatisticType>(
     StatisticType.ProductionIndicator
