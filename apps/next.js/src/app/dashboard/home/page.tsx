@@ -26,26 +26,26 @@ const InformationDialog = ({
       </div>
       <section className="flex flex-col gap-4 p-3">
         <div className="flex w-full flex-col items-center rounded-lg border-[1px] border-black/20 bg-white ">
-          <p className="pt-2 text-2xl font-bold text-background">
+          <p className="pt-2 text-2xl font-bold text-foreground">
             {info.secondHandProduct}
           </p>
           <p className="pb-2">Articoli in vendita</p>
         </div>
         <div className="flex w-full flex-col items-center rounded-lg border-[1px] border-black/20 bg-white ">
-          <p className="pt-2 text-2xl font-bold text-background">
+          <p className="pt-2 text-2xl font-bold text-foreground">
             {info.assistanceRequest}
           </p>
           <p className="pb-2">Richieste di assistenza</p>
         </div>
         <div className="flex w-full flex-col items-center rounded-lg border-[1px] border-black/20 bg-white ">
-          <p className="pt-2 text-2xl font-bold text-background">
+          <p className="pt-2 text-2xl font-bold text-foreground">
             {info.pickupRequest}
           </p>
           <p className="pb-2">Richieste di ritiro</p>
         </div>
 
         <div className="flex w-full flex-col items-center rounded-lg border-[1px] border-black/20 bg-white ">
-          <p className="pt-2 text-2xl font-bold text-background">
+          <p className="pt-2 text-2xl font-bold text-foreground">
             {info.newReport}
           </p>
           <p className="pb-2">Nuove segnalazioni </p>
