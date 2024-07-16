@@ -15,6 +15,7 @@ import { HoursModal } from "./modals/HoursModal";
 import { StatisticModal } from "./modals/StatisticModal";
 import { ContactModal } from "./modals/ContactModal";
 import { WasteTypeModal } from "./modals/WasteTypeModal";
+import { MemberModal } from "./modals/MemberModal";
 
 const CitySelector = ({
   citys,
@@ -317,7 +318,7 @@ const UserContact = ({
           <input
             type="email"
             className={
-              "w-full rounded-xl border border-gray-300 p-2 " +
+              "w-full rounded-xl border border-gray-300 p-2 dark:bg-white " +
               (!email ? "text-gray-400" : "")
             }
             value={email ?? "Ancora non definito..."}
@@ -338,7 +339,7 @@ const UserContact = ({
             <input
               type="text"
               className={
-                "w-full rounded-xl border border-gray-300 p-2 " +
+                "w-full rounded-xl border border-gray-300 p-2 dark:bg-white " +
                 (!whatsapp ? "text-gray-400" : "")
               }
               value={whatsapp ?? "Ancora non definito..."}
@@ -455,9 +456,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <a href="#" className="text-sm text-foreground underline">
-            Modifica
-          </a>
+          <MemberModal />
         </div>
         <section className="flex flex-col gap-3"></section>
         <div className="mt-3 flex w-full flex-1 items-center justify-center ">
@@ -472,9 +471,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-col rounded-2xl bg-white">
         <div className="flex w-full flex-row justify-between px-5 pt-4">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <a href="#" className="text-sm text-foreground underline">
-            Modifica
-          </a>
+          <MemberModal />
         </div>
         <section className="flex flex-col gap-4 p-5">
           <div className="grid grid-cols-2 gap-4">

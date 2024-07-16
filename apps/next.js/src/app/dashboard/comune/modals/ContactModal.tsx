@@ -60,7 +60,7 @@ export function ContactModal() {
           <input
             type="email"
             className={
-              "w-full rounded-xl border border-gray-300 p-2 text-foreground " +
+              "w-full rounded-xl border border-gray-300 p-2 text-foreground dark:bg-white " +
               (!email ? "text-gray-400" : "")
             }
             value={email ?? "Ancora non definito..."}
@@ -83,7 +83,7 @@ export function ContactModal() {
             <input
               type="text"
               className={
-                "w-full rounded-xl border border-gray-300 p-2 text-foreground " +
+                "w-full rounded-xl border border-gray-300 p-2 text-foreground dark:bg-white " +
                 (!phone ? "text-gray-400" : "")
               }
               onChange={(e: ChangeEvent<HTMLInputElement>) =>
