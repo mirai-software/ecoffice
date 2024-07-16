@@ -59,6 +59,7 @@ model city {
 model OpeningHour {
   id         String  @id @unique @default(uuid())
   day        Weekday
+  isOpen     Boolean @default(true)
   openTime1  String // Prima fascia oraria di apertura
   closeTime1 String // Prima fascia oraria di chiusura
   openTime2  String? // Seconda fascia oraria di apertura (opzionale)
@@ -68,6 +69,7 @@ model OpeningHour {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+    @@unique([day, cityId]) // Aggiunta combinazione unica di day e cityId
 }
 
 model Statistic {
