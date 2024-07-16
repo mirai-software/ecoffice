@@ -63,7 +63,7 @@ export function Sidebar() {
   };
 
   return (
-    <section className="flex h-screen w-full flex-col bg-background p-4 text-white">
+    <section className="flex h-screen w-full flex-col bg-foreground p-4 text-white">
       <div className="mb-4 mt-6 flex justify-start">
         <Image src={Logo} alt="logo" width={100} height={100} />
       </div>
@@ -71,7 +71,7 @@ export function Sidebar() {
         {SidebarRoute.map((route) => (
           <li
             key={route.slug}
-            className={`w-full rounded-lg p-2 hover:bg-white hover:text-background ${pathname === route.route ? "bg-white text-background" : ""}`}
+            className={`w-full rounded-lg p-2 hover:bg-white hover:text-foreground ${pathname === route.route ? "bg-white text-foreground" : ""}`}
           >
             <Link href={route.route} className="w-full" aria-current="page">
               {route.name}

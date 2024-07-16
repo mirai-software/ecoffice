@@ -193,7 +193,7 @@ function Sidebar(props: {
   return (
     <div
       className={clsx(
-        "flex grow flex-col items-start gap-y-5 overflow-y-auto bg-background/90 px-6 pb-4",
+        "flex grow flex-col items-start gap-y-5 overflow-y-auto bg-foreground/90 px-6 pb-4",
         {
           "ring-1 ring-white/10": props.isMobile,
         },
@@ -213,7 +213,7 @@ function Sidebar(props: {
                       router.push(item.route);
                     }}
                     className={cn(
-                      "group flex gap-x-3 rounded-md p-2 text-lg font-normal leading-6 text-white hover:bg-white hover:text-background",
+                      "group flex gap-x-3 rounded-md p-2 text-lg font-normal leading-6 text-white hover:bg-white hover:text-foreground",
                     )}
                   >
                     {item.name}
