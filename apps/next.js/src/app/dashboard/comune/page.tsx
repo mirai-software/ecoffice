@@ -3,7 +3,6 @@ import { api } from "@/trpc/react";
 import Container from "../../_components/container";
 import { useState } from "react";
 import Image from "next/image";
-import { useMediaQuery } from "@uidotdev/usehooks";
 
 import {
   Select,
@@ -12,77 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-
-import { Button } from "@/components/ui/button";
-
-export function DrawerDialogDemo() {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <p className="cursor-pointer text-sm text-background underline">
-            Modifica
-          </p>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] rounded-lg bg-white">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <p className="cursor-pointer text-sm text-background underline">
-          Modifica
-        </p>
-      </DrawerTrigger>
-      <DrawerContent className="rounded-lg bg-white">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
-        </DrawerHeader>
-
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild className="bg-white">
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-}
+import { HoursModal } from "./modals/HoursModal";
+import { StatisticModal } from "./modals/StatisticModal";
+import { ContactModal } from "./modals/ContactModal";
+import { WasteTypeModal } from "./modals/WasteTypeModal";
 
 const CitySelector = ({
   citys,
@@ -138,6 +70,7 @@ const CityHours = ({
   cityHours: {
     id: string;
     day: string;
+    isOpen: boolean;
     openTime1: string;
     closeTime1: string;
     openTime2: string | null;
@@ -173,7 +106,7 @@ const CityHours = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Orari</p>
-          <DrawerDialogDemo />
+          <HoursModal />
         </div>
         <section className="flex flex-col gap-3"></section>
         <div className="mt-3 flex w-full flex-1 items-center justify-center ">
@@ -188,7 +121,7 @@ const CityHours = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Orari</p>
-          <DrawerDialogDemo />
+          <HoursModal />
         </div>
         <section className="flex flex-col gap-3">
           {cityHours &&
@@ -201,7 +134,7 @@ const CityHours = ({
                   {getDayItalian(orario.day)}
                 </p>
                 <div className="flex flex-col items-end">
-                  {orario.openTime1 && orario.closeTime1 ? (
+                  {orario.openTime1 && orario.closeTime1 && orario.isOpen ? (
                     <div className="flex flex-row gap-2">
                       <p className="text-base font-normal">
                         {orario.openTime1}
@@ -214,7 +147,7 @@ const CityHours = ({
                   ) : (
                     <p className="text-base font-normal">Chiuso</p>
                   )}
-                  {orario.openTime2 && orario.closeTime2 ? (
+                  {orario.openTime2 && orario.closeTime2 && orario.isOpen ? (
                     <div className="flex flex-row gap-2">
                       <p className="text-base font-normal">
                         {orario.openTime2}
@@ -356,9 +289,7 @@ const CityIndicator = ({
     <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white">
       <div className="flex w-full flex-row justify-between px-5 pt-4">
         <p className="text-lg font-semibold text-black">Indicatori</p>
-        <a href="#" className="text-sm text-background underline">
-          Modifica
-        </a>
+        <StatisticModal />
       </div>
       <section className="flex h-full flex-col gap-4  p-3">
         <StatisticsComponent statistics={cityIndicator} />
@@ -378,9 +309,7 @@ const UserContact = ({
     <section className="flex h-fit min-w-max flex-col rounded-2xl bg-white">
       <div className="flex w-full flex-row justify-between px-5 pt-4">
         <p className="text-lg font-semibold text-black">Contatti</p>
-        <a href="#" className="text-sm text-background underline">
-          Modifica
-        </a>
+        <ContactModal />
       </div>
       <section className="flex flex-col gap-4 p-5">
         <div className="flex flex-col gap-2">
@@ -441,7 +370,7 @@ const WasteTypeSection = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Gestione Rifiuti</p>
-          <a href="#" className="text-sm text-background underline">
+          <a href="#" className="text-sm text-foreground underline">
             Modifica
           </a>
         </div>
@@ -458,9 +387,7 @@ const WasteTypeSection = ({
       <section className="flex h-fit flex-col rounded-2xl bg-white">
         <div className="flex w-full flex-row justify-between px-5 pt-4">
           <p className="text-lg font-semibold text-black">Gestione rifiuti</p>
-          <a href="#" className="text-sm text-background underline">
-            Modifica
-          </a>
+          <WasteTypeModal />
         </div>
         <section className="grid grid-cols-3 gap-4 p-5 lg:grid-cols-4">
           {wasteTypes.map((wasteType) => (
@@ -528,7 +455,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <a href="#" className="text-sm text-background underline">
+          <a href="#" className="text-sm text-foreground underline">
             Modifica
           </a>
         </div>
@@ -545,7 +472,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-col rounded-2xl bg-white">
         <div className="flex w-full flex-row justify-between px-5 pt-4">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <a href="#" className="text-sm text-background underline">
+          <a href="#" className="text-sm text-foreground underline">
             Modifica
           </a>
         </div>
@@ -553,7 +480,7 @@ const MemberSection = ({
           <div className="grid grid-cols-2 gap-4">
             {adminUsers.map((user) => (
               <div key={user.id} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-background text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-foreground text-white">
                   {getInitials(user.firstName, user.lastName)}
                 </div>
                 <div>
