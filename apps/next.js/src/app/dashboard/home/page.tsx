@@ -141,7 +141,7 @@ const DailyCalendarDialog = ({ Calendar }: { Calendar: unknown[] }) => {
 
 export default async function home() {
   const data = await api.user.getAdminCity.query();
-  console.log(data);
+
   return (
     <Container>
       <section className="flex h-full w-full flex-col gap-4 lg:flex-row">
