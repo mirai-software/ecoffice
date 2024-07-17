@@ -141,8 +141,8 @@ export function SideNav(props: {
           <Sidebar isMobile={false} setSidebarOpen={props.setSidebarOpen} />
         </div>
 
-        <main className="2xl:pl-72 flex h-full flex-col lg:pl-60">
-          <div className="flex h-14 w-full items-center justify-around border-b-2 bg-white ">
+        <main className="2xl:pl-72 flex h-full w-full flex-col lg:pl-60">
+          <div className="flex h-14 w-screen items-center justify-around border-b-2 bg-white ">
             <p className="flex-1 pl-2 text-xl font-semibold">
               {getRouteName(pathname)}
             </p>

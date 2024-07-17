@@ -29,7 +29,7 @@ const SidebarRoute = [
   {
     name: "Calendario",
     slug: "calendario",
-    route: "/calendario",
+    route: "/dashboard/calendario",
     info: null,
   },
   {
