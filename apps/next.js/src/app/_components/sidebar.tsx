@@ -35,19 +35,19 @@ const SidebarRoute = [
   {
     name: "Ritiri",
     slug: "ritiri",
-    route: "/ritiri",
+    route: "/dashboard/ritiri",
     info: 3,
   },
   {
     name: "Segnalazioni",
     slug: "segnalazioni",
-    route: "/segnalazioni",
+    route: "/dashboard/segnalazioni",
     info: 4,
   },
   {
     name: "Assistenza",
     slug: "assistenza",
-    route: "/assistenza",
+    route: "/dashboard/assistenza",
     info: 2,
   },
 ];

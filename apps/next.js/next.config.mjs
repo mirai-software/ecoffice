@@ -7,7 +7,7 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["www.ecofficesrl.it", "localhost"],
+    domains: ["www.ecofficesrl.it", "localhost", "evprmsgrfzkaomzxqbco.supabase.co"],
   },
 };
 
