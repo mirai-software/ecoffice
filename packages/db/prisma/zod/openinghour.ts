@@ -5,6 +5,7 @@ import { Completecity, relatedcitySchema } from "./index"
 export const openingHourSchema = z.object({
   id: z.string(),
   day: z.nativeEnum(Weekday),
+  isOpen: z.boolean(),
   openTime1: z.string(),
   closeTime1: z.string(),
   openTime2: z.string().nullish(),

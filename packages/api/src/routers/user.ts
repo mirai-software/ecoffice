@@ -356,8 +356,8 @@ export const userRouter = createTRPCRouter({
         firstName: z.string(),
         lastname: z.string(),
         city: z.string(),
-        address: z.string(),
-        phoneNumber: z.string(),
+        address: z.string().nullable(),
+        phoneNumber: z.string().nullable(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -373,8 +373,8 @@ export const userRouter = createTRPCRouter({
               id: input.city,
             },
           },
-          address: input.address,
-          phone: input.phoneNumber,
+          address: input.address ?? undefined,
+          phone: input.phoneNumber ?? undefined,
         },
       });
     }),

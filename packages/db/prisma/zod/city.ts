@@ -6,6 +6,7 @@ export const citySchema = z.object({
   name: z.string(),
   address: z.string(),
   whatsappNumber: z.string().nullish(),
+  email: z.string().nullish(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
