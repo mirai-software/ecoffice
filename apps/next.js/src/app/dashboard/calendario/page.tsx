@@ -5,6 +5,7 @@ import Image from "next/image";
 import { api } from "@/trpc/react";
 import { EditCalendarModal } from "./modals/EditCalendarModal";
 import { EditCalendarComModal } from "./modals/EditCalendarComModal";
+import LoadingComponent from "@/app/_components/loading";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -165,7 +166,11 @@ export default function home() {
   const { data, isLoading } = api.user.getAdminCity.useQuery();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <LoadingComponent />
+      </Container>
+    );
   }
   return (
     <Container>
