@@ -21,7 +21,6 @@ import StatisticsComponent from "@/components/StatisticsComponent";
 import { CategoryType } from "../(calendar)/calendar";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { set } from "zod";
 
 export default function TabOneScreen() {
   const { data: Calendar, isLoading: calendarLoading } =

@@ -85,20 +85,44 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 
 export type Context = inferAsyncReturnType<typeof createTRPCContext>;
 
-const isAuthed = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.headers.get("authorization")) {
-    throw new Error("Not authorized");
-  }
+/**
+ * Retrieves the JWT token from the request context.
+ * If there is no authorization header, it checks for the token in the cookie.
+ * If the token is found, it returns the token value.
+ * @param ctx - The request context.
+ * @param projectName - The name of the project.
+ * @returns The JWT token.
+ */
+const getJWT = (ctx: Context, projectName: string) => {
+  // if there is no authorization header (for mobile requests) we proceed with the cookie check (for browser requests)
 
-  const jwt = ctx.headers.get("authorization") as string;
-  const token = jwt.split(" ")[1];
+  if (!ctx.headers.get("authorization")) {
+    const cookieHeader = ctx.headers.get("cookie") || "";
+    // Parse the cookie header into an object
+    const cookieList = Object.fromEntries(
+      cookieHeader.split("; ").map((cookie) => {
+        const [name, value] = cookie.split("=");
+        return [name, decodeURIComponent(value)];
+      })
+    );
+    const supabaseAuthToken =
+      cookieList && cookieList[`sb-${projectName}-auth-token`]?.split('"')[1];
+
+    return supabaseAuthToken;
+  } else {
+    const jwt = ctx.headers.get("authorization") as string;
+    return jwt.split(" ")[1];
+  }
+};
+
+const isAuthed = t.middleware(async ({ ctx, next }) => {
+  const token = getJWT(ctx, "evprmsgrfzkaomzxqbco");
 
   const { data } = await supabase.auth.getUser(token);
 
   // console.log(data);
-
   if (!data.user) {
-    throw new Error("Not authorized");
+    throw new Error("Not authorized | User not found");
   }
 
   return next({
@@ -109,17 +133,13 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
 });
 
 const isPrivileged = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.headers.get("authorization")) {
-    throw new Error("Not authorized");
-  }
-
-  const jwt = ctx.headers.get("authorization") as string;
-  const token = jwt.split(" ")[1];
+  // You can find the Project-id in the Supabase dashboard
+  const token = getJWT(ctx, "evprmsgrfzkaomzxqbco");
 
   const { data } = await supabase.auth.getUser(token);
 
   if (!data.user) {
-    throw new Error("Not authorized");
+    throw new Error("Not authorized | User not found");
   }
 
   const email = data.user.email;

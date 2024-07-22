@@ -14,25 +14,11 @@ import { api } from "@/trpc/react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
   const router = useRouter();
   const supabase = createClientComponentClient();
   const { toast } = useToast();
   const CheckUser = api.user.checkifUserisAdmin.useMutation();
-
-  /* 
-  const handleSignUp = async () => {
-    await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    });
-    router.refresh();
-  };
-  */
 
   const handleSignIn = async () => {
     await CheckUser.mutateAsync({ email }).then(async (data) => {
@@ -57,82 +43,67 @@ export default function Login() {
                 description: "Controlla le credenziali e riprova",
               });
             } else {
-              router.push("/dashboard");
+              router.push("/dashboard/home");
             }
           });
       }
     });
   };
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-  };
-
   return (
-    <div className="h-screen w-full lg:grid lg:grid-cols-2 ">
-      <div className="flex items-center justify-center py-12">
-        <div className="mx-auto grid w-[350px] gap-6">
-          <div className="grid gap-2 text-center">
-            <h1 className="text-3xl font-bold">Login</h1>
-            <p className="text-balance text-muted-foreground">
-              Utilizza il tuo account per accedere all'area riservata
-            </p>
-          </div>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="m@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/forgot-password"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <Button className="w-full" onClick={handleSignIn}>
-              Login
-            </Button>
-
-            <Button
-              variant="outline"
-              className="w-full border-yellow-400"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
-          </div>
+    <div className="flex h-screen items-center justify-center bg-background">
+      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg">
+        <div className="flex justify-center">
+          <Image
+            src="/icon/ecoffice-big.png"
+            alt="Ecoffice Logo"
+            width={250}
+            height={250}
+          />
         </div>
-      </div>
-      <div className="hidden bg-muted lg:block">
-        <Image
-          src="https://www.ecofficesrl.it/wp-content/uploads/2024/05/img-gallery-ecoffice-chi-siamo-11.jpg"
-          alt="Image"
-          width="1920"
-          height="1080"
-          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
+        <h2 className="mt-6 text-center text-lg font-normal text-gray-900">
+          Accedi al tuo account
+        </h2>
+        <div className="space-y-4">
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="user@example.com"
+              className="bg-white"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              className="bg-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Link
+              href="/forgot-password"
+              className="text-sm text-black underline"
+            >
+              Hai dimenticato la password?
+            </Link>
+          </div>
+          <div className="flex items-center justify-between"></div>
+          <Button
+            className="w-full rounded-xl bg-background"
+            onClick={handleSignIn}
+          >
+            Accedi
+          </Button>
+        </div>
       </div>
     </div>
   );

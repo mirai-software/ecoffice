@@ -14,9 +14,13 @@ export async function middleware(req: NextRequest) {
 
   if (!data.session) {
     return NextResponse.rewrite(new URL("/login", req.url));
+  } else {
+    // se l'url è uguale al dominio, reindirizza alla dashboard
+    if (!req.url.includes("/dashboard")) {
+      return NextResponse.rewrite(new URL("/dashboard/home", req.url));
+    }
+    return NextResponse.next();
   }
-
-  return res;
 }
 export const config = {
   matcher: [

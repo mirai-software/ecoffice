@@ -1,11 +1,12 @@
 import * as z from "zod"
-import { Completecalendar, relatedcalendarSchema, CompletesecondHandProduct, relatedsecondHandProductSchema, Completeuser, relateduserSchema, CompleteSupportRequest, relatedSupportRequestSchema, CompleteStatistic, relatedStatisticSchema, CompleteOpeningHour, relatedOpeningHourSchema } from "./index"
+import { Completecalendar, relatedcalendarSchema, CompletesecondHandProduct, relatedsecondHandProductSchema, Completeuser, relateduserSchema, CompleteSupportRequest, relatedSupportRequestSchema, CompleteStatistic, relatedStatisticSchema, CompleteOpeningHour, relatedOpeningHourSchema, Completereport, relatedreportSchema, Completepickup, relatedpickupSchema } from "./index"
 
 export const citySchema = z.object({
   id: z.string(),
   name: z.string(),
   address: z.string(),
   whatsappNumber: z.string().nullish(),
+  email: z.string().nullish(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
@@ -17,6 +18,8 @@ export interface Completecity extends z.infer<typeof citySchema> {
   SupportRequest: CompleteSupportRequest[]
   statistics: CompleteStatistic[]
   openingHours: CompleteOpeningHour[]
+  reports: Completereport[]
+  pickups: Completepickup[]
 }
 
 /**
@@ -31,4 +34,6 @@ export const relatedcitySchema: z.ZodSchema<Completecity> = z.lazy(() => citySch
   SupportRequest: relatedSupportRequestSchema.array(),
   statistics: relatedStatisticSchema.array(),
   openingHours: relatedOpeningHourSchema.array(),
+  reports: relatedreportSchema.array(),
+  pickups: relatedpickupSchema.array(),
 }))
