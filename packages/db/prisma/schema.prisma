@@ -50,7 +50,7 @@ model city {
   pickups           pickup[]
   // da definire un ulteriore tabella per i recapiti.
   whatsappNumber    String? // momentanemente stringa, da definire un tipo più appropriato 
-  email            String? // momentanemente stringa, da definire un tipo più appropriato
+  email             String? // momentanemente stringa, da definire un tipo più appropriato
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -69,7 +69,8 @@ model OpeningHour {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-    @@unique([day, cityId]) // Aggiunta combinazione unica di day e cityId
+
+  @@unique([day, cityId]) // Aggiunta combinazione unica di day e cityId
 }
 
 model Statistic {
@@ -137,6 +138,7 @@ model secondHandProduct {
   description String
   price       Float
   images      String[] // array of image urls
+  status      String   @default("Online")
 
   city   city   @relation(fields: [cityId], references: [id])
   cityId String

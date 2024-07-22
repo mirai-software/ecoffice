@@ -7,6 +7,7 @@ export const secondHandProductSchema = z.object({
   description: z.string(),
   price: z.number(),
   images: z.string().array(),
+  status: z.string(),
   cityId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),

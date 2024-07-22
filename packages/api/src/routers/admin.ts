@@ -38,6 +38,44 @@ export const adminRouter = createTRPCRouter({
     });
   }),
 
+  getCitySecondHandProducts: privilegedProcedure.query(async ({ ctx }) => {
+    const { cityId } = await ctx.db.user
+      .findFirst({
+        where: {
+          email: ctx.session.user.email,
+        },
+      })
+      .then((user) => {
+        return (
+          user ?? {
+            cityId: null,
+          }
+        );
+      });
+
+    if (!cityId) {
+      throw new Error("City not found");
+    }
+
+    return ctx.db.city.findFirst({
+      where: {
+        id: cityId,
+      },
+      select: {
+        secondHandProduct: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            price: true,
+            images: true,
+            status: true,
+          },
+        },
+      },
+    });
+  }),
+
   getCityPickRequests: privilegedProcedure.query(async ({ ctx }) => {
     const { cityId } = await ctx.db.user
       .findFirst({
@@ -328,6 +366,79 @@ export const adminRouter = createTRPCRouter({
           },
         });
       }
+    }),
+
+  setSecondHandProduct: privilegedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        price: z.number(),
+        images: z.array(z.string()),
+        status: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.secondHandProduct.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+          price: input.price,
+          images: input.images,
+          status: input.status,
+        },
+      });
+    }),
+
+  createSecondHandProduct: privilegedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        description: z.string(),
+        price: z.number(),
+        images: z.array(z.string()),
+        status: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cityId } = await ctx.db.user
+        .findFirst({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          return (
+            user ?? {
+              cityId: null,
+            }
+          );
+        });
+
+      if (!cityId) {
+        return null;
+      }
+
+      await ctx.db.secondHandProduct.create({
+        data: {
+          id: input.id,
+          name: input.name,
+          description: input.description,
+          price: input.price,
+          images: input.images,
+          status: input.status,
+          city: {
+            connect: {
+              id: cityId,
+            },
+          },
+        },
+      });
     }),
 
   setCityCalendar: privilegedProcedure

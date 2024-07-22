@@ -1,8 +1,6 @@
 "use client";
 import Container from "../../_components/container";
 import { api } from "@/trpc/react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-
 import {
   ColumnDef,
   ColumnFiltersState,
