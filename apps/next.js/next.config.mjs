@@ -6,8 +6,13 @@ await import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const config = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   images: {
-    domains: ["www.ecofficesrl.it", "localhost", "evprmsgrfzkaomzxqbco.supabase.co"],
+    domains: ["localhost", "evprmsgrfzkaomzxqbco.supabase.co"],
   },
 };
 
