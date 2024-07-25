@@ -134,7 +134,6 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
 
 const isPrivileged = t.middleware(async ({ ctx, next }) => {
   // You can find the Project-id in the Supabase dashboard
-  console.log("isPrivileged was Called");
   const token = getJWT(ctx, "evprmsgrfzkaomzxqbco");
 
   const { data } = await supabase.auth.getUser(token);
