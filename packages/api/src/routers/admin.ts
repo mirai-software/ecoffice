@@ -394,6 +394,27 @@ export const adminRouter = createTRPCRouter({
       });
     }),
 
+  getSupportRequestfromId: privilegedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.supportRequest.findFirst({
+        where: {
+          id: input.id,
+        },
+        select: {
+          user: true,
+          messages: {
+            select: {
+              content: true,
+              user: true,
+              createdAt: true,
+            },
+          },
+          id: true,
+        },
+      });
+    }),
+
   getCitySupportRequests: privilegedProcedure.query(async ({ ctx }) => {
     const { cityId } = await ctx.db.user
       .findFirst({

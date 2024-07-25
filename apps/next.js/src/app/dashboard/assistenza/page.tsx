@@ -1,15 +1,16 @@
 "use client";
-import Link from "next/link";
 import Container from "../../_components/container";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { api } from "@/trpc/react";
 import LoadingComponent from "@/app/_components/loading";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 import { Send } from "lucide-react";
 export default function home() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
   const { data, isLoading } = api.admin.getCitySupportRequests.useQuery();
   const [selectedRequest, setSelectedRequest] = useState(0);
   const [newMessage, setNewMessage] = useState("");
@@ -18,6 +19,7 @@ export default function home() {
   const AddMessageToCitySupportRequest =
     api.admin.AddMessageToCitySupportRequest.useMutation();
   const utils = api.useUtils();
+
   const HandleSend = async () => {
     if (data && data[selectedRequest] && newMessage !== "") {
       await AddMessageToCitySupportRequest.mutateAsync({
@@ -184,12 +186,63 @@ export default function home() {
     );
   } else
     return (
-      <Container>
-        <h1 className="text-2xl font-bold">Home Page</h1>
-        <p className="text-sm">This is the home page</p>
-        <Link href="/dashboard/comune" className="w-full" aria-current="page">
-          Comune
-        </Link>
-      </Container>
+      <section className="h-full w-full bg-white/80 p-4">
+        <input
+          type="text"
+          placeholder="Cerca utente"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className="mb-4 w-full rounded-xl border bg-gray-300/10 p-2"
+        />
+        <div className="mb-4 flex items-center justify-center gap-2 border-b-2 pb-4">
+          <Checkbox
+            id="terms"
+            onClick={() => setFilterActive(!filterActive)}
+            checked={filterActive}
+          />
+          <label
+            htmlFor="terms"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Mostra solo richiesta attive
+          </label>
+        </div>
+        <div className="h-96 overflow-y-auto">
+          {/* Lista delle richieste */}
+          {filteredData?.length > 0 ? (
+            filteredData.map((request, index) => (
+              <div
+                key={index}
+                className="cursor-pointer border-b p-2 hover:bg-slate-500/10"
+                onClick={() =>
+                  router.push(`/dashboard/assistenza/${request.id}`)
+                }
+              >
+                <div className="flex items-center justify-between">
+                  <h2 className="font-bold">
+                    {highlightText(
+                      request.user.firstName + " " + request.user.lastName,
+                      filter,
+                    )}
+                  </h2>
+                  <span className="text-xs">
+                    {new Date(request.updatedAt).toLocaleDateString()}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500">
+                  {highlightText(
+                    request.messages[request.messages.length - 1]?.content,
+                    filter,
+                  )}
+                </p>
+              </div>
+            ))
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <p className="text-sm text-gray-500">Nessuna richiesta</p>
+            </div>
+          )}
+        </div>
+      </section>
     );
 }
