@@ -1,8 +1,4 @@
-import {
-  createTRPCProxyClient,
-  loggerLink,
-  unstable_httpBatchStreamLink,
-} from "@trpc/client";
+import { createTRPCProxyClient, loggerLink, httpBatchLink } from "@trpc/client";
 import { cookies } from "next/headers";
 
 import { type AppRouter } from "@ecoffice/api";
@@ -17,7 +13,7 @@ export const api = createTRPCProxyClient<AppRouter>({
         process.env.NODE_ENV === "development" ||
         (op.direction === "down" && op.result instanceof Error),
     }),
-    unstable_httpBatchStreamLink({
+    httpBatchLink({
       url: getUrl(),
       headers() {
         return {
