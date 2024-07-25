@@ -28,31 +28,31 @@ export const navigation = [
   {
     name: "Seconda Mano",
     slug: "seconda-mano",
-    route: "/seconda-mano",
+    route: "/dashboard//seconda-mano",
     info: null,
   },
   {
     name: "Calendario",
     slug: "calendario",
-    route: "/calendario",
+    route: "/dashboard/calendario",
     info: null,
   },
   {
     name: "Ritiri",
     slug: "ritiri",
-    route: "/ritiri",
+    route: "/dashboard/ritiri",
     info: 3,
   },
   {
     name: "Segnalazioni",
     slug: "segnalazioni",
-    route: "/segnalazioni",
+    route: "/dashboard/segnalazioni",
     info: 4,
   },
   {
     name: "Assistenza",
     slug: "assistenza",
-    route: "/assistenza",
+    route: "/dashboard/assistenza",
     info: 2,
   },
 ];

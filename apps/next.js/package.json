@@ -41,6 +41,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-wrap-balancer": "^1.1.0",
+    "sharp": "^0.33.4",
     "stripe": "^14.5.0",
     "superjson": "^1.13.1",
     "svix": "^1.14.0",

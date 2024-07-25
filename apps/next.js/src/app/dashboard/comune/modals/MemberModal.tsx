@@ -64,10 +64,9 @@ export type User = {
   city: City;
 };
 
-export const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<User>[] = [
   {
     id: "select",
-
     enableSorting: false,
     enableHiding: false,
   },
@@ -76,7 +75,7 @@ export const columns: ColumnDef<User>[] = [
     header: "ID",
     cell: ({ row }) => (
       <div className="capitalize">
-        {(row.getValue("id") as string).slice(0, 8) + "..."}
+        {(row.getValue("id") as string).slice(0, 4) + "..."}
       </div>
     ),
   },
@@ -111,7 +110,7 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-right font-medium">
-          {row.getValue("city").name}
+          {(row.getValue("city") as City).name}
         </div>
       );
     },
@@ -132,7 +131,8 @@ export const columns: ColumnDef<User>[] = [
     },
     cell: ({ row }) => (
       <div className="lowercase">
-        {row.getValue("firstName") + (row.getValue("lastName") ?? "")}
+        {(row.getValue("firstName") as string) +
+          ((row.getValue("lastName") as string) ?? "")}
       </div>
     ),
   },
@@ -151,6 +151,7 @@ export function MemberModal() {
 
   const table = useReactTable({
     data: data ?? [],
+    // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -259,7 +260,7 @@ export function MemberModal() {
             Modifica
           </p>
         </DialogTrigger>
-        <DialogContent className="max-h-[80%] max-w-[700px]  rounded-lg bg-white">
+        <DialogContent className="max-h-[80%] max-w-[700px] rounded-lg bg-white">
           <DialogHeader>
             <DialogTitle>Gestione Membri</DialogTitle>
           </DialogHeader>
@@ -275,7 +276,7 @@ export function MemberModal() {
             Modifica
           </p>
         </DrawerTrigger>
-        <DrawerContent className="max-h-[80%] rounded-lg bg-white">
+        <DrawerContent className="max-h-[80%]  rounded-lg bg-white">
           <DrawerHeader className="text-left">
             <DialogTitle>Gestione Membri</DialogTitle>
           </DrawerHeader>

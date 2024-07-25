@@ -23,7 +23,7 @@ export default function home() {
   const HandleSend = async () => {
     if (data && data[selectedRequest] && newMessage !== "") {
       await AddMessageToCitySupportRequest.mutateAsync({
-        requestId: data[selectedRequest]?.id,
+        requestId: data[selectedRequest]?.id as string,
         message: newMessage,
       });
     }
@@ -31,19 +31,21 @@ export default function home() {
     setNewMessage("");
   };
 
-  const filteredData = data?.filter((request) => {
-    const fullName =
-      `${request.user.firstName} ${request.user.lastName}`.toLowerCase();
-    const lastMessage =
-      request.messages[request.messages.length - 1]?.content.toLowerCase();
-    const matchesFilter =
-      fullName.includes(filter.toLowerCase()) ||
-      lastMessage.includes(filter.toLowerCase());
-    const matchesStatus = !filterActive || request.status === "open";
-    return matchesFilter && matchesStatus;
-  });
+  const filteredData =
+    data?.filter((request) => {
+      const fullName =
+        `${request.user.firstName} ${request.user.lastName}`.toLowerCase();
+      const lastMessage =
+        request.messages[request.messages.length - 1]?.content.toLowerCase() ||
+        "";
+      const matchesFilter =
+        fullName.includes(filter.toLowerCase()) ||
+        lastMessage.includes(filter.toLowerCase());
+      const matchesStatus = !filterActive || request.status === "open";
+      return matchesFilter && matchesStatus;
+    }) || [];
 
-  const highlightText = (text, highlight) => {
+  const highlightText = (text: string, highlight: string) => {
     if (!highlight.trim()) {
       return text;
     }
@@ -112,7 +114,8 @@ export default function home() {
                     </div>
                     <p className="text-sm text-gray-500">
                       {highlightText(
-                        request.messages[request.messages.length - 1]?.content,
+                        request.messages[request.messages.length - 1]
+                          ?.content as string,
                         filter,
                       )}
                     </p>
@@ -127,18 +130,18 @@ export default function home() {
           </section>
           <div className="h-full w-2/3 rounded-xl bg-white/80 p-4">
             {/* Dettagli della richiesta selezionata */}
-            {data[selectedRequest] ? (
+            {data && data[selectedRequest] ? (
               <section className="flex h-full flex-col">
                 <h2 className="text-xl font-bold">
-                  {data[selectedRequest].user.firstName +
+                  {data[selectedRequest]!.user.firstName +
                     " " +
-                    data[selectedRequest].user.lastName}
+                    data[selectedRequest]!.user.lastName}
                 </h2>
                 <div className="mt-4 flex flex-col gap-2">
-                  {data[selectedRequest].messages.map((message, index) => (
+                  {data[selectedRequest]!.messages.map((message, index) => (
                     <div
                       key={index}
-                      className={`mb-4 w-[90%] rounded-xl p-4 ${message.sender === "user" ? "bg-gray-100" : " ml-auto bg-blue-100"}`}
+                      className={`mb-4 w-[90%] rounded-xl p-4 ${message.user.role === "user" ? "bg-gray-100" : " ml-auto bg-blue-100"}`}
                     >
                       <span className="flex w-full justify-between text-xs">
                         <p>
@@ -231,7 +234,8 @@ export default function home() {
                 </div>
                 <p className="text-sm text-gray-500">
                   {highlightText(
-                    request.messages[request.messages.length - 1]?.content,
+                    request.messages[request.messages.length - 1]
+                      ?.content as string,
                     filter,
                   )}
                 </p>

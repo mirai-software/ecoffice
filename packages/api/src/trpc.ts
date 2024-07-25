@@ -102,7 +102,7 @@ const getJWT = (ctx: Context, projectName: string) => {
     const cookieList = Object.fromEntries(
       cookieHeader.split("; ").map((cookie) => {
         const [name, value] = cookie.split("=");
-        return [name, decodeURIComponent(value)];
+        return [name, decodeURIComponent(value || "")];
       })
     );
     const supabaseAuthToken =

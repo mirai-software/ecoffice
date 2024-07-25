@@ -608,7 +608,7 @@ export const adminRouter = createTRPCRouter({
                 .findFirst({
                   where: {
                     cityId: cityId,
-                    day: calendar.day,
+                    day: calendar.day as Weekday,
                   },
                 })
                 .then((calendar) => {

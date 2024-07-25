@@ -28,7 +28,7 @@ import Image from "next/image";
 import { api } from "@/trpc/react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { v4 as uuidv4 } from "uuid";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 export function EditProductModal({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
@@ -129,13 +129,13 @@ export function EditProductModal({ id }: { id: string }) {
     });
   };
 
-  const prepareBase64DataUrl = (base64) =>
+  const prepareBase64DataUrl = (base64: string) =>
     base64
       .replace("data:image/jpeg;", "data:image/jpeg;charset=utf-8;")
       .replace(/^.+,/, "");
 
-  const uploadFile = async (event) => {
-    const file = event.target.files[0];
+  const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event!.target!.files![0];
     let base64 = await toBase64(file as File);
     // compress image
     const image = document.createElement("img");
@@ -151,14 +151,14 @@ export function EditProductModal({ id }: { id: string }) {
       canvas.height = image.height * scaleFactor;
 
       context?.drawImage(image, 0, 0, canvas.width, canvas.height);
-      base64 = canvas.toDataURL("image/png");
+      base64 = canvas.toDataURL("image/png") as string;
       const uuid = uuidv4();
 
       const { error } = await supabase.storage
         .from("shop")
         .upload(
           id + "/" + uuid,
-          Buffer.from(prepareBase64DataUrl(base64), "base64"),
+          Buffer.from(prepareBase64DataUrl(base64 as string), "base64"),
           {
             contentType: "image/png",
             cacheControl: "3600",
@@ -170,8 +170,9 @@ export function EditProductModal({ id }: { id: string }) {
         alert("Error uploading file.");
         return;
       }
-
+      // @ts-expect-error ts-migrate(2532) FIXME: never type
       setImages([...images, uuid]);
+      // @ts-expect-error ts-migrate(2532) FIXME: never type
       setImagesUrl([...imagesUrl, await getProductImageUrl(uuid, id)]);
     };
   };
@@ -262,10 +263,7 @@ export function EditProductModal({ id }: { id: string }) {
               </div>
             ))}
             <div className="flex h-24 w-24 items-center justify-center rounded-md border-2 border-dashed border-gray-300">
-              <label
-                for="dropzone-file"
-                class="flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-gray-300"
-              >
+              <label className="flex h-24 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-gray-300">
                 <div className="flex flex-col items-center justify-center pb-6 pt-5">
                   <svg
                     className="h-6 w-6 text-gray-500 dark:text-gray-400"

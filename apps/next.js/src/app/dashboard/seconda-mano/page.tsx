@@ -25,7 +25,6 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import LoadingComponent from "@/app/_components/loading";
-import { ImageModal } from "../ritiri/modals/ImageModal";
 import { EditProductModal } from "./modals/editProduct";
 import { CreateProductModal } from "./modals/CreateProduct";
 
@@ -38,7 +37,7 @@ export type PickRequest = {
   status: string;
 };
 
-export const columns: ColumnDef<PickRequest>[] = [
+const columns: ColumnDef<PickRequest>[] = [
   {
     accessorKey: "id",
     header: "ID",

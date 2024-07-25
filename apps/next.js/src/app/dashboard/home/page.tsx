@@ -11,15 +11,16 @@ const InformationDialog = ({
     assistanceRequest: number;
     pickupRequest: number;
     newReport: number;
+    cityName: string;
   };
 }) => {
   return (
     <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white">
       <div className="flex w-full flex-row justify-between px-5 pt-4">
-        <p className="text-md font-normal">Comune di Battipaglia</p>
+        <p className="text-md font-normal">Comune di {info.cityName}</p>
         <Link
           href={"/dashboard/comune"}
-          className="text-sm text-background underline"
+          className="text-sm text-foreground underline"
         >
           Modifica
         </Link>
@@ -82,7 +83,19 @@ const WasteTypeComponent = ({
   );
 };
 
-const DailyCalendarDialog = ({ Calendar }: { Calendar: unknown[] }) => {
+interface Calendartype {
+  day: string;
+  wasteTypes: {
+    wasteType: {
+      name: string;
+      icon: string;
+      color: string;
+      category: string;
+    };
+  }[];
+}
+
+const DailyCalendarDialog = ({ Calendar }: { Calendar: Calendartype[] }) => {
   const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
 
   const currentDay = Calendar?.find((day) => day.day === today);
@@ -93,7 +106,7 @@ const DailyCalendarDialog = ({ Calendar }: { Calendar: unknown[] }) => {
         <p className="text-md font-normal">Calendario</p>
         <Link
           href={"/dashboard/calendario"}
-          className="text-sm text-background underline"
+          className="text-sm text-foreground underline"
         >
           Gestisci
         </Link>
@@ -119,11 +132,8 @@ const DailyCalendarDialog = ({ Calendar }: { Calendar: unknown[] }) => {
           <p className="text-md font-semibold">Utenze Commerciali</p>
           <div className="flex w-full flex-col  p-3">
             {currentDay?.wasteTypes
-              .filter(
-                ({ wasteType }: { wasteType: unknown }) =>
-                  wasteType.category === "Commercial",
-              )
-              .map(({ wasteType }: { wasteType: unknown }) => (
+              .filter(({ wasteType }) => wasteType.category === "Commercial")
+              .map(({ wasteType }) => (
                 <WasteTypeComponent
                   wastetype={{
                     name: wasteType.name,
@@ -151,6 +161,7 @@ export default async function home() {
             assistanceRequest: data?.SupportRequest.length || 0,
             pickupRequest: data?.pickups.length || 0,
             newReport: data?.reports.length || 0,
+            cityName: data?.name || "",
           }}
         />
 

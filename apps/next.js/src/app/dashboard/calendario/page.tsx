@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+
 import Container from "../../_components/container";
 import Image from "next/image";
 import { api } from "@/trpc/react";
@@ -65,7 +65,23 @@ const CalendarSorter = [
   "Sunday",
 ];
 
-const DailyCalendarDialogDomestic = ({ Calendar }: { Calendar: unknown[] }) => {
+interface Calendartype {
+  day: string;
+  wasteTypes: {
+    wasteType: {
+      name: string;
+      icon: string;
+      color: string;
+      category: string;
+    };
+  }[];
+}
+
+const DailyCalendarDialogDomestic = ({
+  Calendar,
+}: {
+  Calendar: Calendartype[];
+}) => {
   Calendar = Calendar.sort((a, b) =>
     CalendarSorter.indexOf(a.day) > CalendarSorter.indexOf(b.day) ? 1 : -1,
   );
@@ -88,10 +104,9 @@ const DailyCalendarDialogDomestic = ({ Calendar }: { Calendar: unknown[] }) => {
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(
-                        ({ wasteType }: { wasteType: unknown }) =>
-                          wasteType.category === "Citizen",
+                        ({ wasteType }) => wasteType.category === "Citizen",
                       )
-                      .map(({ wasteType }: { wasteType: unknown }) => (
+                      .map(({ wasteType }) => (
                         <WasteTypeComponent
                           wastetype={{
                             name: wasteType.name,
@@ -114,7 +129,7 @@ const DailyCalendarDialogDomestic = ({ Calendar }: { Calendar: unknown[] }) => {
 const DailyCalendarDialogCommercial = ({
   Calendar,
 }: {
-  Calendar: unknown[];
+  Calendar: Calendartype[];
 }) => {
   Calendar = Calendar.sort((a, b) =>
     CalendarSorter.indexOf(a.day) > CalendarSorter.indexOf(b.day) ? 1 : -1,
@@ -139,10 +154,9 @@ const DailyCalendarDialogCommercial = ({
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(
-                        ({ wasteType }: { wasteType: unknown }) =>
-                          wasteType.category === "Commercial",
+                        ({ wasteType }) => wasteType.category === "Commercial",
                       )
-                      .map(({ wasteType }: { wasteType: unknown }) => (
+                      .map(({ wasteType }) => (
                         <WasteTypeComponent
                           wastetype={{
                             name: wasteType.name,

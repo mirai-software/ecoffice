@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { Button } from "@/components/ui/button";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { api } from "@/trpc/react";
 import Image from "next/image";
@@ -60,7 +60,7 @@ const AddWasteTypeComponent = ({
   wasteTypes,
   index,
 }: {
-  SetCalendar: Dispatch<SetStateAction<unknown[]>>;
+  SetCalendar: unknown;
   Calendar: unknown[];
   wasteTypes: {
     id: string;
@@ -101,9 +101,9 @@ const AddWasteTypeComponent = ({
                 const newCalendar = Calendar.map((day, i) => {
                   if (i === index) {
                     return {
-                      ...day,
+                      ...(day as { wasteTypes: { id: string }[] }),
                       wasteTypes: [
-                        ...day.wasteTypes,
+                        ...(day as { wasteTypes: { id: string }[] }).wasteTypes,
                         {
                           wasteType: wasteType,
                         },
@@ -112,6 +112,7 @@ const AddWasteTypeComponent = ({
                   }
                   return day;
                 });
+                // @ts-expect-error ts-migrate(18046) FIXME: 'SetCalendar' is of type 'unknown'.
                 SetCalendar(newCalendar);
                 setOpen(false);
               }}
@@ -158,7 +159,7 @@ const WasteTypeComponent = ({
     index: number;
     color: string;
   };
-  SetCalendar: Dispatch<SetStateAction<unknown[]>>;
+  SetCalendar: unknown;
   Calendar: unknown[];
   wasteTypes: {
     id: string;
@@ -187,19 +188,20 @@ const WasteTypeComponent = ({
       <p className="text-sm text-white">{wastetype.name}</p>
       <span
         onClick={() => {
-          // sovrascrivic con setcalendar Accedendo all'indice e rimuovendo l'elemento con l'id
           const newCalendar = Calendar.map((day, index) => {
             if (index === wastetype.index) {
               return {
-                ...day,
-                wasteTypes: day.wasteTypes.filter(
-                  ({ wasteType }: { wasteType: unknown }) =>
-                    wasteType.id !== wastetype.id,
+                ...(day as { wasteTypes: { id: string }[] }),
+                wasteTypes: (
+                  day as { wasteTypes: { id: string }[] }
+                ).wasteTypes.filter(
+                  (wasteType) => wasteType.id !== wastetype.id,
                 ),
               };
             }
             return day;
           });
+          // @ts-expect-error ts-migrate(2532) FIXME: the Dispatch type is not correct.
           SetCalendar(newCalendar);
         }}
         className="mx-auto text-white underline"
@@ -218,6 +220,7 @@ export function EditCalendarComModal() {
 
   const setCityCalendar = api.admin.setCityCalendar.useMutation();
 
+  // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
   const [Calendar, SetCalendar] = useState<typeof City.calendars>([]);
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
@@ -265,10 +268,10 @@ export function EditCalendarComModal() {
                       <section className="flex flex-1 flex-col">
                         {day.wasteTypes
                           .filter(
-                            ({ wasteType }: { wasteType: unknown }) =>
+                            ({ wasteType }) =>
                               wasteType.category === "Commercial",
                           )
-                          .map(({ wasteType }: { wasteType: unknown }) => (
+                          .map(({ wasteType }) => (
                             <WasteTypeComponent
                               wastetype={{
                                 name: wasteType.name,
@@ -279,11 +282,11 @@ export function EditCalendarComModal() {
                               }}
                               SetCalendar={SetCalendar}
                               Calendar={Calendar}
-                              wasteTypes={wasteTypes}
+                              wasteTypes={wasteTypes || []}
                             />
                           ))}
                         <AddWasteTypeComponent
-                          wasteTypes={wasteTypes}
+                          wasteTypes={wasteTypes || []}
                           SetCalendar={SetCalendar}
                           Calendar={Calendar}
                           index={index}
