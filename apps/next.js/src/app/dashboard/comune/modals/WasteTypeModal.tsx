@@ -72,8 +72,8 @@ export function WasteTypeModal() {
   };
 
   const renderContent = () => (
-    <div className="overflow-y-auto p-4 ">
-      <section className="flex flex-row gap-4 overflow-x-auto p-5">
+    <div className="overflow-y-auto p-4">
+      <section className="flex flex-row gap-4 overflow-x-auto overflow-y-auto  p-5">
         {wasteTypesState.map((wasteType) => (
           <div key={wasteType.id} className="flex flex-col items-center">
             <div
@@ -127,7 +127,7 @@ export function WasteTypeModal() {
               wasteTypesState.find((wasteType) => wasteType.selected)
                 ?.info[0] || ""
             }
-            onChange={(e: ChangeEvent) => {
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               // update the selected waste type info
               setWasteTypesState((prev) =>
                 prev.map((prevWasteType) =>
@@ -155,7 +155,7 @@ export function WasteTypeModal() {
               wasteTypesState.find((wasteType) => wasteType.selected)
                 ?.info[1] || ""
             }
-            onChange={(e: ChangeEvent) => {
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               // update the selected waste type info
               setWasteTypesState((prev) =>
                 prev.map((prevWasteType) =>
@@ -182,7 +182,7 @@ export function WasteTypeModal() {
               wasteTypesState.find((wasteType) => wasteType.selected)
                 ?.info[2] || ""
             }
-            onChange={(e: ChangeEvent) => {
+            onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
               // update the selected waste type info
               setWasteTypesState((prev) =>
                 prev.map((prevWasteType) =>
@@ -215,7 +215,7 @@ export function WasteTypeModal() {
             Modifica
           </p>
         </DialogTrigger>
-        <DialogContent className="max-h-[80%] max-w-[700px]  rounded-lg bg-white">
+        <DialogContent className="max-h-[90%] max-w-[700px] overflow-y-auto  rounded-lg bg-white">
           <DialogHeader>
             <DialogTitle>Gestione Rifiuti</DialogTitle>
             <DialogDescription>
@@ -235,7 +235,7 @@ export function WasteTypeModal() {
             Modifica
           </p>
         </DrawerTrigger>
-        <DrawerContent className="max-h-[80%] rounded-lg bg-white">
+        <DrawerContent className="max-h-[90%] overflow-y-auto rounded-lg bg-white">
           <DrawerHeader className="text-left">
             <DrawerTitle>Gestione Rifiuti</DrawerTitle>
             <DrawerDescription>

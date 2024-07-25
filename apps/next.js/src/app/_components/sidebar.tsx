@@ -23,7 +23,7 @@ const SidebarRoute = [
   {
     name: "Seconda Mano",
     slug: "seconda-mano",
-    route: "/seconda-mano",
+    route: "/dashboard//seconda-mano",
     info: null,
   },
   {

@@ -1,8 +1,6 @@
 "use client";
 import Container from "../../_components/container";
 import { api } from "@/trpc/react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -38,7 +36,7 @@ export type PickRequest = {
   images: string[];
 };
 
-export const columns: ColumnDef<PickRequest>[] = [
+const columns: ColumnDef<PickRequest>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -90,6 +88,7 @@ export default function home() {
 
   const table = useReactTable({
     data: data ?? [],
+    // @ts-expect-error overload
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,

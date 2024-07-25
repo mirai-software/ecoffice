@@ -16,6 +16,7 @@ import { StatisticModal } from "./modals/StatisticModal";
 import { ContactModal } from "./modals/ContactModal";
 import { WasteTypeModal } from "./modals/WasteTypeModal";
 import { MemberModal } from "./modals/MemberModal";
+import LoadingComponent from "@/app/_components/loading";
 
 const CitySelector = ({
   citys,
@@ -525,9 +526,7 @@ export default function Comune() {
   ) {
     return (
       <Container>
-        <section className="flex h-full w-full items-center justify-center ">
-          <p className="text-normal font-semibold">Loading...</p>
-        </section>
+        <LoadingComponent />
       </Container>
     );
   } else

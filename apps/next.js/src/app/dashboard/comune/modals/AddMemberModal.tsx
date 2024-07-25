@@ -32,7 +32,6 @@ import { ChangeEvent, useState } from "react";
 import { api } from "@/trpc/react";
 
 export function AddMemberModal() {
-  const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
   const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
     {},
   );
@@ -54,13 +53,13 @@ export function AddMemberModal() {
     const firstName = nome.split(" ")[0];
     const lastName = nome.split(" ")[1];
 
-    const { error } = await supabase.auth.admin
+    await supabase.auth.admin
       .createUser({
         email: email,
         password: password,
         email_confirm: true,
       })
-      .then((res) => {
+      .then(() => {
         CreateUser.mutate({
           email: email,
         });
@@ -148,7 +147,7 @@ export function AddMemberModal() {
     </div>
   );
 
-  if (userLoading) return null;
+  if (citysLoading) return null;
 
   if (isDesktop) {
     return (

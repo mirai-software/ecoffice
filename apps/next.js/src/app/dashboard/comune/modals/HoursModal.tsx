@@ -115,9 +115,9 @@ export function HoursModal() {
   const [days, setDays] = useState(initialDays);
 
   useEffect(() => {
-    if (user?.city?.openingHours && !done) {
+    if (user && user.city && user.city.openingHours && !done) {
       const updatedDays = initialDays.map((day) => {
-        const dbDay = user.city.openingHours.find(
+        const dbDay = user!.city!.openingHours.find(
           (h) => getDayItalian(h.day) === day.name,
         );
         return dbDay
@@ -136,8 +136,9 @@ export function HoursModal() {
     }
   }, [user]);
 
-  const handleDayChange = (index: unknown, field: string, value: unknown) => {
+  const handleDayChange = (index: number, field: string, value: unknown) => {
     const newDays = [...days];
+    // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
     newDays[index][field] = value;
     console.log(newDays);
     setDays(newDays);
@@ -220,7 +221,7 @@ export function HoursModal() {
             Modifica
           </p>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] max-h-[80%]  rounded-lg bg-white">
+        <DialogContent className="sm:max-w-[425px] max-h-[80%] overflow-y-auto  rounded-lg bg-white">
           <DialogHeader>
             <DialogTitle>Orari</DialogTitle>
             <DialogDescription>
@@ -240,7 +241,7 @@ export function HoursModal() {
             Modifica
           </p>
         </DrawerTrigger>
-        <DrawerContent className="max-h-[80%] rounded-lg bg-white">
+        <DrawerContent className="max-h-[80%] overflow-y-auto rounded-lg bg-white">
           <DrawerHeader className="text-left">
             <DrawerTitle>Orari</DrawerTitle>
             <DrawerDescription>

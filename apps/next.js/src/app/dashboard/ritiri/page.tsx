@@ -1,7 +1,6 @@
 "use client";
 import Container from "../../_components/container";
 import { api } from "@/trpc/react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import {
   ColumnDef,
@@ -38,7 +37,7 @@ export type PickRequest = {
   images: string[];
 };
 
-export const columns: ColumnDef<PickRequest>[] = [
+const columns: ColumnDef<PickRequest>[] = [
   {
     accessorKey: "id",
     header: "ID",
