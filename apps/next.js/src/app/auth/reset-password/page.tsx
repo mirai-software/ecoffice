@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/router";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 // We need to use the service role key to have the admin role for the supabase client
@@ -17,6 +18,7 @@ export default function ResetPasswordPage() {
   const [refreshToken, setRefreshToken] = useState("");
   const [password, setPassword] = useState("");
   const { toast } = useToast();
+  const router = useRouter();
 
   const passwordRegex = new RegExp(
     "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
@@ -84,6 +86,7 @@ export default function ResetPasswordPage() {
 
       if (data) {
         alert("Password has been updated successfully!");
+        router.push("/");
       }
     } catch (error: unknown) {
       // @ts-expect-error - error is unknown type

@@ -119,11 +119,9 @@ const getJWT = (ctx: Context, projectName: string) => {
 const isAuthed = t.middleware(async ({ ctx, next }) => {
   const token = getJWT(ctx, "evprmsgrfzkaomzxqbco");
 
-  console.log(token);
-
   const { data } = await supabase.auth.getUser(token);
 
-  console.log(data);
+  // console.log(data);
   if (!data.user) {
     throw new Error("Not authorized | User not found");
   }
