@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import Logo from "@/../public/icon/ecoffice.png";
+
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { Button, Dialog, Transition } from "@headlessui/react";
