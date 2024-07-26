@@ -24,7 +24,6 @@ import { useEffect, useState } from "react";
 import { api } from "@/trpc/react";
 import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
-import { set } from "zod";
 
 const CalendarSorter = [
   "Monday",
