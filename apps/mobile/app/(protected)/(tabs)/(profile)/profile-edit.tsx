@@ -177,6 +177,7 @@ export default function Profile_Edit() {
                 <Pressable
                   onPress={async () => {
                     await PasswordReset(user?.email as string).then(() => {
+                      router.back();
                       toast.success(
                         "Abbiamo inviato una mail per il reset della password (Controlla lo spam)",
                         {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 // We need to use the service role key to have the admin role for the supabase client
@@ -15,6 +16,11 @@ export default function ResetPasswordPage() {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [password, setPassword] = useState("");
+  const { toast } = useToast();
+
+  const passwordRegex = new RegExp(
+    "^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$",
+  );
 
   useEffect(() => {
     // Get the access token and refresh token from the URL
@@ -48,6 +54,25 @@ export default function ResetPasswordPage() {
   }, [accessToken, refreshToken]);
 
   const handlePasswordUpdate = async (newPassword: string) => {
+    if (!newPassword) {
+      toast({
+        variant: "destructive",
+        title: "Cambio Password Fallito",
+        description: "Controlla le credenziali e riprova",
+      });
+      return;
+    }
+
+    if (!passwordRegex.test(newPassword)) {
+      toast({
+        variant: "destructive",
+        title: "Cambio Password Fallito",
+        description:
+          "La password deve contenere almeno 8 caratteri, un numero e un carattere speciale",
+      });
+      return;
+    }
+
     try {
       const { data, error } = await supabase.auth.updateUser({
         password: newPassword,
@@ -91,12 +116,12 @@ export default function ResetPasswordPage() {
         </h2>
         <div className="space-y-4">
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Nuova Password</Label>
             <Input
               id="password"
               type="password"
               name="password"
-              placeholder="user@example.com"
+              placeholder="Nuova password"
               className="bg-white"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +130,11 @@ export default function ResetPasswordPage() {
           </div>
 
           <div className="flex items-center justify-between"></div>
-          <Button className="w-full rounded-xl bg-background" type="submit">
+          <Button
+            disabled={!passwordRegex.test(password)}
+            className="w-full rounded-xl bg-foreground disabled:bg-background "
+            type="submit"
+          >
             Cambia la password
           </Button>
         </div>
