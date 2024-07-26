@@ -6,6 +6,7 @@ import { api } from "@/trpc/react";
 import { EditCalendarModal } from "./modals/EditCalendarModal";
 import { EditCalendarComModal } from "./modals/EditCalendarComModal";
 import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -45,8 +46,8 @@ const WasteTypeComponent = ({
       }}
     >
       <Image
-        src={process.env.NEXT_PUBLIC_WEBSITE_URL + `/icon/${wastetype.icon}`}
-        alt="Carta"
+        src={getBaseUrl() + `/icon/${wastetype.icon}`}
+        alt={wastetype.name}
         width={25}
         height={25}
       />
