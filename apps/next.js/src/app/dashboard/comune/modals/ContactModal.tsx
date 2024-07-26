@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, useEffect, useState } from "react";
 
 import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function ContactModal() {
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
@@ -28,7 +29,7 @@ export function ContactModal() {
 
   const [done, setDone] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const utils = api.useUtils();
   const [phone, setPhone] = useState("");
@@ -49,6 +50,10 @@ export function ContactModal() {
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
+      toast({
+        title: "Contatti aggiornati",
+        description: "I contatti sono stati aggiornati con successo",
+      });
     }, 1000);
   };
 

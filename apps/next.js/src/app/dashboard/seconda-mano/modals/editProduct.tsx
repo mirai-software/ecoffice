@@ -29,6 +29,7 @@ import { api } from "@/trpc/react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { v4 as uuidv4 } from "uuid";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function EditProductModal({ id }: { id: string }) {
   const [open, setOpen] = useState(false);
@@ -42,6 +43,7 @@ export function EditProductModal({ id }: { id: string }) {
   });
 
   const utils = api.useUtils();
+  const { toast } = useToast();
 
   const SetSecondHandProduct = api.admin.setSecondHandProduct.useMutation();
 
@@ -89,6 +91,10 @@ export function EditProductModal({ id }: { id: string }) {
       utils.invalidate();
       setOpen(false);
       setDone(false);
+      toast({
+        title: "Prodotto aggiornato",
+        description: "Il prodotto è stato aggiornato con successo",
+      });
     }, 1500);
   };
 

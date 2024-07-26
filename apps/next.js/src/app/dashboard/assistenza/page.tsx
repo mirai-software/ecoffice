@@ -6,6 +6,7 @@ import LoadingComponent from "@/app/_components/loading";
 import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { RefreshCcw } from "lucide-react";
 
 import { Send } from "lucide-react";
 export default function home() {
@@ -72,13 +73,20 @@ export default function home() {
       <Container>
         <div className="flex h-full gap-2">
           <section className="h-full w-1/3 rounded-xl border-b bg-white/80 p-4">
-            <input
-              type="text"
-              placeholder="Cerca utente"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="mb-4 w-full rounded-xl border bg-gray-300/10 p-2"
-            />
+            <div className="mb-4 flex items-center gap-2">
+              <RefreshCcw
+                size={24}
+                className="transform cursor-pointer transition-transform hover:rotate-180"
+                onClick={() => utils.admin.getCitySupportRequests.invalidate()}
+              />
+              <input
+                type="text"
+                placeholder="Cerca utente"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className=" w-full rounded-xl border bg-gray-300/10 p-2"
+              />
+            </div>
             <div className="mb-4 flex items-center justify-center gap-2 border-b-2 pb-4">
               <Checkbox
                 id="terms"

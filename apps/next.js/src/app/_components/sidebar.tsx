@@ -66,7 +66,7 @@ export function Sidebar() {
     <section className="flex h-screen w-full flex-col bg-foreground p-4 text-white">
       <div className="mb-4 mt-6 flex justify-start">
         <Image
-          src={getBaseUrl() + `/icon/carta.svg`}
+          src={getBaseUrl() + `/icon/ecoffice.png`}
           alt="logo"
           width={100}
           height={100}

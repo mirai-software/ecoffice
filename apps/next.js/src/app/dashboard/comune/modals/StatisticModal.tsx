@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
 
 type Indicator = {
   id: number;
@@ -38,6 +39,7 @@ export function StatisticModal() {
   const [specificIndicators, setSpecificIndicators] = useState([] as unknown[]);
   const [done, setDone] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { toast } = useToast();
 
   const setCityStatistics = api.admin.setCityStatistics.useMutation();
   const utils = api.useUtils();
@@ -72,6 +74,10 @@ export function StatisticModal() {
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
+      toast({
+        title: "Indicatori aggiornati",
+        description: "Gli indicatori sono stati aggiornati con successo",
+      });
     }, 1000);
   };
 

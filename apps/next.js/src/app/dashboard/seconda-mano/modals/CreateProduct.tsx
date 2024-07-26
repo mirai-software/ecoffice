@@ -31,6 +31,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { v4 as uuidv4 } from "uuid";
 import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function CreateProductModal() {
   const [open, setOpen] = useState(false);
@@ -46,6 +47,7 @@ export function CreateProductModal() {
   const [imagesUrl, setImagesUrl] = useState<string[]>([]);
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { toast } = useToast();
   const utils = api.useUtils();
   const createSecondHandProduct =
     api.admin.createSecondHandProduct.useMutation();
@@ -78,6 +80,10 @@ export function CreateProductModal() {
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
+      toast({
+        title: "Articolo aggiunto",
+        description: "L'articolo è stato aggiunto con successo",
+      });
       setNewuuid(uuidv4());
       setName("");
       setDescription("");
