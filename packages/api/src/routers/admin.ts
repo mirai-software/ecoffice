@@ -30,7 +30,9 @@ export const adminRouter = createTRPCRouter({
   getAdminUsers: privilegedProcedure.query(async ({ ctx }) => {
     return ctx.db.user.findMany({
       where: {
-        role: "admin",
+        role: {
+          in: ["admin", "editor"],
+        },
       },
       include: {
         city: true,
@@ -38,6 +40,52 @@ export const adminRouter = createTRPCRouter({
     });
   }),
 
+  createNewUser: privilegedProcedure
+    .input(
+      z.object({
+        firstName: z.string(),
+        lastName: z.string(),
+        email: z.string(),
+        password: z.string(),
+        role: z.string(),
+        cityId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verifica se la città esiste
+      console.log(input);
+      const cityExists = await ctx.db.city.findFirst({
+        where: {
+          id: input.cityId,
+        },
+      });
+
+      if (!cityExists) {
+        throw new Error("City not found");
+      }
+
+      return await ctx.supabase.auth.admin
+        .createUser({
+          email: input.email,
+          password: input.password,
+          email_confirm: true,
+        })
+        .then(async () => {
+          await ctx.db.user.create({
+            data: {
+              firstName: input.firstName,
+              lastName: input.lastName,
+              email: input.email,
+              role: input.role as "admin" | "user" | "editor",
+              city: {
+                connect: {
+                  id: input.cityId,
+                },
+              },
+            },
+          });
+        });
+    }),
   getCitySecondHandProducts: privilegedProcedure.query(async ({ ctx }) => {
     const { cityId } = await ctx.db.user
       .findFirst({

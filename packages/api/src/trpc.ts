@@ -14,7 +14,8 @@ import { db } from "@ecoffice/db";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+// We need to use the service role key to have the admin role for the supabase client
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE as string;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -154,13 +155,14 @@ const isPrivileged = t.middleware(async ({ ctx, next }) => {
     throw new Error("Not authorized");
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== "admin" && user.role !== "editor") {
     throw new Error("Not authorized");
   }
 
   return next({
     ctx: {
       session: data,
+      supabase: supabase,
     },
   });
 });

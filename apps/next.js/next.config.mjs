@@ -12,7 +12,17 @@ const config = {
     },
   },
   images: {
-    domains: ["localhost", "evprmsgrfzkaomzxqbco.supabase.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+      }
+    ],
+
   },
 };
 
