@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { getRouteName } from "@/lib/getRouteName";
+import { getBaseUrl } from "@/trpc/shared";
 
 export const navigation = [
   {
@@ -201,7 +202,12 @@ function Sidebar(props: {
     >
       <nav className="flex flex-1 items-center">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">
-          <Image src={Logo} alt="Rosy Landi" width={70} height={70} />
+          <Image
+            src={getBaseUrl() + `/icon/ecoffice.png`}
+            alt="ecoffice logo"
+            width={70}
+            height={70}
+          />
           <li>
             <ul role="list" className="-mx-2 space-y-3">
               {navigation.map((item) => (

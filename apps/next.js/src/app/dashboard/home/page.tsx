@@ -4,6 +4,7 @@ import Container from "../../_components/container";
 import Image from "next/image";
 import { api } from "@/trpc/react";
 import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const InformationDialog = ({
   info,
@@ -75,7 +76,7 @@ const WasteTypeComponent = ({
       }}
     >
       <Image
-        src={process.env.NEXT_PUBLIC_WEBSITE_URL + `/icon/${wastetype.icon}`}
+        src={getBaseUrl() + `/icon/${wastetype.icon}`}
         alt="Carta"
         width={25}
         height={25}
