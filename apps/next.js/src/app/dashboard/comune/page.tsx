@@ -17,6 +17,7 @@ import { ContactModal } from "./modals/ContactModal";
 import { WasteTypeModal } from "./modals/WasteTypeModal";
 import { MemberModal } from "./modals/MemberModal";
 import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const CitySelector = ({
   citys,
@@ -399,10 +400,7 @@ const WasteTypeSection = ({
                 style={{ backgroundColor: wasteType.color }}
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_WEBSITE_URL +
-                    `/icon/${wasteType.icon}`
-                  }
+                  src={getBaseUrl() + `/icon/${wasteType.icon}`}
                   width={20}
                   height={20}
                   alt={wasteType.name}

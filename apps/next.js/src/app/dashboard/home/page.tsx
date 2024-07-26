@@ -152,7 +152,7 @@ const DailyCalendarDialog = ({ Calendar }: { Calendar: Calendartype[] }) => {
 };
 
 export default async function home() {
-  const { data, isLoading } = await api.user.getAdminCity.useQuery();
+  const { data, isLoading } = api.user.getAdminCity.useQuery();
 
   if (isLoading) {
     return (
