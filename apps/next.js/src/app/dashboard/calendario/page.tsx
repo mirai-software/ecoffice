@@ -101,7 +101,7 @@ const DailyCalendarDialogDomestic = ({
             {Calendar.map((day) => {
               return (
                 <section className="flex w-full flex-1 flex-row items-center gap-4">
-                  <p className="flex min-w-[20%] ">{getDayItalian(day.day)}</p>
+                  <p className="flex w-[20%] ">{getDayItalian(day.day)}</p>
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(
@@ -151,7 +151,7 @@ const DailyCalendarDialogCommercial = ({
             {Calendar.map((day) => {
               return (
                 <section className="flex w-full flex-1 flex-row items-center gap-4">
-                  <p className="flex min-w-[20%] ">{getDayItalian(day.day)}</p>
+                  <p className="flex w-[20%] ">{getDayItalian(day.day)}</p>
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(
