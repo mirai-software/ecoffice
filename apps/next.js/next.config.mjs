@@ -12,18 +12,18 @@ const config = {
     },
   },
   images: {
+    dangerouslyAllowSVG: true,
+    minimumCacheTTL: 0,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
+        protocol: 'https',
+        hostname: 'evprmsgrfzkaomzxqbco.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**'
       },
-      {
-        protocol: "http",
-        hostname: "**",
-      }
     ],
-
-  },
+    unoptimized: true,
+  }
 };
 
 export default config;
