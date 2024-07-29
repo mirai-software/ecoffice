@@ -98,7 +98,7 @@ export default function Shop() {
                       : "text-black text-md text-center"
                   }
                 >
-                  Cittadino
+                  Domestiche
                 </Text>
               </View>
             </Pressable>

@@ -164,6 +164,7 @@ export default function Onboarding() {
                 <TextInput
                   className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
                   value={name}
+                  placeholder="Inserisci il tuo nome e cognome"
                   onChange={(
                     value: NativeSyntheticEvent<TextInputChangeEventData>
                   ) => setName(value.nativeEvent.text)}

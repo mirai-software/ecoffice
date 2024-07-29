@@ -57,9 +57,23 @@ const columns: ColumnDef<PickRequest>[] = [
   },
 
   {
+    accessorKey: "otherSpecs",
+    header: "Altre Specifiche",
+    cell: ({ row }) => (
+      <div className="">{row.getValue("otherSpecs") as string}</div>
+    ),
+  },
+
+  {
     accessorKey: "type",
     header: "Tipo di Rifiuto",
-    cell: ({ row }) => <div className="">{row.getValue("type") as string}</div>,
+    cell: ({ row }) => (
+      <div className="">
+        {(row.getValue("type") as string) === "other"
+          ? (row.getValue("otherSpecs") as string)
+          : (row.getValue("type") as string)}
+      </div>
+    ),
   },
 
   {
@@ -102,6 +116,16 @@ export default function home() {
       sorting,
       columnFilters,
       columnVisibility,
+    },
+    initialState: {
+      columnVisibility: {
+        id: true,
+        address: true,
+        type: true,
+        phone: true,
+        images: true,
+        otherSpecs: false,
+      },
     },
   });
 
