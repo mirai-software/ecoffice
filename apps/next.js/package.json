@@ -33,6 +33,7 @@
     "@trpc/server": "^10.37.1",
     "@uidotdev/usehooks": "^2.4.1",
     "clsx": "^2.0.0",
+    "cmdk": "^1.0.0",
     "framer-motion": "^10.16.5",
     "lucide-react": "^0.406.0",
     "micro": "^10.0.1",

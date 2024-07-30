@@ -86,6 +86,7 @@ export const adminRouter = createTRPCRouter({
           });
         });
     }),
+
   getCitySecondHandProducts: privilegedProcedure.query(async ({ ctx }) => {
     const { cityId } = await ctx.db.user
       .findFirst({
@@ -175,6 +176,24 @@ export const adminRouter = createTRPCRouter({
           };
         });
       });
+  }),
+
+  getAllCityReports: privilegedProcedure.query(async ({ ctx }) => {
+    return ctx.db.report.findMany({
+      select: {
+        user: {
+          select: {
+            phone: true,
+            id: true,
+          },
+        },
+        id: true,
+        address: true,
+        images: true,
+        type: true,
+        city: true,
+      },
+    });
   }),
 
   getCityReports: privilegedProcedure.query(async ({ ctx }) => {
@@ -581,7 +600,6 @@ export const adminRouter = createTRPCRouter({
       if (!cityId) {
         return null;
       }
-
       await ctx.db.secondHandProduct.create({
         data: {
           id: input.id,
@@ -590,6 +608,104 @@ export const adminRouter = createTRPCRouter({
           price: input.price,
           images: input.images,
           status: input.status,
+          city: {
+            connect: {
+              id: cityId,
+            },
+          },
+        },
+      });
+    }),
+
+  createPickupRequest: privilegedProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        images: z.array(z.string()),
+        type: z.string(),
+        otherSpecs: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cityId } = await ctx.db.user
+        .findFirst({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          return (
+            user ?? {
+              cityId: null,
+            }
+          );
+        });
+
+      if (!cityId) {
+        return null;
+      }
+
+      return ctx.db.pickup.create({
+        data: {
+          address: input.address,
+          images: input.images,
+          status: "open",
+          type: input.type,
+          otherSpecs: input.otherSpecs,
+          user: {
+            connect: {
+              email: ctx.session.user.email!,
+            },
+          },
+          city: {
+            connect: {
+              id: cityId,
+            },
+          },
+        },
+      });
+    }),
+
+  createReportRequest: privilegedProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        images: z.array(z.string()),
+        type: z.string(),
+        otherSpecs: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cityId } = await ctx.db.user
+        .findFirst({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          return (
+            user ?? {
+              cityId: null,
+            }
+          );
+        });
+
+      if (!cityId) {
+        return null;
+      }
+
+      return ctx.db.report.create({
+        data: {
+          address: input.address,
+          images: input.images,
+          status: "open",
+          type: input.type,
+          otherSpecs: input.otherSpecs,
+          user: {
+            connect: {
+              email: ctx.session.user.email!,
+            },
+          },
           city: {
             connect: {
               id: cityId,
