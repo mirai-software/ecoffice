@@ -23,6 +23,7 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 
 import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function HoursModal() {
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
@@ -31,6 +32,7 @@ export function HoursModal() {
   const UpdateHours = api.admin.setAdminHours.useMutation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const utils = api.useUtils();
+  const { toast } = useToast();
 
   const getDayItalian = (day: string) => {
     switch (day) {
@@ -150,6 +152,10 @@ export function HoursModal() {
     });
     setTimeout(() => {
       utils.invalidate();
+      toast({
+        title: "Orari aggiornati",
+        description: "Gli orari sono stati aggiornati con successo",
+      });
       setOpen(false);
     }, 1000);
   };

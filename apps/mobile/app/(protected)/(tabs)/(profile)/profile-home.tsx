@@ -5,10 +5,13 @@ import HeaderContainer from "@/app/_header";
 import { Pressable, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "expo-router";
+import { CommonActions } from "@react-navigation/native";
 import { api } from "@/lib/api";
 
 export default function Shop() {
   const { signOut } = useSupabase();
+  const navigation = useNavigation();
 
   const ResetOnboarding = async () => {
     await AsyncStorage.setItem("@OnboardingIsDone", "false");
@@ -78,6 +81,11 @@ export default function Shop() {
           onPress={() => {
             signOut();
             ResetOnboarding();
+            navigation.dispatch(
+              CommonActions.reset({
+                routes: [{ key: "(tabs)", name: "(tabs)" }],
+              })
+            );
             router.navigate("/(public)/sign-in");
           }}
         >

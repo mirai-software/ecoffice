@@ -22,11 +22,13 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 import { api } from "@/trpc/react";
 import Image from "next/image";
+import { useToast } from "@/components/ui/use-toast";
 
 export function WasteTypeModal() {
   const { data: wasteTypes, isLoading: wasteTypesLoading } =
     api.admin.getWasteTypes.useQuery();
 
+  const { toast } = useToast();
   const utils = api.useUtils();
 
   const [open, setOpen] = useState(false);
@@ -68,6 +70,10 @@ export function WasteTypeModal() {
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
+      toast({
+        title: "Rifiuti aggiornati",
+        description: "I rifiuti sono stati aggiornati con successo",
+      });
     }, 1000);
   };
 
@@ -134,7 +140,11 @@ export function WasteTypeModal() {
                   prevWasteType.selected
                     ? {
                         ...prevWasteType,
-                        info: [e.target.value],
+                        info: [
+                          e.target.value!,
+                          prevWasteType.info[1]!,
+                          prevWasteType.info[2]!,
+                        ],
                       }
                     : prevWasteType,
                 ),
@@ -162,7 +172,11 @@ export function WasteTypeModal() {
                   prevWasteType.selected
                     ? {
                         ...prevWasteType,
-                        info: [e.target.value],
+                        info: [
+                          prevWasteType.info[0]!,
+                          e.target.value!,
+                          prevWasteType.info[2]!,
+                        ],
                       }
                     : prevWasteType,
                 ),
@@ -189,7 +203,11 @@ export function WasteTypeModal() {
                   prevWasteType.selected
                     ? {
                         ...prevWasteType,
-                        info: [e.target.value],
+                        info: [
+                          prevWasteType.info[0]!,
+                          prevWasteType.info[1]!,
+                          e.target.value!,
+                        ],
                       }
                     : prevWasteType,
                 ),

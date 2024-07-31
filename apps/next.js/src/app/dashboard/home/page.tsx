@@ -1,7 +1,10 @@
+"use client";
 import Link from "next/link";
 import Container from "../../_components/container";
 import Image from "next/image";
-import { api } from "@/trpc/server";
+import { api } from "@/trpc/react";
+import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const InformationDialog = ({
   info,
@@ -73,7 +76,7 @@ const WasteTypeComponent = ({
       }}
     >
       <Image
-        src={process.env.NEXT_PUBLIC_WEBSITE_URL + `/icon/${wastetype.icon}`}
+        src={getBaseUrl() + `/icon/${wastetype.icon}`}
         alt="Carta"
         width={25}
         height={25}
@@ -149,24 +152,31 @@ const DailyCalendarDialog = ({ Calendar }: { Calendar: Calendartype[] }) => {
   );
 };
 
-export default async function home() {
-  const data = await api.user.getAdminCity.query();
+export default function home() {
+  const { data, isLoading } = api.user.getAdminCity.useQuery();
 
-  return (
-    <Container>
-      <section className="flex h-full w-full flex-col gap-4 lg:flex-row">
-        <InformationDialog
-          info={{
-            secondHandProduct: data?.secondHandProduct.length || 0,
-            assistanceRequest: data?.SupportRequest.length || 0,
-            pickupRequest: data?.pickups.length || 0,
-            newReport: data?.reports.length || 0,
-            cityName: data?.name || "",
-          }}
-        />
+  if (isLoading) {
+    return (
+      <Container>
+        <LoadingComponent />
+      </Container>
+    );
+  } else
+    return (
+      <Container>
+        <section className="flex h-full w-full flex-col gap-4 lg:flex-row">
+          <InformationDialog
+            info={{
+              secondHandProduct: data?.secondHandProduct.length || 0,
+              assistanceRequest: data?.SupportRequest.length || 0,
+              pickupRequest: data?.pickups.length || 0,
+              newReport: data?.reports.length || 0,
+              cityName: data?.name || "",
+            }}
+          />
 
-        <DailyCalendarDialog Calendar={data?.calendars || []} />
-      </section>
-    </Container>
-  );
+          <DailyCalendarDialog Calendar={data?.calendars || []} />
+        </section>
+      </Container>
+    );
 }

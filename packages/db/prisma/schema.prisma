@@ -151,6 +151,7 @@ model secondHandProduct {
 
 enum Role {
   user
+  editor
   admin
 }
 
@@ -183,10 +184,11 @@ model report {
   id     String @id @unique @default(uuid())
   number Int    @default(autoincrement())
 
-  address String
-  type    String
-  status  String
-  images  String[] // array of image urls
+  address    String
+  type       String
+  otherSpecs String? // if The type is "other" this field is required to specify the type
+  status     String
+  images     String[] // array of image urls
 
   user   user   @relation(fields: [userId], references: [id])
   userId String
@@ -202,12 +204,13 @@ model report {
 
 // Ritiro a Domilicio
 model pickup {
-  id      String   @id @unique @default(uuid())
-  number  Int      @default(autoincrement())
-  address String
-  type    String
-  status  String
-  images  String[] // array of image urls
+  id         String   @id @unique @default(uuid())
+  number     Int      @default(autoincrement())
+  address    String
+  type       String
+  otherSpecs String? // if The type is "other" this field is required to specify the type
+  status     String
+  images     String[] // array of image urls
 
   user   user   @relation(fields: [userId], references: [id])
   userId String

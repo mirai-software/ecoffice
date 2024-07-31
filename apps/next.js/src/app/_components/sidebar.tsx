@@ -1,12 +1,12 @@
 "use client";
 
-import Logo from "@/../public/icon/ecoffice.png";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@headlessui/react";
+import { getBaseUrl } from "@/trpc/shared";
 const SidebarRoute = [
   {
     name: "Dashboard",
@@ -65,7 +65,12 @@ export function Sidebar() {
   return (
     <section className="flex h-screen w-full flex-col bg-foreground p-4 text-white">
       <div className="mb-4 mt-6 flex justify-start">
-        <Image src={Logo} alt="logo" width={100} height={100} />
+        <Image
+          src={getBaseUrl() + `/icon/ecoffice.png`}
+          alt="logo"
+          width={100}
+          height={100}
+        />
       </div>
       <ul className="space-y-2">
         {SidebarRoute.map((route) => (

@@ -30,13 +30,62 @@ export const adminRouter = createTRPCRouter({
   getAdminUsers: privilegedProcedure.query(async ({ ctx }) => {
     return ctx.db.user.findMany({
       where: {
-        role: "admin",
+        role: {
+          in: ["admin", "editor"],
+        },
       },
       include: {
         city: true,
       },
     });
   }),
+
+  createNewUser: privilegedProcedure
+    .input(
+      z.object({
+        firstName: z.string(),
+        lastName: z.string(),
+        email: z.string(),
+        password: z.string(),
+        role: z.string(),
+        cityId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Verifica se la città esiste
+      console.log(input);
+      const cityExists = await ctx.db.city.findFirst({
+        where: {
+          id: input.cityId,
+        },
+      });
+
+      if (!cityExists) {
+        throw new Error("City not found");
+      }
+
+      return await ctx.supabase.auth.admin
+        .createUser({
+          email: input.email,
+          password: input.password,
+          email_confirm: true,
+        })
+        .then(async () => {
+          await ctx.db.user.create({
+            data: {
+              firstName: input.firstName,
+              lastName: input.lastName,
+              email: input.email,
+              role: input.role as "admin" | "user" | "editor",
+              city: {
+                connect: {
+                  id: input.cityId,
+                },
+              },
+            },
+          });
+        });
+    }),
 
   getCitySecondHandProducts: privilegedProcedure.query(async ({ ctx }) => {
     const { cityId } = await ctx.db.user
@@ -127,6 +176,24 @@ export const adminRouter = createTRPCRouter({
           };
         });
       });
+  }),
+
+  getAllCityReports: privilegedProcedure.query(async ({ ctx }) => {
+    return ctx.db.report.findMany({
+      select: {
+        user: {
+          select: {
+            phone: true,
+            id: true,
+          },
+        },
+        id: true,
+        address: true,
+        images: true,
+        type: true,
+        city: true,
+      },
+    });
   }),
 
   getCityReports: privilegedProcedure.query(async ({ ctx }) => {
@@ -533,7 +600,6 @@ export const adminRouter = createTRPCRouter({
       if (!cityId) {
         return null;
       }
-
       await ctx.db.secondHandProduct.create({
         data: {
           id: input.id,
@@ -542,6 +608,104 @@ export const adminRouter = createTRPCRouter({
           price: input.price,
           images: input.images,
           status: input.status,
+          city: {
+            connect: {
+              id: cityId,
+            },
+          },
+        },
+      });
+    }),
+
+  createPickupRequest: privilegedProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        images: z.array(z.string()),
+        type: z.string(),
+        otherSpecs: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cityId } = await ctx.db.user
+        .findFirst({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          return (
+            user ?? {
+              cityId: null,
+            }
+          );
+        });
+
+      if (!cityId) {
+        return null;
+      }
+
+      return ctx.db.pickup.create({
+        data: {
+          address: input.address,
+          images: input.images,
+          status: "open",
+          type: input.type,
+          otherSpecs: input.otherSpecs,
+          user: {
+            connect: {
+              email: ctx.session.user.email!,
+            },
+          },
+          city: {
+            connect: {
+              id: cityId,
+            },
+          },
+        },
+      });
+    }),
+
+  createReportRequest: privilegedProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        images: z.array(z.string()),
+        type: z.string(),
+        otherSpecs: z.string().nullable(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cityId } = await ctx.db.user
+        .findFirst({
+          where: {
+            email: ctx.session.user.email,
+          },
+        })
+        .then((user) => {
+          return (
+            user ?? {
+              cityId: null,
+            }
+          );
+        });
+
+      if (!cityId) {
+        return null;
+      }
+
+      return ctx.db.report.create({
+        data: {
+          address: input.address,
+          images: input.images,
+          status: "open",
+          type: input.type,
+          otherSpecs: input.otherSpecs,
+          user: {
+            connect: {
+              email: ctx.session.user.email!,
+            },
+          },
           city: {
             connect: {
               id: cityId,

@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { CircleX, LoaderCircle } from "lucide-react";
 
 import {
   Drawer,
@@ -22,6 +23,7 @@ import { useEffect, useState } from "react";
 
 import { api } from "@/trpc/react";
 import Image from "next/image";
+import { useToast } from "@/components/ui/use-toast";
 
 const CalendarSorter = [
   "Monday",
@@ -186,16 +188,19 @@ const WasteTypeComponent = ({
         height={25}
       />
       <p className="text-sm text-white">{wastetype.name}</p>
-      <span
+
+      <CircleX
+        className="ml-auto mr-2 text-white"
         onClick={() => {
-          const newCalendar = Calendar.map((day, index) => {
-            if (index === wastetype.index) {
+          const newCalendar = Calendar.map((day, i) => {
+            if (i === wastetype.index) {
               return {
                 ...(day as { wasteTypes: { id: string }[] }),
                 wasteTypes: (
                   day as { wasteTypes: { id: string }[] }
                 ).wasteTypes.filter(
-                  (wasteType) => wasteType.id !== wastetype.id,
+                  // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.s
+                  ({ wasteType }) => wasteType.id !== wastetype.id,
                 ),
               };
             }
@@ -204,10 +209,7 @@ const WasteTypeComponent = ({
           // @ts-expect-error ts-migrate(2532) FIXME: the Dispatch type is not correct.
           SetCalendar(newCalendar);
         }}
-        className="mx-auto text-white underline"
-      >
-        Rimuovi
-      </span>
+      />
     </div>
   );
 };
@@ -219,11 +221,13 @@ export function EditCalendarComModal() {
     api.admin.getWasteTypes.useQuery();
 
   const setCityCalendar = api.admin.setCityCalendar.useMutation();
+  const { toast } = useToast();
 
   // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
   const [Calendar, SetCalendar] = useState<typeof City.calendars>([]);
   const [open, setOpen] = useState(false);
   const [done, setDone] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (City && !done) {
@@ -242,23 +246,28 @@ export function EditCalendarComModal() {
   const utils = api.useUtils();
 
   const handleSave = async () => {
-    setCityCalendar.mutate(Calendar);
-    setTimeout(() => {
+    setIsLoading(true);
+    setCityCalendar.mutateAsync(Calendar).then(() => {
       utils.invalidate();
+      setIsLoading(false);
       setOpen(false);
-    }, 2500);
+      toast({
+        title: "Calendario Aggiornato",
+        description: "Il calendario è stato aggiornato con successo",
+      });
+    });
   };
 
   const renderContent = () => (
     <div className=" p-2">
-      <section className="flex flex-col gap-4 ">
-        <section className="flex max-h-[500px] min-w-max flex-col overflow-y-auto rounded-2xl">
+      <section className="flex flex-col gap-4  overflow-y-auto">
+        <section className="flex max-h-[300px] min-w-max flex-col rounded-2xl lg:max-h-[500px]">
           <section className="mb-10 flex flex-col gap-4 p-3 lg:mb-0">
             <div className="flex flex-col items-center ">
               <p className="text-md text-gray-400">
                 Orario di ritiro: 18:00 - 24:00
               </p>
-              <div className="flex w-full flex-col gap-2 overflow-y-auto p-3">
+              <div className="flex w-full flex-col gap-2 p-3">
                 {Calendar.map((day, index) => {
                   return (
                     <section className="flex w-full flex-1 flex-row items-center gap-4">
@@ -301,8 +310,16 @@ export function EditCalendarComModal() {
         </section>
       </section>
 
-      <Button className="mt-4 w-full bg-foreground" onClick={handleSave}>
-        Salva Modifiche
+      <Button
+        className="mt-4 w-full bg-foreground disabled:bg-gray-700"
+        onClick={handleSave}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <LoaderCircle className="animate-spin" />
+        ) : (
+          "Salva Modifiche"
+        )}
       </Button>
     </div>
   );
@@ -318,7 +335,7 @@ export function EditCalendarComModal() {
             Modifica
           </p>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] max-h-[80%] rounded-lg bg-white">
+        <DialogContent className="sm:max-w-[425px] max-h-[90%] rounded-lg bg-white">
           <DialogHeader>
             <DialogTitle>Utenze Domestiche</DialogTitle>
             <DialogDescription></DialogDescription>
@@ -335,7 +352,7 @@ export function EditCalendarComModal() {
             Modifica
           </p>
         </DrawerTrigger>
-        <DrawerContent className="max-h-[80%] rounded-lg bg-white">
+        <DrawerContent className="max-h-[90%] rounded-lg bg-white">
           <DrawerHeader className="text-left">
             <DrawerTitle>Contatti</DrawerTitle>
             <DrawerDescription>

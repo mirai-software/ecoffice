@@ -17,6 +17,7 @@ import { ContactModal } from "./modals/ContactModal";
 import { WasteTypeModal } from "./modals/WasteTypeModal";
 import { MemberModal } from "./modals/MemberModal";
 import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const CitySelector = ({
   citys,
@@ -24,7 +25,7 @@ const CitySelector = ({
   utils,
 }: {
   citys: { label: string; value: string }[];
-  userData: { city: { name: string } };
+  userData: { city: { name: string }; role: string };
   utils: {
     invalidate: () => void;
   };
@@ -38,6 +39,7 @@ const CitySelector = ({
       </div>
       <section className="flex flex-col gap-4 p-3">
         <Select
+          disabled={userData.role !== "admin"}
           onValueChange={(e) => {
             try {
               setAdminCity.mutate({ city: e });
@@ -399,10 +401,7 @@ const WasteTypeSection = ({
                 style={{ backgroundColor: wasteType.color }}
               >
                 <Image
-                  src={
-                    process.env.NEXT_PUBLIC_WEBSITE_URL +
-                    `/icon/${wasteType.icon}`
-                  }
+                  src={getBaseUrl() + `/icon/${wasteType.icon}`}
                   width={20}
                   height={20}
                   alt={wasteType.name}
@@ -426,6 +425,7 @@ const WasteTypeSection = ({
 
 const MemberSection = ({
   adminUsers,
+  userRole,
 }: {
   adminUsers: {
     id: string;
@@ -440,6 +440,7 @@ const MemberSection = ({
     createdAt: Date;
     updatedAt: Date;
   }[];
+  userRole: string;
 }) => {
   const getInitials = (firstName: string | null, lastName: string | null) => {
     if (!firstName && !lastName) return "";
@@ -457,7 +458,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-1 flex-col rounded-2xl bg-white p-4">
         <div className="flex w-full flex-row justify-between ">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <MemberModal />
+          {userRole === "admin" && <MemberModal />}
         </div>
         <section className="flex flex-col gap-3"></section>
         <div className="mt-3 flex w-full flex-1 items-center justify-center ">
@@ -472,7 +473,7 @@ const MemberSection = ({
       <section className="flex h-fit min-w-max flex-col rounded-2xl bg-white">
         <div className="flex w-full flex-row justify-between px-5 pt-4">
           <p className="text-lg font-semibold text-black">Gestione Membri</p>
-          <MemberModal />
+          {userRole === "admin" && <MemberModal />}
         </div>
         <section className="flex flex-col gap-4 p-5">
           <div className="grid grid-cols-2 gap-4">
@@ -501,7 +502,6 @@ export default function Comune() {
   const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
     {},
   );
-
   const { data: wasteTypes, isLoading: wasteTypesLoading } =
     api.admin.getWasteTypes.useQuery();
   const { data: user, isLoading: userLoading } = api.user.getUser.useQuery({});
@@ -536,7 +536,10 @@ export default function Comune() {
           <section className="flex w-full flex-col gap-4">
             <CitySelector
               citys={citys}
-              userData={{ city: { name: user.city?.name || "" } }}
+              userData={{
+                city: { name: user.city?.name || "" },
+                role: user.role,
+              }}
               utils={utils}
             />
             <CityHours cityHours={user.city?.openingHours || []} />
@@ -548,7 +551,7 @@ export default function Comune() {
               email={user.city?.email}
             />
             <WasteTypeSection wasteTypes={wasteTypes} />
-            <MemberSection adminUsers={adminUsers} />
+            <MemberSection adminUsers={adminUsers} userRole={user.role} />
           </section>
         </section>
       </Container>

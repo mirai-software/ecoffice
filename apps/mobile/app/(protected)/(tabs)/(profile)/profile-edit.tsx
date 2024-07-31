@@ -176,21 +176,23 @@ export default function Profile_Edit() {
                 <Text className="">Password</Text>
                 <Pressable
                   onPress={async () => {
-                    await PasswordReset(user?.email as string);
-                    toast.success(
-                      "Abbiamo inviato una mail per il reset della password",
-                      {
-                        styles: {
-                          view: {
-                            backgroundColor: "#00930F",
-                            borderRadius: 8,
+                    await PasswordReset(user?.email as string).then(() => {
+                      router.back();
+                      toast.success(
+                        "Abbiamo inviato una mail per il reset della password (Controlla lo spam)",
+                        {
+                          styles: {
+                            view: {
+                              backgroundColor: "#00930F",
+                              borderRadius: 8,
+                            },
+                            indicator: {
+                              backgroundColor: "white",
+                            },
                           },
-                          indicator: {
-                            backgroundColor: "white",
-                          },
-                        },
-                      }
-                    );
+                        }
+                      );
+                    });
                   }}
                 >
                   <Text className="text-[#334493] underline font-medium pr-2">

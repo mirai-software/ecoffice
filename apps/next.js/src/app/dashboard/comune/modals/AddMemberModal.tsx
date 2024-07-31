@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import {
   Drawer,
   DrawerContent,
@@ -30,13 +30,13 @@ import { Button } from "@/components/ui/button";
 import { ChangeEvent, useState } from "react";
 
 import { api } from "@/trpc/react";
+import { useToast } from "@/components/ui/use-toast";
 
 export function AddMemberModal() {
   const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
     {},
   );
   const [open, setOpen] = useState(false);
-  const supabase = createClientComponentClient();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const utils = api.useUtils();
 
@@ -46,35 +46,29 @@ export function AddMemberModal() {
   const [cityId, setcityId] = useState("");
   const [password, setPassword] = useState("");
 
-  const CreateUser = api.user.addUser.useMutation();
-  const SetUser = api.user.setUserInformation.useMutation();
+  const CreateUser = api.admin.createNewUser.useMutation();
+  const { toast } = useToast();
 
-  const handleSave = async () => {
-    const firstName = nome.split(" ")[0];
-    const lastName = nome.split(" ")[1];
+  const handleSave = () => {
+    const firstName = nome.split(" ")[0] ?? "";
+    const lastName = nome.split(" ")[1] ?? "";
 
-    await supabase.auth.admin
-      .createUser({
-        email: email,
-        password: password,
-        email_confirm: true,
-      })
-      .then(() => {
-        CreateUser.mutate({
-          email: email,
-        });
+    CreateUser.mutate({
+      email,
+      password,
+      role: "editor",
+      firstName,
+      lastName,
+      cityId,
+    });
 
-        SetUser.mutate({
-          firstName: firstName ?? "",
-          lastname: lastName ?? "",
-          address: null,
-          phoneNumber: null,
-          city: cityId,
-        });
-      });
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
+      toast({
+        title: "Utente aggiunto",
+        description: "L'utente è stato aggiunto con successo",
+      });
     }, 1000);
   };
 
@@ -120,18 +114,19 @@ export function AddMemberModal() {
             }
             placeholder="Password"
           />
-          <Select>
+          <Select
+            onValueChange={(value) => {
+              console.log(value);
+              setcityId(value);
+            }}
+          >
             <SelectTrigger className="text-md w-full rounded-xl border-gray-300 bg-white font-normal text-gray-400">
               <SelectValue placeholder="Seleziona una città" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 {citys?.map((city) => (
-                  <SelectItem
-                    key={city.value}
-                    value={city.value}
-                    onClick={() => setcityId(city.value)}
-                  >
+                  <SelectItem key={city.value} value={city.value}>
                     {city.label}
                   </SelectItem>
                 )) ?? ""}

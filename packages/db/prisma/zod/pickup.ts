@@ -6,6 +6,7 @@ export const pickupSchema = z.object({
   number: z.number().int(),
   address: z.string(),
   type: z.string(),
+  otherSpecs: z.string().nullish(),
   status: z.string(),
   images: z.string().array(),
   userId: z.string(),

@@ -6,9 +6,24 @@ await import("./src/env.mjs");
 
 /** @type {import("next").NextConfig} */
 const config = {
-  images: {
-    domains: ["www.ecofficesrl.it", "localhost", "evprmsgrfzkaomzxqbco.supabase.co"],
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
+  images: {
+    dangerouslyAllowSVG: true,
+    minimumCacheTTL: 0,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'evprmsgrfzkaomzxqbco.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**'
+      },
+    ],
+    unoptimized: true,
+  }
 };
 
 export default config;

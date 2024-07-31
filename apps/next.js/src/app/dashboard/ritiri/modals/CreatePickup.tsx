@@ -33,32 +33,30 @@ import { v4 as uuidv4 } from "uuid";
 import { api } from "@/trpc/react";
 import { useToast } from "@/components/ui/use-toast";
 
-export function CreateProductModal() {
+export function CreatePickupModal() {
   const [open, setOpen] = useState(false);
-
   const supabase = createClientComponentClient();
 
   const [newuuid, setNewuuid] = useState(uuidv4());
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
+  const [address, setAddress] = useState("");
+  const [type, setType] = useState("");
+  const [otherSpecs, setOtherSpecs] = useState<string | null>(null);
+
   const [images, setImages] = useState([]);
   const [imagesUrl, setImagesUrl] = useState<string[]>([]);
 
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const { toast } = useToast();
   const utils = api.useUtils();
-  const createSecondHandProduct =
-    api.admin.createSecondHandProduct.useMutation();
+  const createPickupRequest = api.admin.createPickupRequest.useMutation();
 
   const canUpload = () => {
-    return name !== "" && price !== 0 && description !== "" && status !== "";
+    return address !== "" && type !== "" && images.length > 0;
   };
 
   const getProductImageUrl = async (fileUUID: string, cityUUID: string) => {
     const { data } = await supabase.storage
-      .from("shop")
+      .from("requests")
       .getPublicUrl(cityUUID + "/" + fileUUID);
 
     if (!data) {
@@ -68,27 +66,24 @@ export function CreateProductModal() {
   };
 
   const handleSave = () => {
-    createSecondHandProduct.mutate({
-      id: newuuid,
-      name: name,
-      price: price,
-      description: description,
-      status: status,
-      images: images,
+    createPickupRequest.mutate({
+      address,
+      type,
+      images,
+      otherSpecs,
     });
 
     setTimeout(() => {
       utils.invalidate();
       setOpen(false);
       toast({
-        title: "Articolo aggiunto",
-        description: "L'articolo è stato aggiunto con successo",
+        title: "Ritiro aggiunto",
+        description: "Il Ritiro è stato aggiunto con successo",
       });
       setNewuuid(uuidv4());
-      setName("");
-      setDescription("");
-      setPrice(0);
-      setStatus("");
+      setAddress("");
+      setType("");
+      setImagesUrl([]);
       setImages([]);
     }, 1500);
   };
@@ -134,7 +129,7 @@ export function CreateProductModal() {
       const uuid = uuidv4();
 
       const { error } = await supabase.storage
-        .from("shop")
+        .from("requests")
         .upload(
           newuuid + "/" + uuid,
           Buffer.from(prepareBase64DataUrl(base64 as string), "base64"),
@@ -161,61 +156,54 @@ export function CreateProductModal() {
       <section className="grid grid-cols-2 gap-4">
         <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-400">
-            Nome Articolo
+            Indirizzo
           </label>
           <input
             type="text"
             className="sm:text-sm mt-1 block w-full rounded-xl border-2 border-gray-200 p-2 shadow-sm focus:border-indigo-500 focus:ring-foreground"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-400">
-            Prezzo
-          </label>
-          <input
-            type="number"
-            className="sm:text-sm mt-1 block w-full rounded-xl border-2 border-gray-200 p-2 shadow-sm focus:border-indigo-500 focus:ring-foreground"
-            defaultValue={price || ""}
-            value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
         </div>
 
         <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-400">
-            Status
+            Tipo di segnalazione
           </label>
-          <Select
-            defaultValue={status as string}
-            onValueChange={(event) => setStatus(event)}
-          >
+
+          <Select value={type} onValueChange={(value) => setType(value)}>
             <SelectTrigger className="w-full rounded-xl border-2 border-gray-200 bg-white">
-              <SelectValue placeholder="Definisci lo stato" />
+              <SelectValue placeholder="Seleziona il tipo di segnalazione" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Stato</SelectLabel>
-                <SelectItem value="Online">Disponibile</SelectItem>
-                <SelectItem value="Venduto">Venduto</SelectItem>
+                <SelectLabel>Tipo</SelectLabel>
+                <SelectItem value="RAEE-1">RAEE</SelectItem>
+                <SelectItem value="Pannolini-Pannoloni">
+                  Pannolini e Pannoloni
+                </SelectItem>
+                <SelectItem value="Sfalci-di-Potatura">
+                  Sfalci di Potatura
+                </SelectItem>
+                <SelectItem value="altro">Altro</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
+          {type === "altro" && (
+            <div className="mt-2">
+              <label className="block text-sm font-medium text-gray-400">
+                Specifica
+              </label>
+              <input
+                type="text"
+                className="sm:text-sm mt-1 block w-full rounded-xl border-2 border-gray-200 p-2 shadow-sm focus:border-indigo-500 focus:ring-foreground"
+                value={otherSpecs || ""}
+                onChange={(e) => setOtherSpecs(e.target.value)}
+              />
+            </div>
+          )}
         </div>
 
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-400">
-            Descrizione
-          </label>
-          <textarea
-            className="sm:text-sm mt-1 block w-full rounded-xl border-2 border-gray-200 p-2 shadow-sm focus:border-indigo-500 focus:ring-foreground"
-            rows={4}
-            defaultValue={description || ""}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
         <div className="col-span-2">
           <label className="block text-sm font-medium text-gray-400">
             Carica immagini del prodotto
@@ -289,12 +277,12 @@ export function CreateProductModal() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <p className="w-fit cursor-pointer rounded-lg bg-foreground p-2 text-sm text-foreground text-white disabled:text-gray-400">
-            Nuovo Articolo
+            Nuovo Ritiro
           </p>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] max-h-[90%] rounded-lg bg-white">
           <DialogHeader>
-            <DialogTitle>Aggiungi Articolo </DialogTitle>
+            <DialogTitle>Aggiungi Ritiro </DialogTitle>
           </DialogHeader>
           {renderContent()}
         </DialogContent>
@@ -305,12 +293,12 @@ export function CreateProductModal() {
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <p className="w-fit cursor-pointer rounded-lg bg-foreground p-2 text-sm text-foreground text-white disabled:text-gray-400">
-            Nuovo Articolo
+            Nuovo Ritiro
           </p>
         </DrawerTrigger>
         <DrawerContent className="max-h-[90%] rounded-lg bg-white">
           <DrawerHeader className="text-left">
-            <DrawerTitle>Aggiungi Articolo</DrawerTitle>
+            <DrawerTitle>Aggiungi Ritiro</DrawerTitle>
           </DrawerHeader>
           {renderContent()}
         </DrawerContent>

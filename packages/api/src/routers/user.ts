@@ -29,11 +29,12 @@ export const userRouter = createTRPCRouter({
         .findUnique({
           where: {
             email: input.email,
-            role: "admin",
+            role: {
+              in: ["admin", "editor"],
+            },
           },
         })
         .then((user) => {
-          console.log("user", user);
           if (!user) {
             return false;
           } else {

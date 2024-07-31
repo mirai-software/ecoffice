@@ -6,6 +6,7 @@ import { api } from "@/trpc/react";
 import { EditCalendarModal } from "./modals/EditCalendarModal";
 import { EditCalendarComModal } from "./modals/EditCalendarComModal";
 import LoadingComponent from "@/app/_components/loading";
+import { getBaseUrl } from "@/trpc/shared";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -45,8 +46,8 @@ const WasteTypeComponent = ({
       }}
     >
       <Image
-        src={process.env.NEXT_PUBLIC_WEBSITE_URL + `/icon/${wastetype.icon}`}
-        alt="Carta"
+        src={getBaseUrl() + `/icon/${wastetype.icon}`}
+        alt={wastetype.name}
         width={25}
         height={25}
       />
@@ -100,7 +101,7 @@ const DailyCalendarDialogDomestic = ({
             {Calendar.map((day) => {
               return (
                 <section className="flex w-full flex-1 flex-row items-center gap-4">
-                  <p className="flex min-w-[20%] ">{getDayItalian(day.day)}</p>
+                  <p className="flex w-[20%] ">{getDayItalian(day.day)}</p>
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(
@@ -150,7 +151,7 @@ const DailyCalendarDialogCommercial = ({
             {Calendar.map((day) => {
               return (
                 <section className="flex w-full flex-1 flex-row items-center gap-4">
-                  <p className="flex min-w-[20%] ">{getDayItalian(day.day)}</p>
+                  <p className="flex w-[20%] ">{getDayItalian(day.day)}</p>
                   <section className="flex flex-1 flex-col">
                     {day.wasteTypes
                       .filter(

@@ -12,11 +12,13 @@ export async function middleware(req: NextRequest) {
   // Refresh session if expired - required for Server Components
   const { data } = await supabase.auth.getSession();
 
-  if (!data.session) {
+  if (!data.session && !req.url.includes("auth")) {
     return NextResponse.rewrite(new URL("/login", req.url));
   } else {
-    // se l'url è uguale al dominio, reindirizza alla dashboard
-    if (!req.url.includes("/dashboard")) {
+    if (req.url.includes("auth")) {
+      NextResponse.next();
+    } else if (!req.url.includes("/dashboard")) {
+      // se l'url è uguale al dominio, reindirizza alla dashboard
       return NextResponse.rewrite(new URL("/dashboard/home", req.url));
     }
     return NextResponse.next();

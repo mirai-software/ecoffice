@@ -30,6 +30,7 @@ export default function CreateHomeRequest() {
   // Form States
   const [images, setImages] = useState([] as ImagePicker.ImagePickerAsset[]);
   const [type, setType] = useState(null);
+  const [otherSpecs, setOtherSpecs] = useState("");
   const [address, setAddress] = useState("");
 
   // API Calls
@@ -76,13 +77,39 @@ export default function CreateHomeRequest() {
     }
 
     if (images.length === 0) {
-      const data = {
-        address: address,
-        type: type,
-        images: [],
-      };
+      alert("Assicurati di aver caricato almeno un'immagine");
+      return;
+    }
+
+    if (type === "other" && otherSpecs === "") {
+      alert("Assicurati di aver specificato il tipo di rifiuto correttamente");
+      return;
+    }
+
+    const imagesUrl: string[] = [];
+    try {
+      images.map(async (image) => {
+        const imageId = uuidv4();
+        imagesUrl.push(imageId);
+        await uploadRequestImage(image.base64 as string, imageId);
+      });
+    } finally {
+      const data =
+        type === "other"
+          ? {
+              address: address,
+              type: type,
+              otherSpecs: otherSpecs,
+              images: imagesUrl,
+            }
+          : {
+              address: address,
+              type: type,
+              images: imagesUrl,
+            };
       await AddRequest.mutateAsync(data).then(() => {
         router.back();
+        utils.user.getUserPickupRequests.invalidate();
         toast.success(
           "Ritiro a domicilio richiesto correttamente. Puoi seguirne lo stato dal tuo Profilo.",
           {
@@ -98,39 +125,6 @@ export default function CreateHomeRequest() {
           }
         );
       });
-    } else {
-      const imagesUrl: string[] = [];
-      try {
-        images.map(async (image) => {
-          const imageId = uuidv4();
-          imagesUrl.push(imageId);
-          await uploadRequestImage(image.base64 as string, imageId);
-        });
-      } finally {
-        const data = {
-          address: address,
-          type: type,
-          images: imagesUrl,
-        };
-        await AddRequest.mutateAsync(data).then(() => {
-          router.back();
-          utils.user.getUserPickupRequests.invalidate();
-          toast.success(
-            "Ritiro a domicilio richiesto correttamente. Puoi seguirne lo stato dal tuo Profilo.",
-            {
-              styles: {
-                view: {
-                  backgroundColor: "#00930F",
-                  borderRadius: 8,
-                },
-                indicator: {
-                  backgroundColor: "white",
-                },
-              },
-            }
-          );
-        });
-      }
     }
   };
   if (isLoading) {
@@ -185,8 +179,22 @@ export default function CreateHomeRequest() {
                       label: "Sfalci di Potatura",
                       value: "Sfalci-di-Potatura",
                     },
+                    {
+                      label: "Altro",
+                      value: "other",
+                    },
                   ]}
                 />
+                {type === "other" ? (
+                  <TextInput
+                    className="border-[1px] border-gray-500 rounded-2xl   text-black p-4"
+                    value={otherSpecs}
+                    placeholder="Specificare il tipo di rifiuto"
+                    onChange={(
+                      value: NativeSyntheticEvent<TextInputChangeEventData>
+                    ) => setOtherSpecs(value.nativeEvent.text)}
+                  />
+                ) : null}
               </View>
             </View>
 

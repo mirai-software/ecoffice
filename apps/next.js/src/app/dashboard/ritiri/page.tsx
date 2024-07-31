@@ -23,10 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import LoadingComponent from "@/app/_components/loading";
 import { ImageModal } from "./modals/ImageModal";
+import { FancyMultiSelect, Framework } from "../segnalazioni/page";
+import { CreatePickup, CreatePickupModal } from "./modals/CreatePickup";
 
 export type PickRequest = {
   phone: string | null;
@@ -57,9 +59,23 @@ const columns: ColumnDef<PickRequest>[] = [
   },
 
   {
+    accessorKey: "otherSpecs",
+    header: "Altre Specifiche",
+    cell: ({ row }) => (
+      <div className="">{row.getValue("otherSpecs") as string}</div>
+    ),
+  },
+
+  {
     accessorKey: "type",
     header: "Tipo di Rifiuto",
-    cell: ({ row }) => <div className="">{row.getValue("type") as string}</div>,
+    cell: ({ row }) => (
+      <div className="">
+        {(row.getValue("type") as string) === "other"
+          ? (row.getValue("otherSpecs") as string)
+          : (row.getValue("type") as string)}
+      </div>
+    ),
   },
 
   {
@@ -80,15 +96,36 @@ const columns: ColumnDef<PickRequest>[] = [
 ];
 
 export default function home() {
-  const { data, isLoading } = api.admin.getCityPickRequests.useQuery();
-  console.log(data);
+  const { data, isLoading } = api.admin.getAllCityReports.useQuery();
+  const { data: citys, isLoading: citysLoading } = api.city.getAllcity.useQuery(
+    {},
+  );
 
+  const [PickRequest, setPickRequest] = useState<[]>([]);
+  const [citysData, setCitysData] = useState<Framework[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
+  useEffect(() => {
+    if (citys) {
+      setCitysData(citys);
+    }
+  }, [citys]);
+
+  useEffect(() => {
+    if (data) {
+      setPickRequest(
+        // inserisci unicamente i "data" che hanno data.city.id in citysData
+        data.filter((data) => {
+          return citysData.some((city) => city.value === data.city.id);
+        }),
+      );
+    }
+  }, [data, citysData]);
+
   const table = useReactTable({
-    data: data ?? [],
+    data: PickRequest ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -103,6 +140,16 @@ export default function home() {
       columnFilters,
       columnVisibility,
     },
+    initialState: {
+      columnVisibility: {
+        id: true,
+        address: true,
+        type: true,
+        phone: true,
+        images: true,
+        otherSpecs: false,
+      },
+    },
   });
 
   if (isLoading) {
@@ -114,6 +161,14 @@ export default function home() {
   } else
     return (
       <Container>
+        <div className="flex flex-col gap-2">
+          <CreatePickupModal />
+          <FancyMultiSelect
+            citys={citysData || []}
+            setCitys={setCitysData}
+            allCitys={citys || []}
+          />
+        </div>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
