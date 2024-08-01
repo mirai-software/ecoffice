@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getTitle(route: { name: string }) {
   switch (route.name) {
     case "home":
-      return "Ecooffice";
+      return "Ecoffice";
     case "create-report":
       return "Segnalazione";
     case "create-request":
