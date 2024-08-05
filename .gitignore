@@ -178,3 +178,7 @@ dist
 apps/mobile/.expo/metro/
 
 .turbo/
+
+
+# Android service account file
+apps/mobile/ecoffice-61852d16647b.json
