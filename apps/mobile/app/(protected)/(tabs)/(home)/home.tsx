@@ -5,6 +5,7 @@ import {
   Pressable,
   View,
   ScrollView,
+  ViewStyle,
 } from "react-native";
 
 import { FadeIn, FadeOut } from "react-native-reanimated";
@@ -194,9 +195,9 @@ export default function TabOneScreen() {
                 exiting={FadeOut}
                 className="w-full h-20"
               >
-                <PagerView style={{ flex: 1 }} initialPage={0}>
+                <PagerView style={requestsStyles.PagerView} initialPage={0}>
                   {requests?.map((request, index) => (
-                    <View key={index} className="relative w-full">
+                    <View key={index} style={requestsStyles.pageStyle as ViewStyle}>
                       <RequestComponent
                         request={{
                           ...request,
@@ -232,3 +233,13 @@ export default function TabOneScreen() {
       </HeaderContainer>
     );
 }
+
+const requestsStyles = {
+  PagerView: {
+    flex: 1,
+  },
+  pageStyle: {
+    marginLeft: 5,
+    marginRight: 5,
+  },
+};
