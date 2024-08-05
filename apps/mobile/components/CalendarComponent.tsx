@@ -61,7 +61,7 @@ export default function CalendarComponent({
                   <SvgUri
                     width="24"
                     height="24"
-                    uri={getBaseUrl() + garbage.icon}
+                    uri={getBaseUrl() + '/icon/' + garbage.icon}
                     fill="white"
                   />
                 ) : (
