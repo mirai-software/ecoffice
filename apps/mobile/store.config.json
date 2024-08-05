@@ -1,0 +1,20 @@
+{
+    "configVersion": 0,
+    "apple": {
+        "info": {
+            "it": {
+                "title": "Ecoffice",
+                "subtitle": "Facciamo la differenza assieme",
+                "description": "Grazie a un'interfaccia intuitiva e user-friendly, puoi consultare rapidamente tutte le informazioni necessarie sui materiali di scarto da avviare al riuso, recupero, riciclo o smaltimento nel tuo Comune.",
+                "keywords": [
+                    "ecoffice",
+                    "rifiuti",
+                    "ritiri"
+                ],
+                "marketingUrl": "https://www.ecofficesrl.it/",
+                "supportUrl": "https://www.ecofficesrl.it/",
+                "privacyPolicyUrl": "https://www.ecofficesrl.it/"
+            }
+        }
+    }
+}
