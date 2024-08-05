@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Text } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "expo-router";
+import { CategoryType } from "@/components/CalendarComponent";
 
 const getDayItalian = (day: string) => {
   switch (day) {
@@ -30,11 +31,6 @@ const getDayItalian = (day: string) => {
   }
 };
 
-export enum CategoryType {
-  Commercial = "Commercial",
-  Citizen = "Citizen",
-}
-
 export default function Shop() {
   const { data: Calendar, isLoading } = api.city.getCityCalendar.useQuery({});
   const [category, setCategory] = useState(CategoryType.Citizen);
@@ -54,13 +50,13 @@ export default function Shop() {
   if (isLoading) {
     return (
       <HeaderContainer router={router}>
-        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+        <ActivityIndicator className="items-center justify-center flex-1 bg-background" />
       </HeaderContainer>
     );
   } else if (Calendar?.length === 0) {
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 items-center  justify-center bg-background p-4 gap-y-4">
+        <View className="items-center justify-center flex-1 p-4 bg-background gap-y-4">
           <Muted className="text-center">
             Nessun Calendario attualmente caricato.{" "}
           </Muted>
@@ -134,8 +130,8 @@ export default function Shop() {
               </View>
             </Pressable>
           </View>
-          <View className="flex-1 items-start justify-start bg-background gap-y-4 pt-4 pb-40">
-            <Text className="w-full text-center text-gray-500 font-normal">
+          <View className="items-start justify-start flex-1 pt-4 pb-40 bg-background gap-y-4">
+            <Text className="w-full font-normal text-center text-gray-500">
               Orario di ritiro 18:00 - 24:00
             </Text>
             {Calendar?.map((day) => (

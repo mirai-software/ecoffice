@@ -20,7 +20,7 @@ export default function StatisticsComponent({
     cityId: string;
     createdAt: Date;
     updatedAt: Date;
-  }[];
+  }[] | undefined;
 }) {
   const [selected, setSelected] = useState<StatisticType>(
     StatisticType.ProductionIndicator
@@ -28,8 +28,8 @@ export default function StatisticsComponent({
 
   if (!statistics || statistics.length === 0) {
     return (
-      <View className="flex-1 w-full mt-3 justify-center items-center">
-        <Text className="text-center font-normal text-gray-600">
+      <View className="items-center justify-center flex-1 w-full mt-3">
+        <Text className="font-normal text-center text-gray-600">
           Nessuna Statistica Presente
         </Text>
       </View>
@@ -38,7 +38,7 @@ export default function StatisticsComponent({
 
   return (
     <View className="flex-1 w-full mt-3">
-      <View className="w-full flex flex-row justify-between items-center border-2 rounded-3xl border-gray-300 mt-4">
+      <View className="flex flex-row items-center justify-between w-full mt-4 border-2 border-gray-300 rounded-3xl">
         <Pressable
           onPress={() => setSelected(StatisticType.ProductionIndicator)}
           className="w-[50%]"
@@ -94,12 +94,12 @@ export default function StatisticsComponent({
                 entering={FadeIn.duration(200)}
                 exiting={FadeOut.duration(100)}
                 key={statistic.id}
-                className="w-full flex flex-row justify-between items-center p-3 border-b-2 border-gray-300"
+                className="flex flex-row items-center justify-between w-full p-3 border-b-2 border-gray-300"
               >
-                <Text className=" text-lg uppercase text-gray-500">
+                <Text className="text-lg text-gray-500 uppercase ">
                   {statistic.name}
                 </Text>
-                <Text className="text-black text-lg font-medium">
+                <Text className="text-lg font-medium text-black">
                   {statistic.data}
                 </Text>
               </Animated.View>

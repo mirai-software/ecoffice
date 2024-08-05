@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { Href, router } from "expo-router";
 import {
   ActivityIndicator,
   Image,
@@ -12,13 +12,12 @@ import Animated from "react-native-reanimated";
 import PagerView from "react-native-pager-view";
 
 import { Text } from "@/components/ui/text";
-import CalendarComponent from "@/components/CalendarComponent";
+import CalendarComponent, { CategoryType } from "@/components/CalendarComponent";
 import HeaderContainer from "@/app/_header";
 import { api } from "@/lib/api";
 import { SecondHandProductComponent } from "../(shop)/shop";
 import { RequestComponent } from "../(profile)/requests";
 import StatisticsComponent from "@/components/StatisticsComponent";
-import { CategoryType } from "../(calendar)/calendar";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -69,7 +68,7 @@ export default function TabOneScreen() {
   ) {
     return (
       <HeaderContainer>
-        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+        <ActivityIndicator className="items-center justify-center flex-1 bg-background" />
       </HeaderContainer>
     );
   } else
@@ -81,17 +80,17 @@ export default function TabOneScreen() {
             exiting={FadeOut}
             className="flex w-full gap-1"
           >
-            <View className="flex flex-row justify-between items-center w-full p-4">
-              <Text className="font-semibold text-xl">
+            <View className="flex flex-row items-center justify-between w-full p-4">
+              <Text className="text-xl font-semibold">
                 Calendario Utenze{" "}
                 {category === CategoryType.Citizen
                   ? "Cittadino"
                   : "Commerciale"}
               </Text>
               <Pressable
-                onPress={() => router.navigate("/(calendar)/calendar")}
+                onPress={() => router.navigate(("/(calendar)/calendar") as Href)}
               >
-                <Text className="font-normal text-md underline">Vedi</Text>
+                <Text className="font-normal underline text-md">Vedi</Text>
               </Pressable>
             </View>
             <CalendarComponent
@@ -103,13 +102,13 @@ export default function TabOneScreen() {
           <Animated.View
             entering={FadeIn}
             exiting={FadeOut}
-            className="flex flex-row gap-4 pt-4 mb-4 mx-4"
+            className="flex flex-row gap-4 pt-4 mx-4 mb-4"
           >
             <Pressable
               onPress={() => {
                 router.push("/create-report");
               }}
-              className="flex-1 flex gap-2 shadow-sm bg-white rounded-2xl items-center p-2 "
+              className="flex items-center flex-1 gap-2 p-2 bg-white shadow-sm rounded-2xl "
             >
               <Text className="text-center font-bold text-xl text-[#BE0B00]">
                 Effettua una Segnalazione
@@ -123,7 +122,7 @@ export default function TabOneScreen() {
               onPress={() => {
                 router.push("/create-request");
               }}
-              className="flex-1 flex gap-2 shadow-sm bg-white rounded-2xl items-center p-2"
+              className="flex items-center flex-1 gap-2 p-2 bg-white shadow-sm rounded-2xl"
             >
               <Text className="text-center font-bold text-xl text-[#00930F]">
                 Richiedi un ritiro a domicilio
@@ -137,16 +136,16 @@ export default function TabOneScreen() {
           <Animated.View
             entering={FadeIn}
             exiting={FadeOut}
-            className="flex flex-row justify-between items-center w-full p-4"
+            className="flex flex-row items-center justify-between w-full p-4"
           >
-            <Text className="font-semibold text-2xl">Seconda Mano</Text>
-            <Pressable onPress={() => router.navigate("/(shop)/shop")}>
-              <Text className="font-normal text-md underline">Vedi tutto</Text>
+            <Text className="text-2xl font-semibold">Seconda Mano</Text>
+            <Pressable onPress={() => router.navigate(("/(shop)/shop") as Href)}>
+              <Text className="font-normal underline text-md">Vedi tutto</Text>
             </Pressable>
           </Animated.View>
           {secondHand?.length === 0 ? (
-            <View className="min-h-10 flex items-center justify-center">
-              <Text className="text-center font-normal text-gray-600">
+            <View className="flex items-center justify-center min-h-10">
+              <Text className="font-normal text-center text-gray-600">
                 Nessun prodotto attualmente caricato
               </Text>
             </View>
@@ -178,14 +177,14 @@ export default function TabOneScreen() {
           <Animated.View
             entering={FadeIn}
             exiting={FadeOut}
-            className="flex flex-row justify-between items-center w-full p-4"
+            className="flex flex-row items-center justify-between w-full p-4"
           >
-            <Text className="font-semibold text-2xl">Richieste Effettuate</Text>
+            <Text className="text-2xl font-semibold">Richieste Effettuate</Text>
           </Animated.View>
           <Animated.View entering={FadeIn} exiting={FadeOut} className="mx-5">
             {requests?.length === 0 ? (
-              <View className="min-h-10 flex items-center justify-center">
-                <Text className="text-center font-normal text-gray-600">
+              <View className="flex items-center justify-center min-h-10">
+                <Text className="font-normal text-center text-gray-600">
                   Nessuna richiesta effettuata
                 </Text>
               </View>
@@ -214,14 +213,14 @@ export default function TabOneScreen() {
           <Animated.View
             entering={FadeIn}
             exiting={FadeOut}
-            className="flex flex-col justify-between items-start w-full p-4 pb-60 pt-10"
+            className="flex flex-col items-start justify-between w-full p-4 pt-10 pb-60"
           >
-            <View className="flex flex-row justify-between w-full items-center">
-              <Text className="font-semibold text-2xl">
+            <View className="flex flex-row items-center justify-between w-full">
+              <Text className="text-2xl font-semibold">
                 Comune di {user?.city?.name}
               </Text>
 
-              <Pressable onPress={() => router.push("/(home)/orari")}>
+              <Pressable onPress={() => router.push(("/(home)/orari") as Href)}>
                 <Text className="font-normal text-md underline text-[#334493]">
                   Vedi orari
                 </Text>

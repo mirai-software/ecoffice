@@ -1,6 +1,6 @@
 import { Pressable, View } from "react-native";
 import { Text } from "./ui/text";
-import { router } from "expo-router";
+import { Href, router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import { SvgUri } from "react-native-svg";
 import InfoCircle from "@/assets/icons/info-circle";
@@ -8,7 +8,11 @@ import InfoCircle from "@/assets/icons/info-circle";
 import { FadeIn, FadeOut } from "react-native-reanimated";
 import Animated from "react-native-reanimated";
 import { getBaseUrl } from "@/lib/api";
-import { CategoryType } from "@/app/(protected)/(tabs)/(calendar)/calendar";
+
+export enum CategoryType {
+  Commercial = "Commercial",
+  Citizen = "Citizen",
+}
 
 type wasteTypes = {
   id: string;
@@ -36,7 +40,7 @@ export default function CalendarComponent({
       entering={FadeIn}
       exiting={FadeOut}
     >
-      <View className="flex-1 justify-center items-center">
+      <View className="items-center justify-center flex-1">
         <Text>{day}</Text>
       </View>
       <View className="flex-[3] min-h-12">
@@ -51,7 +55,7 @@ export default function CalendarComponent({
               backgroundColor: garbage.color,
             }}
           >
-            <View className="flex-1 flex flex-row justify-between items-center pl-1 pr-5">
+            <View className="flex flex-row items-center justify-between flex-1 pl-1 pr-5">
               <View className="flex flex-row gap-2">
                 {garbage.icon && garbage.icon != "default" ? (
                   <SvgUri
@@ -63,11 +67,11 @@ export default function CalendarComponent({
                 ) : (
                   <FontAwesome name="recycle" size={24} color="white" />
                 )}
-                <Text className="font-semibold text-xl text-white ">
+                <Text className="text-xl font-semibold text-white ">
                   {garbage.name}
                 </Text>
               </View>
-              <Pressable onPress={() => router.push("/" + garbage.id)}>
+              <Pressable onPress={() => router.push(("/" + garbage.id) as Href)}>
                 <InfoCircle />
               </Pressable>
             </View>
