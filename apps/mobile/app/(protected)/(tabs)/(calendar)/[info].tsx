@@ -29,7 +29,7 @@ export default function Page() {
       <HeaderContainer router={router}>
         <ScrollView className="flex-1 bg-background">
           <View
-            className="flex-1 flex-row min-h-16 items-center justify-center gap-3"
+            className="flex-row items-center justify-center flex-1 gap-3 min-h-16"
             style={{
               backgroundColor: wasteType.color,
             }}
@@ -38,13 +38,13 @@ export default function Page() {
               <SvgUri
                 width="24"
                 height="24"
-                uri={getBaseUrl() + wasteType.icon}
+                uri={getBaseUrl() + `/icon/${wasteType.icon}`}
                 fill="white"
               />
             ) : (
               <FontAwesome name="recycle" size={24} color="white" />
             )}
-            <Text className="text-2xl text-white font-semibold">
+            <Text className="text-2xl font-semibold text-white">
               {wasteType.name}
             </Text>
           </View>
@@ -52,7 +52,7 @@ export default function Page() {
             <View className="mb-4">
               <View className="flex-row items-center mb-2">
                 <AntDesign name="checkcircleo" size={24} color="green" />
-                <Text className="text-xl font-semibold ml-2">
+                <Text className="ml-2 text-xl font-semibold">
                   Cosa conferire
                 </Text>
               </View>
@@ -63,7 +63,7 @@ export default function Page() {
             <View className="mb-4">
               <View className="flex-row items-center mb-2">
                 <AntDesign name="closecircleo" size={24} color="red" />
-                <Text className="text-xl font-semibold ml-2">
+                <Text className="ml-2 text-xl font-semibold">
                   Cosa non conferire
                 </Text>
               </View>
@@ -74,7 +74,7 @@ export default function Page() {
             <View className="mb-4">
               <View className="flex-row items-center mb-2">
                 <AntDesign name="infocirlceo" size={24} color="black" />
-                <Text className="text-xl font-semibold ml-2">
+                <Text className="ml-2 text-xl font-semibold">
                   Come conferire
                 </Text>
               </View>
