@@ -97,16 +97,17 @@ export default function CreateHomeRequest() {
       const data =
         type === "other"
           ? {
-              address: address,
-              type: type,
-              otherSpecs: otherSpecs,
-              images: imagesUrl,
-            }
+            address: address,
+            type: type,
+            otherSpecs: otherSpecs,
+            images: imagesUrl,
+          }
           : {
-              address: address,
-              type: type,
-              images: imagesUrl,
-            };
+            address: address,
+            type: type,
+            otherSpecs: null,
+            images: imagesUrl,
+          };
       await AddRequest.mutateAsync(data).then(() => {
         router.back();
         utils.user.getUserPickupRequests.invalidate();
@@ -130,14 +131,14 @@ export default function CreateHomeRequest() {
   if (isLoading) {
     return (
       <HeaderContainer router={router}>
-        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+        <ActivityIndicator className="items-center justify-center flex-1 bg-background" />
       </HeaderContainer>
     );
   } else
     return (
       <HeaderContainer router={router}>
-        <View className="flex-1 bg-background p-4 relative">
-          <View className="flex-1 z-1 flex gap-4">
+        <View className="relative flex-1 p-4 bg-background">
+          <View className="flex flex-1 gap-4 z-1">
             <View className="flex gap-2">
               <Text className="">Indirizzo</Text>
               <TextInput
@@ -212,36 +213,36 @@ export default function CreateHomeRequest() {
               <View className="flex flex-row gap-4">
                 {images.length > 0
                   ? images.map((image) => (
-                      <View className="relative" key={image.assetId}>
-                        <Pressable
-                          onPress={() => {
-                            setImages(images.filter((img) => img !== image));
-                          }}
-                          key={image.uri}
-                          className="absolute top-1 right-1 z-30 rounded-full p-1 bg-black/30 shadow-xl"
-                        >
-                          <AntDesign
-                            name="close"
-                            size={20}
-                            color="white"
-                            className="shadow-lg"
-                          />
-                        </Pressable>
-                        <Animated.Image
-                          entering={FadeIn}
-                          exiting={FadeOut}
-                          key={image.assetId}
-                          source={{ uri: image.uri }}
-                          style={{ width: 100, height: 100, borderRadius: 8 }}
-                          className="h-28 w-28 rounded-lg"
+                    <View className="relative" key={image.assetId}>
+                      <Pressable
+                        onPress={() => {
+                          setImages(images.filter((img) => img !== image));
+                        }}
+                        key={image.uri}
+                        className="absolute z-30 p-1 rounded-full shadow-xl top-1 right-1 bg-black/30"
+                      >
+                        <AntDesign
+                          name="close"
+                          size={20}
+                          color="white"
+                          className="shadow-lg"
                         />
-                      </View>
-                    ))
+                      </Pressable>
+                      <Animated.Image
+                        entering={FadeIn}
+                        exiting={FadeOut}
+                        key={image.assetId}
+                        source={{ uri: image.uri }}
+                        style={{ width: 100, height: 100, borderRadius: 8 }}
+                        className="rounded-lg h-28 w-28"
+                      />
+                    </View>
+                  ))
                   : null}
                 {images.length < 3 ? (
                   <Pressable
                     onPress={pickImage}
-                    className="h-28 w-28 flex justify-center items-center rounded-lg border-dashed border-2 border-gray-300"
+                    className="flex items-center justify-center border-2 border-gray-300 border-dashed rounded-lg h-28 w-28"
                   >
                     <AddImage />
                   </Pressable>
@@ -249,7 +250,7 @@ export default function CreateHomeRequest() {
               </View>
             </View>
 
-            <View className="flex-1 justify-end pb-32">
+            <View className="justify-end flex-1 pb-32">
               <Button
                 className="mt-5 bg-[#334493]   text-black w-full rounded-lg p-3"
                 onPress={HandleSubmit}

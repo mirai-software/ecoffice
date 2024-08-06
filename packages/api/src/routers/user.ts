@@ -50,6 +50,7 @@ export const userRouter = createTRPCRouter({
         address: z.string(),
         images: z.array(z.string()),
         type: z.string(),
+        otherSpecs: z.string().nullable(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -69,6 +70,7 @@ export const userRouter = createTRPCRouter({
               address: input.address,
               images: input.images,
               type: input.type,
+              otherSpecs: input.otherSpecs,
               status: "pending",
               user: {
                 connect: {
