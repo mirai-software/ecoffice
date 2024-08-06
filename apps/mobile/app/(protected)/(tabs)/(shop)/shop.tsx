@@ -14,7 +14,7 @@ import { useSupabase } from "@/context/supabase-provider";
 import HeaderContainer from "@/app/_header";
 
 import { api } from "@/lib/api";
-import { router, useLocalSearchParams } from "expo-router";
+import { Href, router, useLocalSearchParams } from "expo-router";
 import { Float } from "react-native/Libraries/Types/CodegenTypes";
 import { useEffect, useState } from "react";
 
@@ -46,17 +46,17 @@ export const SecondHandProductComponent = (product: secondHandProduct) => {
   if (imageUrl === "") {
     return (
       <HeaderContainer router={router}>
-        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+        <ActivityIndicator className="items-center justify-center flex-1 bg-background" />
       </HeaderContainer>
     );
   } else {
     return (
       <Pressable
-        className="bg-white rounded-2xl shadow-lg w-[90%] mx-5 flex gap-2 pb-5"
+        className="bg-white rounded-2xl border-2 border-gray-300 w-[90%] mx-5 flex gap-2 pb-5"
         onPress={() =>
           product.customRoute
-            ? router.push(product.customRoute)
-            : router.push(`/(shop)/${product.id}`)
+            ? router.push((product.customRoute) as Href)
+            : router.push((`/(shop)/${product.id}`) as Href)
         }
       >
         {imageUrl !== "null" ? (
@@ -66,12 +66,12 @@ export const SecondHandProductComponent = (product: secondHandProduct) => {
             resizeMode="cover"
           />
         ) : (
-          <View className="w-full h-52 rounded-t-2xl flex items-center justify-center">
-            <Text className="font-semibold text-xl">Nessuna Immagine</Text>
+          <View className="flex items-center justify-center w-full h-52 rounded-t-2xl">
+            <Text className="text-xl font-semibold">Nessuna Immagine</Text>
           </View>
         )}
-        <Text className="font-medium text-xl pl-4">{product.name}</Text>
-        <Text className="font-light text-md pl-4">
+        <Text className="pl-4 text-xl font-medium">{product.name}</Text>
+        <Text className="pl-4 font-light text-md">
           {product.date.toDateString()}
         </Text>
       </Pressable>
@@ -101,14 +101,14 @@ export default function Shop() {
   if (isLoading) {
     return (
       <HeaderContainer router={router}>
-        <ActivityIndicator className="flex-1 justify-center items-center bg-background" />
+        <ActivityIndicator className="items-center justify-center flex-1 bg-background" />
       </HeaderContainer>
     );
   } else if (data?.length === 0) {
     return (
       <HeaderContainer router={router}>
         <Animated.View
-          className="flex-1 items-center justify-center bg-background p-4 gap-y-4"
+          className="items-center justify-center flex-1 p-4 bg-background gap-y-4"
           entering={FadeIn}
           exiting={FadeOut}
         >
@@ -131,7 +131,7 @@ export default function Shop() {
           }
         >
           <Animated.View
-            className="flex-1 pb-44 items-center justify-start bg-background gap-y-4 mt-3"
+            className="items-center justify-start flex-1 mt-3 pb-44 bg-background gap-y-4"
             entering={FadeIn}
             exiting={FadeOut}
           >
